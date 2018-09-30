@@ -1,0 +1,1 @@
+/usr/bin/c++.exe -g  -Wl,--enable-auto-import CMakeFiles/TEST-POINT.dir/tests/point.cpp.o  -o TEST-POINT.exe -Wl,--out-implib,libTEST-POINT.dll.a -Wl,--major-image-version,0,--minor-image-version,0 
