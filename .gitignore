@@ -32,7 +32,7 @@
 *.app
 
 # Debug
-#cmake-build-debug/
+cmake-build-debug/
 
 # Accesos directos
 *.lnk
@@ -43,3 +43,6 @@
 # Entregas
 entregas/*
 *.pdf
+
+# Archivos CLion
+.idea/
