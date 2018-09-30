@@ -1,4 +1,0 @@
-/cygdrive/c/Users/Pablo/Google Drive/Trabajos/Computacion en GPU/Tareas-CC7515/tarea-01/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/cygdrive/c/Users/Pablo/Google Drive/Trabajos/Computacion en GPU/Tareas-CC7515/tarea-01/cmake-build-debug/CMakeFiles/edit_cache.dir
-/cygdrive/c/Users/Pablo/Google Drive/Trabajos/Computacion en GPU/Tareas-CC7515/tarea-01/cmake-build-debug/CMakeFiles/TEST-POINT.dir
-/cygdrive/c/Users/Pablo/Google Drive/Trabajos/Computacion en GPU/Tareas-CC7515/tarea-01/cmake-build-debug/CMakeFiles/TEST-VECTOR.dir

@@ -30,3 +30,16 @@
 *.exe
 *.out
 *.app
+
+# Debug
+#cmake-build-debug/
+
+# Accesos directos
+*.lnk
+
+# Ignora informe
+*informe.*
+
+# Entregas
+entregas/*
+*.pdf
