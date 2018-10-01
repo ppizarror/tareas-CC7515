@@ -118,10 +118,10 @@ public:
     Vector<T> &operator*=(const T v);
 
     // Divide por un valor y retorna nuevo vector
-    Vector<T> operator*(const T v) const;
+    Vector<T> operator/(const T v) const;
 
     // Divide por un valor a sí mismo
-    Vector<T> &operator*=(const T v);
+    Vector<T> &operator/=(const T v);
 
     // Comprobación igualdad
     bool operator==(const Vector<T> &v) const;
@@ -605,6 +605,41 @@ Vector<T> &Vector<T>::operator*=(const T v) {
     this->set_j(this->get_j() * v);
     if (this->dim == 3) {
         this->set_k(this->get_k() * v);
+    }
+    return *this;
+}
+
+template<class T>
+/**
+ * Divide por un valor y retorna nuevo vector.
+ *
+ * @tparam T Template
+ * @param v Valor a dividir
+ * @return Nuevo vector
+ */
+Vector<T> Vector<T>::operator/(const T v) const {
+    if (v == 0) throw std::logic_error("Can't divide by zero");
+    if (this->dim == 2) {
+        return Vector<T>(this->get_i() / v, this->get_j() / v);
+    } else {
+        return Vector<T>(this->get_i() / v, this->get_j() / v, this->get_k() / v);
+    }
+}
+
+template<class T>
+/**
+ * Divide por un valor a sí mismo
+ *
+ * @tparam T Template
+ * @param v Valor a dividir
+ * @return El puntero al objeto
+ */
+Vector<T> &Vector<T>::operator/=(const T v) {
+    if (v == 0) throw std::logic_error("Can't divide by zero");
+    this->set_i(this->get_i() / v);
+    this->set_j(this->get_j() / v);
+    if (this->dim == 3) {
+        this->set_k(this->get_k() / v);
     }
     return *this;
 }

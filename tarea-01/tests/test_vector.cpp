@@ -190,13 +190,27 @@ void test_substract() {
 void test_mult() {
     Vector<double> v1 = Vector<double>(-1, 1, -1);
     assert(v1 * -1 == Vector<double>(1, -1, 1));
+    assert(v1 * 0 == Vector<double>(0, 0, 0));
+    v1 *= 420;
+    assert(v1.get_i() == -420 && v1 == Vector<double>(-420, 420, -420)); // 420 == bepis
+}
+
+/**
+ * Testeo división.
+ */
+void test_div() {
+    Vector<double> v1 = Vector<double>(-1, 1, -1);
+    assert(v1 / -1 == Vector<double>(1, -1, 1));
+    assert(v1 / 0.5 == Vector<double>(-2, 2, -2));
+    v1 /= -2;
+    assert(v1 == Vector<double>(0.5, -0.5, 0.5));
 }
 
 /**
  * Corre los test.
  */
 int main() {
-    std::cout << "Testeando vector" << std::endl;
+    std::cout << "Test Vector" << std::endl;
 
     // Carga los tests
     test2D_cross();
@@ -209,6 +223,7 @@ int main() {
     test_add();
     test_substract();
     test_mult();
+    test_div();
 
     // Retorna
     return 0;
