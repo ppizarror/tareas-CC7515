@@ -23,11 +23,12 @@ template<class T>
 /**
  * Vector, se puede hacer a partir de punto o coordenadas.
  * Provee funciones para producto cruz, punto, norma.
+ *
  * @tparam T Template
  */
 class Vector {
 private:
-    T *c = new T[3];
+    T c[3];
     int dim;
 public:
 
@@ -62,7 +63,7 @@ public:
     void setK(T k);
 
     // Retorna el punto en forma de String
-    std::string toString() const;
+    std::string to_string() const;
 
     // Imprime el punto en la consola
     void print() const;
@@ -71,7 +72,7 @@ public:
     void normalize();
 
     // Retorna vector normalizado
-    Vector<T> getNormalized() const;
+    Vector<T> get_normalized() const;
 
     // Producto cruz entre dos vectores
     Vector<T> cross(const Vector<T> &v) const;
@@ -83,7 +84,7 @@ public:
     Vector<T> &operator=(const Vector<T> &v);
 
     // Retorna la dimensión del vector
-    int getDimension() const;
+    int get_dim() const;
 
     // Retorna la norma del vector
     T norm() const;
@@ -100,6 +101,7 @@ public:
 template<class T>
 /**
  * Constructor vector 2 componentes.
+ * 
  * @tparam T
  * @param i Componente eje x
  * @param j Componente eje y
@@ -114,6 +116,7 @@ Vector<T>::Vector(T i, T j) {
 template<class T>
 /**
  * Constructor vector 3 componentes.
+ * 
  * @tparam T
  * @param i Componente eje x
  * @param j Componente eje y
@@ -128,20 +131,21 @@ Vector<T>::Vector(T i, T j, T k) {
 
 template<class T>
 /**
- * Destructor
+ * Destructor.
+ * 
  * @tparam T Template
  */
 Vector<T>::~Vector() {
-    delete[] this->c;
 }
 
 template<class T>
 /**
  * Crea un string con el vector.
+ * 
  * @tparam T Template
- * @return
+ * @return String del vector
  */
-std::string Vector<T>::toString() const {
+std::string Vector<T>::to_string() const {
     std::string s = "[" + std::to_string(this->getI()) + "," + std::to_string(this->getJ());
     if (this->dim == 2) {
         s += "]";
@@ -154,6 +158,7 @@ std::string Vector<T>::toString() const {
 template<class T>
 /**
  * Establece componente i (en x).
+ * 
  * @tparam T Template
  * @param i Valor de la componente
  */
@@ -164,6 +169,7 @@ void Vector<T>::setI(T i) {
 template<class T>
 /**
  * Establece componente j (en y).
+ * 
  * @tparam T Template
  * @param j Valor de la componente
  */
@@ -174,6 +180,7 @@ void Vector<T>::setJ(T j) {
 template<class T>
 /**
  * Establece componente k (en z).
+ * 
  * @tparam T Template
  * @param k Valor de la componente
  */
@@ -187,8 +194,9 @@ void Vector<T>::setK(T k) {
 template<class T>
 /**
  * Retorna la componente en x.
+ * 
  * @tparam T Template
- * @return
+ * @return Componente en x
  */
 T Vector<T>::getI() const {
     return this->c[0];
@@ -197,8 +205,9 @@ T Vector<T>::getI() const {
 template<class T>
 /**
  * Retorna la componente en y.
+ * 
  * @tparam T Template
- * @return
+ * @return Componente en y
  */
 T Vector<T>::getJ() const {
     return this->c[1];
@@ -207,12 +216,13 @@ T Vector<T>::getJ() const {
 template<class T>
 /**
  * Retorna la componente en k.
+ * 
  * @tparam T Template
- * @return
+ * @return Componente en z
  */
 T Vector<T>::getK() const {
     if (this->dim < 3) {
-        throw std::logic_error("La componente K no existe en un vector 2D");
+        throw std::logic_error("K vector component does not exist in a 2D vector");
     }
     return this->c[2];
 }
@@ -220,15 +230,17 @@ T Vector<T>::getK() const {
 template<class T>
 /**
  * Imprime el vector en consola.
+ * 
  * @tparam T
  */
 void Vector<T>::print() const {
-    std::cout << this->toString() << std::endl;
+    std::cout << this->to_string() << std::endl;
 }
 
 template<class T>
 /**
  * Normaliza el vector.
+ * 
  * @tparam T Template
  */
 void Vector<T>::normalize() {
@@ -248,9 +260,10 @@ void Vector<T>::normalize() {
 template<class T>
 /**
  * Producto cruz entre vectores.
+ * 
  * @tparam T Template
  * @param v Vector
- * @return
+ * @return Nuevo vector resultante del producto cruz
  */
 Vector<T> Vector<T>::cross(const Vector<T> &v) const {
     T i, j, k;
@@ -263,9 +276,10 @@ Vector<T> Vector<T>::cross(const Vector<T> &v) const {
 template<class T>
 /**
  * Operador de asignación.
+ * 
  * @tparam T Template
  * @param v
- * @return
+ * @return Puntero al objeto
  */
 Vector<T> &Vector<T>::operator=(const Vector<T> &v) {
     this->setI(v.getI());
@@ -282,9 +296,10 @@ Vector<T> &Vector<T>::operator=(const Vector<T> &v) {
 template<class T>
 /**
  * Producto punto entre dos vectores.
+ * 
  * @tparam T
  * @param v
- * @return
+ * @return Nuevo vector producto punto
  */
 Vector<T> Vector<T>::dot(const Vector<T> &v) const {
     T i, j, k;
@@ -296,25 +311,27 @@ Vector<T> Vector<T>::dot(const Vector<T> &v) const {
         k = this->getK() * v.getK();
         return Vector<T>(i, j, k);
     } else {
-        throw std::logic_error("No se puede realizar producto punto entre dos vectores con distinta dimension");
+        throw std::logic_error("Cant perform dot operator between two vectors with different dimension");
     }
 }
 
 template<class T>
 /**
  * Retorna la dimensión del punto.
+ * 
  * @tparam T Template
  * @return Dimensión en N
  */
-int Vector<T>::getDimension() const {
+int Vector<T>::get_dim() const {
     return this->dim;
 }
 
 template<class T>
 /**
  * Retorna la norma del vector.
+ * 
  * @tparam T Template
- * @return
+ * @return Norma del vector
  */
 T Vector<T>::norm() const {
     T d;
@@ -329,8 +346,9 @@ T Vector<T>::norm() const {
 template<class T>
 /**
  * Retorna el valor absoluto del vector.
+ * 
  * @tparam T Template
- * @return
+ * @return Vector con valores absolutos
  */
 Vector<T> Vector<T>::abs() const {
     if (this->dim == 2) {
@@ -343,6 +361,7 @@ Vector<T> Vector<T>::abs() const {
 template<class T>
 /**
  * Crea un vector a partir de un punto.
+ * 
  * @tparam T Template
  * @param p Punto
  */
@@ -363,10 +382,11 @@ Vector<T>::Vector(Point<T> &p) {
 template<class T>
 /**
  * Genera un vector normalizado del mismo.
+ * 
  * @tparam T Template
- * @return
+ * @return Nuevo vector normalizado
  */
-Vector<T> Vector<T>::getNormalized() const {
+Vector<T> Vector<T>::get_normalized() const {
     Vector<T> *n;
     if (this->dim == 2) {
         n = new Vector<T>(this->getI(), this->getJ());
@@ -380,10 +400,11 @@ Vector<T> Vector<T>::getNormalized() const {
 template<class T>
 /**
  * Operador concatenación con strings.
- * @return
+ * 
+ * @return String concatenado
  */
 std::ostream &operator<<(std::ostream &out, const Vector<T> &v) {
-    out << v.toString();
+    out << v.to_string();
     return out;
 }
 

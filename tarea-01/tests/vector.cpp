@@ -13,7 +13,7 @@
 /**
  * Testea normalizado de vectores.
  */
-void testNormalize() {
+void test2D_normalize() {
     Vector<int> v = Vector<int>(1, 2);
     v.normalize();
     assert(v.getI() == 0 && v.getJ() == 1); // 0.5 -> 0 y 1.0 -> 1
@@ -26,7 +26,7 @@ void testNormalize() {
 /**
  * Testea producto punto entre vectores.
  */
-void testDot() {
+void test2D_dot() {
     Vector<float> v1 = Vector<float>(3, 2);
     Vector<float> v2 = Vector<float>(2, -1);
     Vector<float> v3 = v1.dot(v2);
@@ -42,7 +42,7 @@ void testDot() {
 /**
  * Testea producto cruz vectores.
  */
-void testCross() {
+void test2D_cross() {
     Vector<float> v1 = Vector<float>(3, 2);
     Vector<float> v2 = Vector<float>(2, -1);
     Vector<float> v3 = v1.cross(v2);
@@ -76,7 +76,7 @@ void testCross() {
 /**
  * Testea vector desde punto.
  */
-void testVectorDesdePunto() {
+void test_from_point() {
     // Crea los puntos
     Point<double> p1 = Point<double>(3, -4, 7);
     Point<double> p2 = Point<double>(2, 6, -1);
@@ -93,7 +93,7 @@ void testVectorDesdePunto() {
 /**
  * Tests de precisión.
  */
-void testPrecision() {
+void test_precision() {
     std::cout << "\nTest de precision:" << std::endl;
 
     // Se crea vector en entero y doble-precisión
@@ -112,8 +112,8 @@ void testPrecision() {
     std::cout << "\tNorma [Double] : " << v_d.norm() << std::endl;
 
     // Se normalizan
-    std::cout << "\tVector [Integer] Normalizado: " << v_i.getNormalized() << std::endl;
-    std::cout << "\tVector [Double]  Normalizado: " << v_d.getNormalized() << std::endl;
+    std::cout << "\tVector [Integer] Normalizado: " << v_i.get_normalized() << std::endl;
+    std::cout << "\tVector [Double]  Normalizado: " << v_d.get_normalized() << std::endl;
 
     // Productos cruz
     std::cout << "\tProducto cruz [Integer]: " << vc_i << std::endl;
@@ -127,11 +127,11 @@ int main() {
     std::cout << "Testeando vector" << std::endl;
 
     // Carga los tests
-    testCross();
-    testDot();
-    testNormalize();
-    testVectorDesdePunto();
-    testPrecision();
+    test2D_cross();
+    test2D_dot();
+    test2D_normalize();
+    test_from_point();
+    test_precision();
 
     // Retorna
     return 0;

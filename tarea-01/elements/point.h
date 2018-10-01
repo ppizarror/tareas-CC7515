@@ -217,7 +217,7 @@ template<class T>
  */
 T Point<T>::get_coord_z() const {
     if (this->dim < 3) {
-        throw std::logic_error("La coordenada Z no existe en un punto 2D");
+        throw std::logic_error("Z coordinate does not exists in a 2D point");
     }
     return coord[2];
 }
@@ -264,7 +264,7 @@ Point<T> Point<T>::operator+(const Point<T> &p) const {
         return Point<T>(this->get_coord_x() + p.get_coord_x(), this->get_coord_y() + p.get_coord_y(),
                         this->get_coord_z() + p.get_coord_z());
     } else {
-        throw std::logic_error("Las dimensiones no son correctas para la operacion +");
+        throw std::logic_error("Invalid dimension to perform add operator");
     }
 }
 
@@ -285,7 +285,7 @@ Point<T> &Point<T>::operator+=(const Point<T> &p) {
     } else if (this->dim == 3 && p.dim == 3) {
         this->coord[2] += p.get_coord_z();
     } else {
-        throw std::logic_error("Las dimensiones no son correctas para la operacion +=");
+        throw std::logic_error("Invalid dimension to perform += operator");
     }
     return *this;
 }
@@ -305,7 +305,7 @@ Point<T> Point<T>::operator-(Point<T> &p) const {
         return Point<T>(this->get_coord_x() - p.get_coord_x(), this->get_coord_y() - p.get_coord_y(),
                         this->get_coord_z() - p.get_coord_z());
     } else {
-        throw std::logic_error("Las dimensiones no son correctas para la operacion -");
+        throw std::logic_error("Invalid dimension to perform - operator");
     }
 }
 
@@ -326,7 +326,7 @@ Point<T> &Point<T>::operator-=(const Point<T> &p) {
     } else if (this->dim == 3 && p.dim == 3) {
         this->coord[2] -= p.get_coord_z();
     } else {
-        throw std::logic_error("Las dimensiones no son correctas para la operacion -=");
+        throw std::logic_error("Invalid dimension to perform -= operator");
     }
     return *this;
 }
