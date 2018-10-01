@@ -21,6 +21,7 @@
 template<class T>
 /**
  * Clase Punto en 2D o 3D.
+ *
  * @tparam T Template
  */
 class Point {
@@ -502,6 +503,7 @@ template<class T>
  *
  * @tparam T Template
  * @param v Valor a dividir
+ * @return Puntero al mismo objeto dividido
  */
 Point<T> &Point<T>::operator/=(T v) {
     // Se suman primero componente x e y
@@ -518,8 +520,10 @@ Point<T> &Point<T>::operator/=(T v) {
 template<class T>
 /**
  * Multiplica y guarda en el mismo punto.
+ *
  * @tparam T Template
  * @param v Valor a dividir
+ * @return Puntero al mismo objeto multiplicado
  */
 Point<T> &Point<T>::operator*=(T v) {
     // Se suman primero componente x e y
@@ -536,9 +540,10 @@ Point<T> &Point<T>::operator*=(T v) {
 template<class T>
 /**
  * Verifica igualdad con otro punto.
+ *
  * @tparam T Template
  * @param p Punto
- * @return
+ * @return Indica si el punto es igual con otro
  */
 bool Point<T>::operator==(const Point<T> &p) const {
     if (this->dim == 2 && p.dim == 2) {
@@ -547,13 +552,14 @@ bool Point<T>::operator==(const Point<T> &p) const {
         return this->getCoordX() == p.getCoordX() && this->getCoordY() == p.getCoordY() &&
                this->getCoordZ() == p.getCoordZ();
     } else {
-        throw std::logic_error("Las dimensiones no son correctas al comprobar igualdad");
+        throw std::logic_error("Point dimension is not the same");
     }
 }
 
 template<class T>
 /**
  * Retorna la dimensión del punto.
+ *
  * @tparam T Template
  * @return Dimensión en N
  */
@@ -564,7 +570,8 @@ int Point<T>::getDimension() const {
 template<class T>
 /**
  * Operador concatenación con strings.
- * @return
+ *
+ * @return Concatena con un strng
  */
 std::ostream &operator<<(std::ostream &out, const Point<T> &p) {
     out << p.toString();
@@ -573,10 +580,11 @@ std::ostream &operator<<(std::ostream &out, const Point<T> &p) {
 
 template<class T>
 /**
- * Operador desigualdad
+ * Operador desigualdad.
+ *
  * @tparam T Template
  * @param p Punto
- * @return
+ * @return Indica si el punto no es igual con otro
  */
 bool Point<T>::operator!=(const Point<T> &p) const {
     return !(*this == p);
@@ -584,11 +592,12 @@ bool Point<T>::operator!=(const Point<T> &p) const {
 
 template<class T>
 /**
- * Comprueba el orden ccw entre el punto y a, b
+ * Comprueba el orden ccw entre el punto y a,b.
+ *
  * @tparam T Template
  * @param a Punto a
  * @param b Punto b
- * @return
+ * @return -1 si no es ccw, 1 si es ccw
  */
 int Point<T>::ccw(Point<T> &a, Point<T> &b) {
     T area = (a.getCoordX() - this->getCoordX()) * (b.getCoordY() - this->getCoordY()) -
@@ -601,9 +610,10 @@ int Point<T>::ccw(Point<T> &a, Point<T> &b) {
 
 template<class T>
 /**
- * Clona el punto
+ * Clona el punto.
+ *
  * @tparam T Template
- * @return
+ * @return Punto nuevo
  */
 Point<T> Point<T>::clonar() {
     if (this->dim < 3)
@@ -614,10 +624,11 @@ Point<T> Point<T>::clonar() {
 
 template<class T>
 /**
- * Obtiene el coseno del ángulo entre el punto y otro
+ * Obtiene el coseno del ángulo entre el punto y otro.
+ *
  * @tparam T - Template
  * @param a - Punto
- * @return
+ * @return Valor del coseno
  */
 double Point<T>::cos(Point<T> &a) {
     if (a.getCoordX() == this->getCoordX())
@@ -631,10 +642,11 @@ double Point<T>::cos(Point<T> &a) {
 
 template<class T>
 /**
- * Obtiene el coseno del ángulo entre el punto y otro
+ * Obtiene el coseno del ángulo entre el punto y otro.
+ *
  * @tparam T - Template
  * @param a - Punto
- * @return
+ * @return Valor del coseno
  */
 double Point<T>::cos(Point<T> &a, double dist) {
     if (a.getCoordX() == this->getCoordX() || dist == 0)
