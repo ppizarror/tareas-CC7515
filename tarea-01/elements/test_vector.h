@@ -45,22 +45,22 @@ public:
     ~Vector();
 
     // Obtiene la coordenada x
-    T getI() const;
+    T get_i() const;
 
     // Obtiene la coordenada y
-    T getJ() const;
+    T get_j() const;
 
     // Obtiene la coordenada z
-    T getK() const;
+    T get_k() const;
 
     // Establece la coordenada x
-    void setI(T i);
+    void set_i(T i);
 
     // Establece la coordenada y
-    void setJ(T j);
+    void set_j(T j);
 
     // Establece una coordenada z
-    void setK(T k);
+    void set_k(T k);
 
     // Retorna el punto en forma de String
     std::string to_string() const;
@@ -82,6 +82,12 @@ public:
 
     // Asignación
     Vector<T> &operator=(const Vector<T> &v);
+
+    // Comprobación igualdad
+    bool operator==(const Vector<T> &v) const;
+
+    // Comprobación desigualdad
+    bool operator!=(const Vector<T> &v) const;
 
     // Retorna la dimensión del vector
     int get_dim() const;
@@ -107,8 +113,8 @@ template<class T>
  * @param j Componente eje y
  */
 Vector<T>::Vector(T i, T j) {
-    this->setI(i);
-    this->setJ(j);
+    this->set_i(i);
+    this->set_j(j);
     this->c[2] = 0.0;
     this->dim = 2;
 }
@@ -124,9 +130,9 @@ template<class T>
  */
 Vector<T>::Vector(T i, T j, T k) {
     this->dim = 3;
-    this->setI(i);
-    this->setJ(j);
-    this->setK(k);
+    this->set_i(i);
+    this->set_j(j);
+    this->set_k(k);
 }
 
 template<class T>
@@ -146,11 +152,11 @@ template<class T>
  * @return String del vector
  */
 std::string Vector<T>::to_string() const {
-    std::string s = "[" + std::to_string(this->getI()) + "," + std::to_string(this->getJ());
+    std::string s = "[" + std::to_string(this->get_i()) + "," + std::to_string(this->get_j());
     if (this->dim == 2) {
         s += "]";
     } else {
-        s += "," + std::to_string(this->getK()) + "]";
+        s += "," + std::to_string(this->get_k()) + "]";
     }
     return s;
 }
@@ -162,7 +168,7 @@ template<class T>
  * @tparam T Template
  * @param i Valor de la componente
  */
-void Vector<T>::setI(T i) {
+void Vector<T>::set_i(T i) {
     this->c[0] = i;
 }
 
@@ -173,7 +179,7 @@ template<class T>
  * @tparam T Template
  * @param j Valor de la componente
  */
-void Vector<T>::setJ(T j) {
+void Vector<T>::set_j(T j) {
     this->c[1] = j;
 }
 
@@ -184,7 +190,7 @@ template<class T>
  * @tparam T Template
  * @param k Valor de la componente
  */
-void Vector<T>::setK(T k) {
+void Vector<T>::set_k(T k) {
     this->c[2] = k;
     if (this->dim == 2) {
         this->dim = 3;
@@ -198,7 +204,7 @@ template<class T>
  * @tparam T Template
  * @return Componente en x
  */
-T Vector<T>::getI() const {
+T Vector<T>::get_i() const {
     return this->c[0];
 }
 
@@ -209,7 +215,7 @@ template<class T>
  * @tparam T Template
  * @return Componente en y
  */
-T Vector<T>::getJ() const {
+T Vector<T>::get_j() const {
     return this->c[1];
 }
 
@@ -220,7 +226,7 @@ template<class T>
  * @tparam T Template
  * @return Componente en z
  */
-T Vector<T>::getK() const {
+T Vector<T>::get_k() const {
     if (this->dim < 3) {
         throw std::logic_error("K vector component does not exist in a 2D vector");
     }
@@ -246,14 +252,14 @@ template<class T>
 void Vector<T>::normalize() {
     T m;
     if (this->dim == 2) {
-        m = std::max(this->getI(), this->getJ());
-        this->setI(this->getI() / m);
-        this->setJ(this->getJ() / m);
+        m = std::max(this->get_i(), this->get_j());
+        this->set_i(this->get_i() / m);
+        this->set_j(this->get_j() / m);
     } else {
-        m = std::max(std::max(this->getI(), this->getJ()), this->getK());
-        this->setI(this->getI() / m);
-        this->setJ(this->getJ() / m);
-        this->setK(this->getK() / m);
+        m = std::max(std::max(this->get_i(), this->get_j()), this->get_k());
+        this->set_i(this->get_i() / m);
+        this->set_j(this->get_j() / m);
+        this->set_k(this->get_k() / m);
     }
 }
 
@@ -267,9 +273,9 @@ template<class T>
  */
 Vector<T> Vector<T>::cross(const Vector<T> &v) const {
     T i, j, k;
-    i = this->getJ() * v.c[2] - this->c[2] * v.getJ();
-    j = this->c[2] * v.getI() - this->getI() * v.c[2];
-    k = this->getI() * v.getJ() - this->getJ() * v.getI();
+    i = this->get_j() * v.c[2] - this->c[2] * v.get_j();
+    j = this->c[2] * v.get_i() - this->get_i() * v.c[2];
+    k = this->get_i() * v.get_j() - this->get_j() * v.get_i();
     return Vector<T>(i, j, k);
 }
 
@@ -282,11 +288,11 @@ template<class T>
  * @return Puntero al objeto
  */
 Vector<T> &Vector<T>::operator=(const Vector<T> &v) {
-    this->setI(v.getI());
-    this->setJ(v.getJ());
+    this->set_i(v.get_i());
+    this->set_j(v.get_j());
     if (v.dim == 3) {
         this->dim = 3;
-        this->setK(v.getK());
+        this->set_k(v.get_k());
     } else {
         this->dim = 2;
     }
@@ -303,12 +309,12 @@ template<class T>
  */
 Vector<T> Vector<T>::dot(const Vector<T> &v) const {
     T i, j, k;
-    i = this->getI() * v.getI();
-    j = this->getJ() * v.getJ();
+    i = this->get_i() * v.get_i();
+    j = this->get_j() * v.get_j();
     if (this->dim == 2 && v.dim == 2) {
         return Vector<T>(i, j);
     } else if (this->dim == 3 && v.dim == 3) {
-        k = this->getK() * v.getK();
+        k = this->get_k() * v.get_k();
         return Vector<T>(i, j, k);
     } else {
         throw std::logic_error("Cant perform dot operator between two vectors with different dimension");
@@ -336,9 +342,9 @@ template<class T>
 T Vector<T>::norm() const {
     T d;
     if (this->dim == 2) {
-        d = sqrt(pow(this->getI(), 2) + pow(this->getJ(), 2));
+        d = sqrt(pow(this->get_i(), 2) + pow(this->get_j(), 2));
     } else {
-        d = sqrt(pow(this->getI(), 2) + pow(this->getJ(), 2) + pow(this->getK(), 2));
+        d = sqrt(pow(this->get_i(), 2) + pow(this->get_j(), 2) + pow(this->get_k(), 2));
     }
     return d;
 }
@@ -352,9 +358,9 @@ template<class T>
  */
 Vector<T> Vector<T>::abs() const {
     if (this->dim == 2) {
-        return Vector<T>(std::abs(this->getI()), std::abs(this->getJ()));
+        return Vector<T>(std::abs(this->get_i()), std::abs(this->get_j()));
     } else {
-        return Vector<T>(std::abs(this->getI()), std::abs(this->getJ()), std::abs(this->getK()));
+        return Vector<T>(std::abs(this->get_i()), std::abs(this->get_j()), std::abs(this->get_k()));
     }
 }
 
@@ -368,14 +374,14 @@ template<class T>
 Vector<T>::Vector(Point<T> &p) {
     this->dim = p.get_dim();
     if (this->dim == 2) { // Inicia vector en 2D
-        this->setI(p.get_coord_x());
-        this->setJ(p.get_coord_y());
+        this->set_i(p.get_coord_x());
+        this->set_j(p.get_coord_y());
         this->c[2] = 0.0;
 
     } else {  // Inicia vector en 3D
-        this->setI(p.get_coord_x());
-        this->setJ(p.get_coord_y());
-        this->setK(p.get_coord_z());
+        this->set_i(p.get_coord_x());
+        this->set_j(p.get_coord_y());
+        this->set_k(p.get_coord_z());
     }
 }
 
@@ -389,9 +395,9 @@ template<class T>
 Vector<T> Vector<T>::get_normalized() const {
     Vector<T> *n;
     if (this->dim == 2) {
-        n = new Vector<T>(this->getI(), this->getJ());
+        n = new Vector<T>(this->get_i(), this->get_j());
     } else {
-        n = new Vector<T>(this->getI(), this->getJ(), this->getK());
+        n = new Vector<T>(this->get_i(), this->get_j(), this->get_k());
     }
     n->normalize();
     return *n;
@@ -406,6 +412,42 @@ template<class T>
 std::ostream &operator<<(std::ostream &out, const Vector<T> &v) {
     out << v.to_string();
     return out;
+}
+
+template<class T>
+/**
+ * Operador igualdad.
+ * 
+ * @tparam T Template
+ * @param v Vector
+ * @return Indica si dos vectores son iguales
+ */
+bool Vector<T>::operator==(const Vector<T> &v) const {
+    if (this->dim == 2 && v.get_dim() == 2) {
+        return this->get_i() == v.get_i() && this->get_j() == v.get_j();
+    } else if (this->dim == 3 && v.get_dim() == 3) {
+        return this->get_i() == v.get_i() && this->get_j() == v.get_j() && this->get_k() == v.get_k();
+    } else {
+        throw std::logic_error("Vector dimension is not the same");
+    }
+}
+
+template<class T>
+/**
+ * Operador desigualdad.
+ * 
+ * @tparam T Template
+ * @param v Vector
+ * @return Indica si dos vectores son distintos
+ */
+bool Vector<T>::operator!=(const Vector<T> &v) const {
+    if (this->dim == 2 && v.get_dim() == 2) {
+        return this->get_i() != v.get_i() || this->get_j() != v.get_j();
+    } else if (this->dim == 3 && v.get_dim() == 3) {
+        return this->get_i() != v.get_i() || this->get_j() != v.get_j() || this->get_k() != v.get_k();
+    } else {
+        throw std::logic_error("Vector dimension is not the same");
+    }
 }
 
 #pragma clang diagnostic pop

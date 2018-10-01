@@ -16,11 +16,11 @@
 void test2D_normalize() {
     Vector<int> v = Vector<int>(1, 2);
     v.normalize();
-    assert(v.getI() == 0 && v.getJ() == 1); // 0.5 -> 0 y 1.0 -> 1
+    assert(v.get_i() == 0 && v.get_j() == 1); // 0.5 -> 0 y 1.0 -> 1
 
     Vector<double> v2 = Vector<double>(1, 2);
     v2.normalize();
-    assert(v2.getI() == 0.50f && v2.getJ() == 1.0f); // 0.5->0.5 y 1.0->1.0
+    assert(v2.get_i() == 0.50f && v2.get_j() == 1.0f); // 0.5->0.5 y 1.0->1.0
 }
 
 /**
@@ -30,13 +30,13 @@ void test2D_dot() {
     Vector<float> v1 = Vector<float>(3, 2);
     Vector<float> v2 = Vector<float>(2, -1);
     Vector<float> v3 = v1.dot(v2);
-    assert(v3.getI() == 6.0f && v3.getJ() == -2.0f); // (3,2).(2,-1)=(6,-2)
+    assert(v3.get_i() == 6.0f && v3.get_j() == -2.0f); // (3,2).(2,-1)=(6,-2)
 
     // Prueba cambiando a ceros
-    v3.setI(0);
-    v3.setJ(0);
+    v3.set_i(0);
+    v3.set_j(0);
     v1 = v1.dot(v3);
-    assert(v1.getI() == 0.0f && v1.getJ() == 0.0f); // (3,2).(0,0)=(0,0)
+    assert(v1.get_i() == 0.0f && v1.get_j() == 0.0f); // (3,2).(0,0)=(0,0)
 }
 
 /**
@@ -46,12 +46,12 @@ void test2D_cross() {
     Vector<float> v1 = Vector<float>(3, 2);
     Vector<float> v2 = Vector<float>(2, -1);
     Vector<float> v3 = v1.cross(v2);
-    assert(v3.getI() == 0.0f && v3.getJ() == 0.0f && v3.getK() == -7.0f); // (3,2,0)x(2,-1,0)=(0,0,-7)
+    assert(v3.get_i() == 0.0f && v3.get_j() == 0.0f && v3.get_k() == -7.0f); // (3,2,0)x(2,-1,0)=(0,0,-7)
 
     v1 = Vector<float>(3, -4);
     v2 = Vector<float>(2, 6);
     v3 = v1.cross(v2);
-    std::cout << v1 << " x " << v2 << " = " << v3 << std::endl;
+    std::cout << v1 << "x" << v2 << " = " << v3 << std::endl;
     assert(v3 == Vector<float>(0, 0, 26));
 }
 
@@ -59,34 +59,23 @@ void test2D_cross() {
  * Testea producto cruz vectores en 3D.
  */
 void test3D_cross() {
-    Vector<float> v1 = Vector<float>(3, 2);
-    Vector<float> v2 = Vector<float>(2, -1);
+    Vector<float> v1 = Vector<float>(2, 0, 1);
+    Vector<float> v2 = Vector<float>(1, -1, 3);
     Vector<float> v3 = v1.cross(v2);
-    assert(v3.getI() == 0.0f && v3.getJ() == 0.0f && v3.getK() == -7.0f); // (3,2,0)x(2,-1,0)=(0,0,-7)
-
-    // Prueba vectores en 3D
-    v1 = Vector<float>(2, 0, 1);
-    v2 = Vector<float>(1, -1, 3);
-    v3 = v1.cross(v2);
-    assert(v3.getI() == 1.0f && v3.getJ() == -5.0f && v3.getK() == -2.0f);
+    assert(v3.get_i() == 1.0f && v3.get_j() == -5.0f && v3.get_k() == -2.0f);
 
     // Vector 3D con componente 0
     v1 = Vector<float>(4, 1, 0);
     v2 = Vector<float>(3, 7, 0);
     v3 = v1.cross(v2);
-    assert(v3.getI() == 0.0f && v3.getJ() == 0.0f && v3.getK() == 25.0f);
-
-    // Vector 2D
-    v1 = Vector<float>(3, -4);
-    v2 = Vector<float>(2, 6);
-    v3 = v1.cross(v2);
-    std::cout << v1 << " x" << v2 << " = " << v3 << std::endl;
+    assert(v3.get_i() == 0.0f && v3.get_j() == 0.0f && v3.get_k() == 25.0f);
 
     // Prueba vectores en 3D
     v1 = Vector<float>(3, -4, 7);
     v2 = Vector<float>(2, 6, -1);
     v3 = v1.cross(v2);
     std::cout << v1 << "x" << v2 << " = " << v3 << std::endl;
+    assert(v3 == Vector<float>(-38, 17, 26));
 }
 
 /**
@@ -103,7 +92,7 @@ void test_from_point() {
     Vector<double> v3 = v1.cross(v2);
 
     // Imprime en consola
-    assert(v3.getI() == -38.0f && v3.getJ() == 17.0f && v3.getK() == 26.0f);
+    assert(v3.get_i() == -38.0f && v3.get_j() == 17.0f && v3.get_k() == 26.0f);
 }
 
 /**
@@ -137,6 +126,31 @@ void test_precision() {
 }
 
 /**
+ * Testea igualdad y desigualdad.
+ */
+void test_eq_noteq() {
+    // Testeo en enteros
+    Vector<float> v1 = Vector<float>(1, 1, 3);
+    Vector<float> v2 = Vector<float>(1, 1, 3);
+    Vector<float> v3 = Vector<float>(1, -1, 3);
+
+    assert(v1 == v2);
+    assert(v2 == v1);
+    assert(v1 != v3);
+    assert(v2 != v3);
+
+    // Testeo en flotantes místicos
+    float sq = sqrtf(5);
+    v1.set_i(1 * sq);
+    v1.set_j(2 * sq);
+    v2.set_i(1 * sq);
+    v2.set_j(2 * sq);
+
+    assert(v1 == v2);
+    assert(v2 == v1);
+}
+
+/**
  * Corre los test.
  */
 int main() {
@@ -144,10 +158,12 @@ int main() {
 
     // Carga los tests
     test2D_cross();
+    test3D_cross();
     test2D_dot();
     test2D_normalize();
     test_from_point();
     test_precision();
+    test_eq_noteq();
 
     // Retorna
     return 0;

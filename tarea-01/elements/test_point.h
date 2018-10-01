@@ -558,6 +558,25 @@ bool Point<T>::operator==(const Point<T> &p) const {
 
 template<class T>
 /**
+ * Operador desigualdad.
+ *
+ * @tparam T Template
+ * @param p Punto
+ * @return Indica si el punto no es igual con otro
+ */
+bool Point<T>::operator!=(const Point<T> &p) const {
+    if (this->dim == 2 && p.dim == 2) {
+        return this->get_coord_x() != p.get_coord_x() || this->get_coord_y() != p.get_coord_y();
+    } else if (this->dim == 3 && p.dim == 3) {
+        return this->get_coord_x() != p.get_coord_x() || this->get_coord_y() != p.get_coord_y() ||
+               this->get_coord_z() == p.get_coord_z();
+    } else {
+        throw std::logic_error("Point dimension is not the same");
+    }
+}
+
+template<class T>
+/**
  * Retorna la dimensión del punto.
  *
  * @tparam T Template
@@ -576,18 +595,6 @@ template<class T>
 std::ostream &operator<<(std::ostream &out, const Point<T> &p) {
     out << p.to_string();
     return out;
-}
-
-template<class T>
-/**
- * Operador desigualdad.
- *
- * @tparam T Template
- * @param p Punto
- * @return Indica si el punto no es igual con otro
- */
-bool Point<T>::operator!=(const Point<T> &p) const {
-    return !(*this == p);
 }
 
 template<class T>
