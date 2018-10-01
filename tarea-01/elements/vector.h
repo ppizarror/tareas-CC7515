@@ -349,14 +349,14 @@ template<class T>
 Vector<T>::Vector(Point<T> &p) {
     this->dim = p.getDimension();
     if (this->dim == 2) { // Inicia vector en 2D
-        this->setI(p.getCoordX());
-        this->setJ(p.getCoordY());
+        this->setI(p.get_coord_x());
+        this->setJ(p.get_coord_y());
         this->c[2] = 0.0;
 
     } else {  // Inicia vector en 3D
-        this->setI(p.getCoordX());
-        this->setJ(p.getCoordY());
-        this->setK(p.getCoordZ());
+        this->setI(p.get_coord_x());
+        this->setJ(p.get_coord_y());
+        this->setK(p.get_coord_z());
     }
 }
 

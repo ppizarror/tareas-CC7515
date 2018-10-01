@@ -43,13 +43,13 @@ public:
     ~Point();
 
     // Obtiene la coordenada x
-    T getCoordX() const;
+    T get_coord_x() const;
 
     // Obtiene la coordenada y
-    T getCoordY() const;
+    T get_coord_y() const;
 
     // Obtiene la coordenada z
-    T getCoordZ() const;
+    T get_coord_z() const;
 
     // Establece la coordenada x
     void setCoordX(T x);
@@ -193,7 +193,7 @@ template<class T>
  * @tparam T Template
  * @return Coordenada
  */
-T Point<T>::getCoordX() const {
+T Point<T>::get_coord_x() const {
     return coord[0];
 }
 
@@ -204,7 +204,7 @@ template<class T>
  * @tparam T Template
  * @return Coordenada
  */
-T Point<T>::getCoordY() const {
+T Point<T>::get_coord_y() const {
     return coord[1];
 }
 
@@ -215,7 +215,7 @@ template<class T>
  * @tparam T Template
  * @return Coordenada
  */
-T Point<T>::getCoordZ() const {
+T Point<T>::get_coord_z() const {
     if (this->dim < 3) {
         throw std::logic_error("La coordenada Z no existe en un punto 2D");
     }
@@ -230,11 +230,11 @@ template<class T>
  * @return String en forma (x,y) o (x,y,z)
  */
 std::string Point<T>::toString() const {
-    std::string s = "(" + std::to_string(this->getCoordX()) + "," + std::to_string(this->getCoordY()); // Point
+    std::string s = "(" + std::to_string(this->get_coord_x()) + "," + std::to_string(this->get_coord_y()); // Point
     if (this->dim == 2) {
         s += ")";
     } else {
-        s += "," + std::to_string(this->getCoordZ()) + ")";
+        s += "," + std::to_string(this->get_coord_z()) + ")";
     }
     return s;
 }
@@ -259,10 +259,10 @@ template<class T>
  */
 Point<T> Point<T>::operator+(const Point<T> &p) const {
     if (this->dim == 2 && p.dim == 2) {
-        return Point<T>(this->getCoordX() + p.getCoordX(), this->getCoordY() + p.getCoordY());
+        return Point<T>(this->get_coord_x() + p.get_coord_x(), this->get_coord_y() + p.get_coord_y());
     } else if (this->dim == 3 && p.dim == 3) {
-        return Point<T>(this->getCoordX() + p.getCoordX(), this->getCoordY() + p.getCoordY(),
-                        this->getCoordZ() + p.getCoordZ());
+        return Point<T>(this->get_coord_x() + p.get_coord_x(), this->get_coord_y() + p.get_coord_y(),
+                        this->get_coord_z() + p.get_coord_z());
     } else {
         throw std::logic_error("Las dimensiones no son correctas para la operacion +");
     }
@@ -277,13 +277,13 @@ template<class T>
  */
 Point<T> &Point<T>::operator+=(const Point<T> &p) {
     // Se suman primero componente x e y
-    this->coord[0] += p.getCoordX();
-    this->coord[1] += p.getCoordY();
+    this->coord[0] += p.get_coord_x();
+    this->coord[1] += p.get_coord_y();
 
     // Comprobación dimensiones
     if (this->dim == 2 && p.dim == 2) {
     } else if (this->dim == 3 && p.dim == 3) {
-        this->coord[2] += p.getCoordZ();
+        this->coord[2] += p.get_coord_z();
     } else {
         throw std::logic_error("Las dimensiones no son correctas para la operacion +=");
     }
@@ -300,10 +300,10 @@ template<class T>
  */
 Point<T> Point<T>::operator-(Point<T> &p) const {
     if (this->dim == 2 && p.dim == 2) {
-        return Point<T>(this->getCoordX() - p.getCoordX(), this->getCoordY() - p.getCoordY());
+        return Point<T>(this->get_coord_x() - p.get_coord_x(), this->get_coord_y() - p.get_coord_y());
     } else if (this->dim == 3 && p.dim == 3) {
-        return Point<T>(this->getCoordX() - p.getCoordX(), this->getCoordY() - p.getCoordY(),
-                        this->getCoordZ() - p.getCoordZ());
+        return Point<T>(this->get_coord_x() - p.get_coord_x(), this->get_coord_y() - p.get_coord_y(),
+                        this->get_coord_z() - p.get_coord_z());
     } else {
         throw std::logic_error("Las dimensiones no son correctas para la operacion -");
     }
@@ -318,13 +318,13 @@ template<class T>
  */
 Point<T> &Point<T>::operator-=(const Point<T> &p) {
     // Se suman primero componente x e y
-    this->coord[0] -= p.getCoordX();
-    this->coord[1] -= p.getCoordY();
+    this->coord[0] -= p.get_coord_x();
+    this->coord[1] -= p.get_coord_y();
 
     // Comprobación dimensiones
     if (this->dim == 2 && p.dim == 2) {
     } else if (this->dim == 3 && p.dim == 3) {
-        this->coord[2] -= p.getCoordZ();
+        this->coord[2] -= p.get_coord_z();
     } else {
         throw std::logic_error("Las dimensiones no son correctas para la operacion -=");
     }
@@ -340,9 +340,9 @@ template<class T>
  */
 Point<T> Point<T>::operator-() const {
     if (this->dim == 2) {
-        return Point<T>(-this->getCoordX(), -this->getCoordY());
+        return Point<T>(-this->get_coord_x(), -this->get_coord_y());
     } else {
-        return Point<T>(-this->getCoordX(), -this->getCoordY(), -this->getCoordZ());
+        return Point<T>(-this->get_coord_x(), -this->get_coord_y(), -this->get_coord_z());
     }
 }
 
@@ -355,13 +355,13 @@ template<class T>
  * @return
  */
 Point<T> &Point<T>::operator=(const Point<T> &p) {
-    this->coord[0] = p.getCoordX();
-    this->coord[1] = p.getCoordY();
+    this->coord[0] = p.get_coord_x();
+    this->coord[1] = p.get_coord_y();
 
     // Comprobación dimensiones
     if (p.getDimension() == 3) {
         this->dim = 3;
-        this->coord[2] = p.getCoordZ();
+        this->coord[2] = p.get_coord_z();
     } else {
         this->dim = 2;
     }
@@ -377,9 +377,9 @@ template<class T>
  */
 Point<T> Point<T>::abs() const {
     if (this->dim == 2) {
-        return Point<T>(std::abs(this->getCoordX()), std::abs(this->getCoordY()));
+        return Point<T>(std::abs(this->get_coord_x()), std::abs(this->get_coord_y()));
     } else {
-        return Point<T>(std::abs(this->getCoordX()), std::abs(this->getCoordY()), std::abs(this->getCoordZ()));
+        return Point<T>(std::abs(this->get_coord_x()), std::abs(this->get_coord_y()), std::abs(this->get_coord_z()));
     }
 }
 
@@ -393,9 +393,9 @@ template<class T>
 double Point<T>::distOrigin() const {
     double d;
     if (this->dim == 2) {
-        d = sqrt(pow(this->getCoordX(), 2) + pow(this->getCoordY(), 2));
+        d = sqrt(pow(this->get_coord_x(), 2) + pow(this->get_coord_y(), 2));
     } else {
-        d = sqrt(pow(this->getCoordX(), 2) + pow(this->getCoordY(), 2) + pow(this->getCoordZ(), 2));
+        d = sqrt(pow(this->get_coord_x(), 2) + pow(this->get_coord_y(), 2) + pow(this->get_coord_z(), 2));
     }
     return d;
 }
@@ -410,10 +410,10 @@ template<class T>
  */
 double Point<T>::dist2(Point<T> &p) const {
     if (this->dim == 2) {
-        return pow(this->getCoordX() - p.getCoordX(), 2) + pow(this->getCoordY() - p.getCoordY(), 2);
+        return pow(this->get_coord_x() - p.get_coord_x(), 2) + pow(this->get_coord_y() - p.get_coord_y(), 2);
     } else {
-        return pow(this->getCoordX() - p.getCoordX(), 2) + pow(this->getCoordY() - p.getCoordY(), 2) +
-               pow(this->getCoordZ() - p.getCoordZ(), 2);
+        return pow(this->get_coord_x() - p.get_coord_x(), 2) + pow(this->get_coord_y() - p.get_coord_y(), 2) +
+               pow(this->get_coord_z() - p.get_coord_z(), 2);
     }
 }
 
@@ -439,9 +439,9 @@ template<class T>
  */
 Point<T> Point<T>::operator/(T v) const {
     if (this->dim == 2) {
-        return Point<T>(this->getCoordX() / v, this->getCoordY() / v);
+        return Point<T>(this->get_coord_x() / v, this->get_coord_y() / v);
     } else {
-        return Point<T>(this->getCoordX() / v, this->getCoordY() / v, this->getCoordZ() / v);
+        return Point<T>(this->get_coord_x() / v, this->get_coord_y() / v, this->get_coord_z() / v);
     }
 }
 
@@ -455,9 +455,9 @@ template<class T>
  */
 Point<T> Point<T>::operator*(T v) const {
     if (this->dim == 2) {
-        return Point<T>(this->getCoordX() * v, this->getCoordY() * v);
+        return Point<T>(this->get_coord_x() * v, this->get_coord_y() * v);
     } else {
-        return Point<T>(this->getCoordX() * v, this->getCoordY() * v, this->getCoordZ() * v);
+        return Point<T>(this->get_coord_x() * v, this->get_coord_y() * v, this->get_coord_z() * v);
     }
 }
 
@@ -547,10 +547,10 @@ template<class T>
  */
 bool Point<T>::operator==(const Point<T> &p) const {
     if (this->dim == 2 && p.dim == 2) {
-        return this->getCoordX() == p.getCoordX() && this->getCoordY() == p.getCoordY();
+        return this->get_coord_x() == p.get_coord_x() && this->get_coord_y() == p.get_coord_y();
     } else if (this->dim == 3 && p.dim == 3) {
-        return this->getCoordX() == p.getCoordX() && this->getCoordY() == p.getCoordY() &&
-               this->getCoordZ() == p.getCoordZ();
+        return this->get_coord_x() == p.get_coord_x() && this->get_coord_y() == p.get_coord_y() &&
+                this->get_coord_z() == p.get_coord_z();
     } else {
         throw std::logic_error("Point dimension is not the same");
     }
@@ -600,8 +600,8 @@ template<class T>
  * @return -1 si no es ccw, 1 si es ccw
  */
 int Point<T>::ccw(Point<T> &a, Point<T> &b) {
-    T area = (a.getCoordX() - this->getCoordX()) * (b.getCoordY() - this->getCoordY()) -
-             (a.getCoordY() - this->getCoordY()) * (b.getCoordX() - this->getCoordX());
+    T area = (a.get_coord_x() - this->get_coord_x()) * (b.get_coord_y() - this->get_coord_y()) -
+             (a.get_coord_y() - this->get_coord_y()) * (b.get_coord_x() - this->get_coord_x());
     if (area > 0.0f)
         return -1; // No son ccw
     else
@@ -617,9 +617,9 @@ template<class T>
  */
 Point<T> Point<T>::clonar() {
     if (this->dim < 3)
-        return Point<T>(this->getCoordX(), this->getCoordY());
+        return Point<T>(this->get_coord_x(), this->get_coord_y());
     else
-        return Point<T>(this->getCoordZ(), this->getCoordY(), this->getCoordZ());
+        return Point<T>(this->get_coord_z(), this->get_coord_y(), this->get_coord_z());
 }
 
 template<class T>
@@ -631,13 +631,13 @@ template<class T>
  * @return Valor del coseno
  */
 double Point<T>::cos(Point<T> &a) {
-    if (a.getCoordX() == this->getCoordX())
+    if (a.get_coord_x() == this->get_coord_x())
         return 0.0f;
-    if (a.getCoordY() == this->getCoordY()) {
-        if (a.getCoordX() > this->getCoordX()) return 1;
+    if (a.get_coord_y() == this->get_coord_y()) {
+        if (a.get_coord_x() > this->get_coord_x()) return 1;
         else return -1;
     }
-    return acos((double) ((a.getCoordX() - this->getCoordX())) / (this->dist(a)));
+    return acos((double) ((a.get_coord_x() - this->get_coord_x())) / (this->dist(a)));
 }
 
 template<class T>
@@ -649,13 +649,13 @@ template<class T>
  * @return Valor del coseno
  */
 double Point<T>::cos(Point<T> &a, double dist) {
-    if (a.getCoordX() == this->getCoordX() || dist == 0)
+    if (a.get_coord_x() == this->get_coord_x() || dist == 0)
         return 0;
-    if (a.getCoordY() == this->getCoordY()) {
-        if (a.getCoordX() > this->getCoordX()) return 1;
+    if (a.get_coord_y() == this->get_coord_y()) {
+        if (a.get_coord_x() > this->get_coord_x()) return 1;
         else return -1;
     }
-    return acos((double) ((a.getCoordX() - this->getCoordX()) / dist));
+    return acos((double) ((a.get_coord_x() - this->get_coord_x()) / dist));
 }
 
 #pragma clang diagnostic pop

@@ -21,25 +21,25 @@ void test2D_int() {
     p1.print();
 
     // Comprueba que se hayan definido bien los objetos
-    assert(p1.getCoordX() == 420);
-    assert(p1.getCoordY() != 0);
+    assert(p1.get_coord_x() == 420);
+    assert(p1.get_coord_y() != 0);
 
     // Comprueba sumas
     Point<int> p2 = Point<int>(0, -69);
     Point<int> p3 = p1 + p2;
-    assert(p3.getCoordX() == 420 && p3.getCoordY() == 0);
+    assert(p3.get_coord_x() == 420 && p3.get_coord_y() == 0);
 
     // Comprueba suma a sí mismo. (0, -69) + (420, 0) = (420, -69)
     p2 += p3;
-    assert(p2.getCoordX() == 420 && p2.getCoordY() == -69);
+    assert(p2.get_coord_x() == 420 && p2.get_coord_y() == -69);
 
     // Restas
     p2 = -p2;
-    assert(p2.getCoordX() == -420 && p2.getCoordY() == 69);
+    assert(p2.get_coord_x() == -420 && p2.get_coord_y() == 69);
 
     // Valor absoluto
     p2 = p2.abs();
-    assert(p2.getCoordX() == 420 && p2.getCoordY() == 69);
+    assert(p2.get_coord_x() == 420 && p2.get_coord_y() == 69);
 
     // Calcula distancia de un punto al eje
     Point<int> porigin = Point<int>(0, 0);
@@ -49,7 +49,7 @@ void test2D_int() {
     p2.setCoordX(5);
     p2.setCoordY(5);
     p2 /= 5;
-    assert(p2.getCoordX() == 1 && p2.getCoordY() == 1);
+    assert(p2.get_coord_x() == 1 && p2.get_coord_y() == 1);
 
     // Point uno
     Point<int> pone = Point<int>(1, 1);
@@ -67,7 +67,7 @@ void test2D_float() {
     p2 = new Point<float>(4.20, 2.10);
 
     // Comprobación a lo bruto sumas y restas
-    assert(p1->getCoordY() + p2->getCoordY() == 4.20f);
+    assert(p1->get_coord_y() + p2->get_coord_y() == 4.20f);
 }
 
 /**
