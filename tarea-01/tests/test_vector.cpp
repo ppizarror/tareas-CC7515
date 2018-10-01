@@ -151,6 +151,19 @@ void test_eq_noteq() {
 }
 
 /**
+ * Testea la suma de vectores.
+ */
+void test_add() {
+    Vector<double> v1 = Vector<double>(1, 1, 1);
+    Vector<double> v2 = Vector<double>(1, -1, 1);
+    assert(v1 + v2 == Vector<double>(2, 0, 2)); // Modo nuevo objeto
+
+    v1 += v2; // Modo suma a sí mismo
+    Vector<double> v3 = Vector<double>(2, 0, 2);
+    assert(v1 == v3);
+}
+
+/**
  * Corre los test.
  */
 int main() {
@@ -164,6 +177,7 @@ int main() {
     test_from_point();
     test_precision();
     test_eq_noteq();
+    test_add();
 
     // Retorna
     return 0;

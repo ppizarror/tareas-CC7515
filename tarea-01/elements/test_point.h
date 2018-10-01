@@ -287,6 +287,7 @@ Point<T> &Point<T>::operator+=(const Point<T> &p) {
     } else {
         throw std::logic_error("Invalid dimension to perform += operator");
     }
+
     return *this;
 }
 
