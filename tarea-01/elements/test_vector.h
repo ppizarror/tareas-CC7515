@@ -17,7 +17,7 @@
 #include <algorithm> // Para max
 #include <cmath>
 #include <iostream>
-#include "point.h"
+#include "test_point.h"
 
 template<class T>
 /**

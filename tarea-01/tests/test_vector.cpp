@@ -8,7 +8,7 @@
 // Importación de librerías
 #include <iostream>
 #include <cassert>
-#include "../elements/vector.h"
+#include "../elements/test_vector.h"
 
 /**
  * Testea normalizado de vectores.
@@ -40,9 +40,25 @@ void test2D_dot() {
 }
 
 /**
- * Testea producto cruz vectores.
+ * Testea producto cruz vectores en 2D.
  */
 void test2D_cross() {
+    Vector<float> v1 = Vector<float>(3, 2);
+    Vector<float> v2 = Vector<float>(2, -1);
+    Vector<float> v3 = v1.cross(v2);
+    assert(v3.getI() == 0.0f && v3.getJ() == 0.0f && v3.getK() == -7.0f); // (3,2,0)x(2,-1,0)=(0,0,-7)
+
+    v1 = Vector<float>(3, -4);
+    v2 = Vector<float>(2, 6);
+    v3 = v1.cross(v2);
+    std::cout << v1 << " x " << v2 << " = " << v3 << std::endl;
+    assert(v3 == Vector<float>(0, 0, 26));
+}
+
+/**
+ * Testea producto cruz vectores en 3D.
+ */
+void test3D_cross() {
     Vector<float> v1 = Vector<float>(3, 2);
     Vector<float> v2 = Vector<float>(2, -1);
     Vector<float> v3 = v1.cross(v2);

@@ -8,7 +8,7 @@
 // Importación de librerías
 #include <iostream>
 #include <cassert>
-#include "../elements/point.h"
+#include "../elements/test_point.h"
 
 /**
  * Testea la creación de un punto entero.
@@ -97,16 +97,27 @@ void test2D_dist_cos() {
 }
 
 /**
+ * Testea tamaño de un vector en 3D.
+ */
+void test3D_length() {
+    Point<double> p = Point<double>(0, 3, 4);
+    assert(p.dist_origin() == 5);
+}
+
+/**
  * Corre los test.
  */
 int main() {
     std::cout << "Testeando punto" << std::endl;
 
-    // Carga los tests 2D
+    // Inicia los tests 2D
     test2D_int();
     test2D_float();
     test2D_eq_not();
     test2D_dist_cos();
+
+    // Inicia los tests 3D
+    test3D_length();
 
     // Retorna
     return 0;
