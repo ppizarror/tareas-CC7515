@@ -179,6 +179,9 @@ void test_substract() {
     v1 = Vector<double>(1, 1, 1);
     v2 = Vector<double>(1, -1, 1);
     assert(v1 - v2 == Vector<double>(0, 2, 0) && v2 - v1 == Vector<double>(0, -2, 0));
+
+    // Verifica la resta unaria
+    assert(-(v1 - v2) == Vector<double>(0, -2, 0));
 }
 
 /**

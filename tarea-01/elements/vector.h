@@ -108,6 +108,9 @@ public:
     // Resta un vector a sí mismo
     Vector<T> &operator-=(const Vector<T> &v);
 
+    // Resta unaria
+    Vector<T> operator-() const;
+
     // Comprobación igualdad
     bool operator==(const Vector<T> &v) const;
 
@@ -544,6 +547,21 @@ Vector<T> &Vector<T>::operator-=(const Vector<T> &v) {
     }
 
     return *this;
+}
+
+template<class T>
+/**
+ * Resta unaria.
+ *
+ * @tparam T Template
+ * @return Vector con componentes negativas
+ */
+Vector<T> Vector<T>::operator-() const {
+    if (this->dim == 2) {
+        return Vector<T>(-this->get_i(), -this->get_j());
+    } else {
+        return Vector<T>(-this->get_i(), -this->get_j(), -this->get_k());
+    }
 }
 
 #pragma clang diagnostic pop
