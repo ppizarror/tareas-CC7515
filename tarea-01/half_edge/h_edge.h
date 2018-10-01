@@ -6,12 +6,13 @@
  * @date 01/10/2018
  */
 
-#ifndef T_CC7515_HALFEDGE_HEDGE_H
-#define T_CC7515_HALFEDGE_HEDGE_H
+// Inicia el bloque
+#ifndef T_CC7515_HALFEDGE_H_EDGE_H
+#define T_CC7515_HALFEDGE_H_EDGE_H
 
 class H_Edge {
 private:
-
+    
 };
 
-#endif //T_CC7515_HALFEDGE_HEDGE_H
+#endif //T_CC7515_HALFEDGE_H_EDGE_H

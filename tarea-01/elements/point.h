@@ -1,6 +1,7 @@
 /**
  * Clase Punto.
  *
+ * @package elements
  * @author Pablo Pizarro
  * @date 30/09/2018
  */
@@ -9,10 +10,11 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 
-// Importación de librerías
+// Inicia el bloque
 #ifndef T_CC7515_ELEMENTS_POINT_H
 #define T_CC7515_ELEMENTS_POINT_H
 
+// Importación de librerías
 #include <cmath>
 #include <iostream>
 #include <ctgmath>

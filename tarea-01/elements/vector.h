@@ -2,6 +2,7 @@
  * Clase Vector.
  * Provee funciones para operaciones producto punto, cruz y normalización.
  *
+ * @package elements
  * @author Pablo Pizarro
  * @date 30/09/2018
  */
@@ -10,10 +11,11 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 
-// Importación de librerías
+// Inicia el bloque
 #ifndef T_CC7515_ELEMENTS_VECTOR_H
 #define T_CC7515_ELEMENTS_VECTOR_H
 
+// Importación de librerías
 #include <algorithm> // Para max
 #include <cmath>
 #include <iostream>
