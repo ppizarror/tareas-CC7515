@@ -8,7 +8,7 @@
 // Importación de librerías
 #include <iostream>
 #include <cassert>
-#include "../elements/test_vector.h"
+#include "../elements/vector.h"
 
 /**
  * Testea normalizado de vectores.
