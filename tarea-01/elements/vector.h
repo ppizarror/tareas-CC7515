@@ -117,6 +117,12 @@ public:
     // Multiplica por un valor a sí mismo
     Vector<T> &operator*=(const T v);
 
+    // Divide por un valor y retorna nuevo vector
+    Vector<T> operator*(const T v) const;
+
+    // Divide por un valor a sí mismo
+    Vector<T> &operator*=(const T v);
+
     // Comprobación igualdad
     bool operator==(const Vector<T> &v) const;
 

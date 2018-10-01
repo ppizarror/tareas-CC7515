@@ -118,17 +118,17 @@ public:
     // Resta unaria
     Point<T> operator-() const;
 
-    // Divide por un valor
-    Point<T> operator/(const T v) const;
-
-    // Divide por un valor a sí mismo
-    Point<T> &operator/=(const T v);
-
     // Multiplica por un valor
     Point<T> operator*(const T v) const;
 
     // Multiplica por un valor a sí mismo
     Point<T> &operator*=(const T v);
+
+    // Divide por un valor
+    Point<T> operator/(const T v) const;
+
+    // Divide por un valor a sí mismo
+    Point<T> &operator/=(const T v);
 
     // Comprobación igualdad
     bool operator==(const Point<T> &p) const;
@@ -251,6 +251,215 @@ void Point<T>::print() const {
 
 template<class T>
 /**
+ * Retorna el valor absoluto del punto.
+ *
+ * @tparam T Template
+ * @return
+ */
+Point<T> Point<T>::abs() const {
+    if (this->dim == 2) {
+        return Point<T>(std::abs(this->get_coord_x()), std::abs(this->get_coord_y()));
+    } else {
+        return Point<T>(std::abs(this->get_coord_x()), std::abs(this->get_coord_y()), std::abs(this->get_coord_z()));
+    }
+}
+
+template<class T>
+/**
+ * Retorna distancia al origen del punto.
+ *
+ * @tparam T Template
+ * @return
+ */
+double Point<T>::dist_origin() const {
+    double d;
+    if (this->dim == 2) {
+        d = sqrt(pow(this->get_coord_x(), 2) + pow(this->get_coord_y(), 2));
+    } else {
+        d = sqrt(pow(this->get_coord_x(), 2) + pow(this->get_coord_y(), 2) + pow(this->get_coord_z(), 2));
+    }
+    return d;
+}
+
+template<class T>
+/**
+ * Calcula la distancia al cuadrado entre dos puntos.
+ *
+ * @tparam Template
+ * @param p Punto
+ * @return
+ */
+double Point<T>::dist2(Point<T> &p) const {
+    if (this->dim == 2) {
+        return pow(this->get_coord_x() - p.get_coord_x(), 2) + pow(this->get_coord_y() - p.get_coord_y(), 2);
+    } else {
+        return pow(this->get_coord_x() - p.get_coord_x(), 2) + pow(this->get_coord_y() - p.get_coord_y(), 2) +
+               pow(this->get_coord_z() - p.get_coord_z(), 2);
+    }
+}
+
+template<class T>
+/**
+ * Calcula la distancia entre dos puntos.
+ *
+ * @tparam Template
+ * @param p Punto
+ * @return
+ */
+double Point<T>::dist(Point<T> &p) const {
+    return sqrt(this->dist2(p));
+}
+
+template<class T>
+/**
+ * Define coordenada x.
+ *
+ * @tparam T Template
+ * @param x Valor de la coordenada
+ */
+void Point<T>::set_coord_x(T x) {
+    this->coord[0] = x;
+}
+
+template<class T>
+/**
+ * Define coordenada y.
+ *
+ * @tparam T Template
+ * @param y Valor de la coordenada
+ */
+void Point<T>::set_coord_y(T y) {
+    this->coord[1] = y;
+}
+
+template<class T>
+/**
+ * Define coordenada z, aumenta dimensión.
+ *
+ * @tparam T Template
+ * @param z Valor de la coordenada
+ */
+void Point<T>::set_coord_z(T z) {
+    this->coord[2] = z;
+    if (this->dim == 2) {
+        this->dim = 3;
+    }
+}
+
+template<class T>
+/**
+ * Retorna la dimensión del punto.
+ *
+ * @tparam T Template
+ * @return Dimensión en N
+ */
+int Point<T>::get_dim() const {
+    return this->dim;
+}
+
+template<class T>
+/**
+ * Operador concatenación con strings.
+ *
+ * @return Concatena con un strng
+ */
+std::ostream &operator<<(std::ostream &out, const Point<T> &p) {
+    out << p.to_string();
+    return out;
+}
+
+template<class T>
+/**
+ * Comprueba el orden ccw entre el punto y a,b.
+ *
+ * @tparam T Template
+ * @param a Punto a
+ * @param b Punto b
+ * @return -1 si no es ccw, 1 si es ccw
+ */
+int Point<T>::ccw(Point<T> &a, Point<T> &b) {
+    T area = (a.get_coord_x() - this->get_coord_x()) * (b.get_coord_y() - this->get_coord_y()) -
+             (a.get_coord_y() - this->get_coord_y()) * (b.get_coord_x() - this->get_coord_x());
+    if (area > 0.0f)
+        return -1; // No son ccw
+    else
+        return 1; // ccw
+}
+
+template<class T>
+/**
+ * Clona el punto.
+ *
+ * @tparam T Template
+ * @return Punto nuevo
+ */
+Point<T> Point<T>::clone() {
+    if (this->dim < 3)
+        return Point<T>(this->get_coord_x(), this->get_coord_y());
+    else
+        return Point<T>(this->get_coord_z(), this->get_coord_y(), this->get_coord_z());
+}
+
+template<class T>
+/**
+ * Obtiene el coseno del ángulo entre el punto y otro.
+ *
+ * @tparam T - Template
+ * @param a - Punto
+ * @return Valor del coseno
+ */
+double Point<T>::cos(Point<T> &a) {
+    if (a.get_coord_x() == this->get_coord_x())
+        return 0.0f;
+    if (a.get_coord_y() == this->get_coord_y()) {
+        if (a.get_coord_x() > this->get_coord_x()) return 1;
+        else return -1;
+    }
+    return acos((double) ((a.get_coord_x() - this->get_coord_x())) / (this->dist(a)));
+}
+
+template<class T>
+/**
+ * Obtiene el coseno del ángulo entre el punto y otro.
+ *
+ * @tparam T - Template
+ * @param a - Punto
+ * @return Valor del coseno
+ */
+double Point<T>::cos(Point<T> &a, double dist) {
+    if (a.get_coord_x() == this->get_coord_x() || dist == 0)
+        return 0;
+    if (a.get_coord_y() == this->get_coord_y()) {
+        if (a.get_coord_x() > this->get_coord_x()) return 1;
+        else return -1;
+    }
+    return acos((double) ((a.get_coord_x() - this->get_coord_x()) / dist));
+}
+
+template<class T>
+/**
+ * Operación asignación.
+ *
+ * @tparam T Template
+ * @param p Punto
+ * @return
+ */
+Point<T> &Point<T>::operator=(const Point<T> &p) {
+    this->coord[0] = p.get_coord_x();
+    this->coord[1] = p.get_coord_y();
+
+    // Comprobación dimensiones
+    if (p.get_dim() == 3) {
+        this->dim = 3;
+        this->coord[2] = p.get_coord_z();
+    } else {
+        this->dim = 2;
+    }
+    return *this;
+}
+
+template<class T>
+/**
  * Suma el punto con otro y retorna un nuevo punto.
  *
  * @tparam T Template
@@ -349,105 +558,6 @@ Point<T> Point<T>::operator-() const {
 
 template<class T>
 /**
- * Operación asignación.
- *
- * @tparam T Template
- * @param p Punto
- * @return
- */
-Point<T> &Point<T>::operator=(const Point<T> &p) {
-    this->coord[0] = p.get_coord_x();
-    this->coord[1] = p.get_coord_y();
-
-    // Comprobación dimensiones
-    if (p.get_dim() == 3) {
-        this->dim = 3;
-        this->coord[2] = p.get_coord_z();
-    } else {
-        this->dim = 2;
-    }
-    return *this;
-}
-
-template<class T>
-/**
- * Retorna el valor absoluto del punto.
- *
- * @tparam T Template
- * @return
- */
-Point<T> Point<T>::abs() const {
-    if (this->dim == 2) {
-        return Point<T>(std::abs(this->get_coord_x()), std::abs(this->get_coord_y()));
-    } else {
-        return Point<T>(std::abs(this->get_coord_x()), std::abs(this->get_coord_y()), std::abs(this->get_coord_z()));
-    }
-}
-
-template<class T>
-/**
- * Retorna distancia al origen del punto.
- *
- * @tparam T Template
- * @return
- */
-double Point<T>::dist_origin() const {
-    double d;
-    if (this->dim == 2) {
-        d = sqrt(pow(this->get_coord_x(), 2) + pow(this->get_coord_y(), 2));
-    } else {
-        d = sqrt(pow(this->get_coord_x(), 2) + pow(this->get_coord_y(), 2) + pow(this->get_coord_z(), 2));
-    }
-    return d;
-}
-
-template<class T>
-/**
- * Calcula la distancia al cuadrado entre dos puntos.
- *
- * @tparam Template
- * @param p Punto
- * @return
- */
-double Point<T>::dist2(Point<T> &p) const {
-    if (this->dim == 2) {
-        return pow(this->get_coord_x() - p.get_coord_x(), 2) + pow(this->get_coord_y() - p.get_coord_y(), 2);
-    } else {
-        return pow(this->get_coord_x() - p.get_coord_x(), 2) + pow(this->get_coord_y() - p.get_coord_y(), 2) +
-               pow(this->get_coord_z() - p.get_coord_z(), 2);
-    }
-}
-
-template<class T>
-/**
- * Calcula la distancia entre dos puntos.
- *
- * @tparam Template
- * @param p Punto
- * @return
- */
-double Point<T>::dist(Point<T> &p) const {
-    return sqrt(this->dist2(p));
-}
-
-template<class T>
-/**
- * Divide el punto por un valor.
- *
- * @tparam T Template
- * @param v valor
- * @return
- */
-Point<T> Point<T>::operator/(const T v) const {
-    if (this->dim == 2) {
-        return Point<T>(this->get_coord_x() / v, this->get_coord_y() / v);
-    } else {
-        return Point<T>(this->get_coord_x() / v, this->get_coord_y() / v, this->get_coord_z() / v);
-    }
-}
-
-template<class T>
-/**
  * Multiplica el punto por un valor.
  *
  * @tparam T Template
@@ -464,37 +574,33 @@ Point<T> Point<T>::operator*(const T v) const {
 
 template<class T>
 /**
- * Define coordenada x.
+ * Multiplica y guarda en el mismo punto.
  *
  * @tparam T Template
- * @param x Valor de la coordenada
+ * @param v Valor a dividir
+ * @return Puntero al mismo objeto multiplicado
  */
-void Point<T>::set_coord_x(T x) {
-    this->coord[0] = x;
+Point<T> &Point<T>::operator*=(const T v) {
+    this->coord[0] *= v;
+    this->coord[1] *= v;
+    if (this->dim == 3) this->coord[2] *= v;
+    return *this;
 }
 
 template<class T>
 /**
- * Define coordenada y.
+ * Divide el punto por un valor.
  *
  * @tparam T Template
- * @param y Valor de la coordenada
+ * @param v valor
+ * @return
  */
-void Point<T>::set_coord_y(T y) {
-    this->coord[1] = y;
-}
-
-template<class T>
-/**
- * Define coordenada z, aumenta dimensión.
- *
- * @tparam T Template
- * @param z Valor de la coordenada
- */
-void Point<T>::set_coord_z(T z) {
-    this->coord[2] = z;
+Point<T> Point<T>::operator/(const T v) const {
+    if (v == 0) throw std::logic_error("Can't divide by zero");
     if (this->dim == 2) {
-        this->dim = 3;
+        return Point<T>(this->get_coord_x() / v, this->get_coord_y() / v);
+    } else {
+        return Point<T>(this->get_coord_x() / v, this->get_coord_y() / v, this->get_coord_z() / v);
     }
 }
 
@@ -507,34 +613,10 @@ template<class T>
  * @return Puntero al mismo objeto dividido
  */
 Point<T> &Point<T>::operator/=(const T v) {
-    // Se suman primero componente x e y
+    if (v == 0) throw std::logic_error("Can't divide by zero");
     this->coord[0] /= v;
     this->coord[1] /= v;
-
-    // Comprobación dimensiones
-    if (this->dim == 3) {
-        this->coord[2] /= v;
-    }
-    return *this;
-}
-
-template<class T>
-/**
- * Multiplica y guarda en el mismo punto.
- *
- * @tparam T Template
- * @param v Valor a dividir
- * @return Puntero al mismo objeto multiplicado
- */
-Point<T> &Point<T>::operator*=(const T v) {
-    // Se suman primero componente x e y
-    this->coord[0] *= v;
-    this->coord[1] *= v;
-
-    // Comprobación dimensiones
-    if (this->dim == 3) {
-        this->coord[2] *= v;
-    }
+    if (this->dim == 3) this->coord[2] /= v;
     return *this;
 }
 
@@ -574,96 +656,6 @@ bool Point<T>::operator!=(const Point<T> &p) const {
     } else {
         throw std::logic_error("Point dimension is not the same");
     }
-}
-
-template<class T>
-/**
- * Retorna la dimensión del punto.
- *
- * @tparam T Template
- * @return Dimensión en N
- */
-int Point<T>::get_dim() const {
-    return this->dim;
-}
-
-template<class T>
-/**
- * Operador concatenación con strings.
- *
- * @return Concatena con un strng
- */
-std::ostream &operator<<(std::ostream &out, const Point<T> &p) {
-    out << p.to_string();
-    return out;
-}
-
-template<class T>
-/**
- * Comprueba el orden ccw entre el punto y a,b.
- *
- * @tparam T Template
- * @param a Punto a
- * @param b Punto b
- * @return -1 si no es ccw, 1 si es ccw
- */
-int Point<T>::ccw(Point<T> &a, Point<T> &b) {
-    T area = (a.get_coord_x() - this->get_coord_x()) * (b.get_coord_y() - this->get_coord_y()) -
-             (a.get_coord_y() - this->get_coord_y()) * (b.get_coord_x() - this->get_coord_x());
-    if (area > 0.0f)
-        return -1; // No son ccw
-    else
-        return 1; // ccw
-}
-
-template<class T>
-/**
- * Clona el punto.
- *
- * @tparam T Template
- * @return Punto nuevo
- */
-Point<T> Point<T>::clone() {
-    if (this->dim < 3)
-        return Point<T>(this->get_coord_x(), this->get_coord_y());
-    else
-        return Point<T>(this->get_coord_z(), this->get_coord_y(), this->get_coord_z());
-}
-
-template<class T>
-/**
- * Obtiene el coseno del ángulo entre el punto y otro.
- *
- * @tparam T - Template
- * @param a - Punto
- * @return Valor del coseno
- */
-double Point<T>::cos(Point<T> &a) {
-    if (a.get_coord_x() == this->get_coord_x())
-        return 0.0f;
-    if (a.get_coord_y() == this->get_coord_y()) {
-        if (a.get_coord_x() > this->get_coord_x()) return 1;
-        else return -1;
-    }
-    return acos((double) ((a.get_coord_x() - this->get_coord_x())) / (this->dist(a)));
-}
-
-template<class T>
-/**
- * Obtiene el coseno del ángulo entre el punto y otro.
- *
- * @tparam T - Template
- * @param a - Punto
- * @return Valor del coseno
- */
-double Point<T>::cos(Point<T> &a, double dist) {
-    if (a.get_coord_x() == this->get_coord_x() || dist == 0)
-        return 0;
-    if (a.get_coord_y() == this->get_coord_y()) {
-        if (a.get_coord_x() > this->get_coord_x()) return 1;
-        else return -1;
-    }
-    return acos((double) ((a.get_coord_x() - this->get_coord_x()) / dist));
 }
 
 #pragma clang diagnostic pop
