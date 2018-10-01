@@ -72,14 +72,14 @@ public:
     // Suma un punto a sí mismo
     Point<T> &operator+=(const Point<T> &p);
 
-    // Suma dos puntos y retorna un tercero
+    // Resta dos puntos y retorna un tercero
     Point<T> operator-(Point<T> &p) const;
+
+    // Resta un punto a sí mismo
+    Point<T> &operator-=(const Point<T> &p);
 
     // Resta unaria
     Point<T> operator-() const;
-
-    // Suma un punto a sí mismo
-    Point<T> &operator-=(const Point<T> &p);
 
     // Asignación
     Point<T> &operator=(const Point<T> &p);

@@ -83,6 +83,9 @@ public:
     // Asignación
     Vector<T> &operator=(const Vector<T> &v);
 
+    // Suma dos vectores y retorna un tercero
+    Vector<T> operator+(const Vector<T> &v) const;
+
     // Comprobación igualdad
     bool operator==(const Vector<T> &v) const;
 
@@ -417,7 +420,7 @@ std::ostream &operator<<(std::ostream &out, const Vector<T> &v) {
 template<class T>
 /**
  * Operador igualdad.
- * 
+ *
  * @tparam T Template
  * @param v Vector
  * @return Indica si dos vectores son iguales
@@ -435,7 +438,7 @@ bool Vector<T>::operator==(const Vector<T> &v) const {
 template<class T>
 /**
  * Operador desigualdad.
- * 
+ *
  * @tparam T Template
  * @param v Vector
  * @return Indica si dos vectores son distintos
@@ -445,6 +448,24 @@ bool Vector<T>::operator!=(const Vector<T> &v) const {
         return this->get_i() != v.get_i() || this->get_j() != v.get_j();
     } else if (this->dim == 3 && v.get_dim() == 3) {
         return this->get_i() != v.get_i() || this->get_j() != v.get_j() || this->get_k() != v.get_k();
+    } else {
+        throw std::logic_error("Vector dimension is not the same");
+    }
+}
+
+template<class T>
+/**
+ * Suma dos vectores y retorna un tercero.
+ *
+ * @tparam T Template
+ * @param v Vector a sumar
+ * @return Nuevo vector sumado
+ */
+Vector<T> Vector<T>::operator+(const Vector<T> &v) const {
+    if (this->dim == 2 && v.get_dim() == 2) {
+        return Vector<T>(this->get_i() + v.get_i(), this->get_j() + v.get_j());
+    } else if (this->dim == 3 && v.get_dim() == 3) {
+        return Vector<T>(this->get_i() + v.get_i(), this->get_j() + v.get_j(), this->get_k() + v.get_k());
     } else {
         throw std::logic_error("Vector dimension is not the same");
     }
