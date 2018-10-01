@@ -66,42 +66,6 @@ public:
     // Imprime el punto en la consola
     void print() const;
 
-    // Suma dos puntos y retorna un tercero
-    Point<T> operator+(const Point<T> &p) const;
-
-    // Suma un punto a sí mismo
-    Point<T> &operator+=(const Point<T> &p);
-
-    // Resta dos puntos y retorna un tercero
-    Point<T> operator-(Point<T> &p) const;
-
-    // Resta un punto a sí mismo
-    Point<T> &operator-=(const Point<T> &p);
-
-    // Resta unaria
-    Point<T> operator-() const;
-
-    // Asignación
-    Point<T> &operator=(const Point<T> &p);
-
-    // Divide por un valor
-    Point<T> operator/(T v) const;
-
-    // Multiplica por un valor
-    Point<T> operator*(T v) const;
-
-    // Divide por un valor y guarda el punto
-    Point<T> &operator/=(T v);
-
-    // Multiplica por un valor y guarda el punto
-    Point<T> &operator*=(T v);
-
-    // Comprobación igualdad
-    bool operator==(const Point<T> &p) const;
-
-    // Comprobación desigualdad
-    bool operator!=(const Point<T> &p) const;
-
     // Retorna valor absoluto
     Point<T> abs() const;
 
@@ -135,6 +99,42 @@ public:
 
     // Obtiene el coseno del ángulo entre un punto y otro
     double cos(Point<T> &a, double dist);
+
+    // Asignación
+    Point<T> &operator=(const Point<T> &p);
+
+    // Suma dos puntos y retorna un tercero
+    Point<T> operator+(const Point<T> &p) const;
+
+    // Suma un punto a sí mismo
+    Point<T> &operator+=(const Point<T> &p);
+
+    // Resta dos puntos y retorna un tercero
+    Point<T> operator-(Point<T> &p) const;
+
+    // Resta un punto a sí mismo
+    Point<T> &operator-=(const Point<T> &p);
+
+    // Resta unaria
+    Point<T> operator-() const;
+
+    // Divide por un valor
+    Point<T> operator/(T v) const;
+
+    // Divide por un valor a sí mismo
+    Point<T> &operator/=(T v);
+
+    // Multiplica por un valor
+    Point<T> operator*(T v) const;
+
+    // Multiplica por un valor a sí mismo
+    Point<T> &operator*=(T v);
+
+    // Comprobación igualdad
+    bool operator==(const Point<T> &p) const;
+
+    // Comprobación desigualdad
+    bool operator!=(const Point<T> &p) const;
 };
 
 template<class T>
