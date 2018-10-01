@@ -164,6 +164,24 @@ void test_add() {
 }
 
 /**
+ * Testa las restas.
+ */
+void test_substract() {
+    Vector<double> v1 = Vector<double>(1, 1, 1);
+    Vector<double> v2 = Vector<double>(1, -1, 1);
+    assert(v1 - v2 == Vector<double>(0, 2, 0)); // Modo nuevo objeto
+
+    v1 += v2; // Modo resta a sí mismo
+    Vector<double> v3 = Vector<double>(0, 2, 0);
+    assert(v1 == v3);
+
+    // Verifica la no conmutativatividad (a-b != b-a)
+    v1 = Vector<double>(1, 1, 1);
+    v2 = Vector<double>(1, -1, 1);
+    assert(v1 - v2 == Vector<double>(0, 2, 0) && v2 - v1 == Vector<double>(0, -2, 0));
+}
+
+/**
  * Corre los test.
  */
 int main() {
@@ -178,6 +196,7 @@ int main() {
     test_precision();
     test_eq_noteq();
     test_add();
+    test_substract();
 
     // Retorna
     return 0;

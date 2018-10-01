@@ -80,21 +80,6 @@ public:
     // Producto punto entre dos vectores
     Vector<T> dot(const Vector<T> &v) const;
 
-    // Asignación
-    Vector<T> &operator=(const Vector<T> &v);
-
-    // Suma dos vectores y retorna un tercero
-    Vector<T> operator+(const Vector<T> &v) const;
-
-    // Suma un vector a sí mismo
-    Vector<T> &operator+=(const Vector<T> &v);
-
-    // Comprobación igualdad
-    bool operator==(const Vector<T> &v) const;
-
-    // Comprobación desigualdad
-    bool operator!=(const Vector<T> &v) const;
-
     // Retorna la dimensión del vector
     int get_dim() const;
 
@@ -107,6 +92,27 @@ public:
     // Operación concatenación con string
     template<class U>
     friend std::ostream &operator<<(std::ostream &out, const Vector<U> &v);
+
+    // Asignación
+    Vector<T> &operator=(const Vector<T> &v);
+
+    // Suma dos vectores y retorna un tercero
+    Vector<T> operator+(const Vector<T> &v) const;
+
+    // Suma un vector a sí mismo
+    Vector<T> &operator+=(const Vector<T> &v);
+
+    // Resta dos vectores y retorna un tercero
+    Vector<T> operator-(const Vector<T> &v) const;
+
+    // Resta un vector a sí mismo
+    Vector<T> &operator-=(const Vector<T> &v);
+
+    // Comprobación igualdad
+    bool operator==(const Vector<T> &v) const;
+
+    // Comprobación desigualdad
+    bool operator!=(const Vector<T> &v) const;
 
 };
 
@@ -493,6 +499,48 @@ Vector<T> &Vector<T>::operator+=(const Vector<T> &v) {
         this->set_k(this->get_k() + v.get_k());
     } else {
         throw std::logic_error("Invalid dimension to perform += operator");
+    }
+
+    return *this;
+}
+
+template<class T>
+/**
+ * Resta dos vectores y retorna un tercero.
+ *
+ * @tparam T Template
+ * @param v Vector a sumar
+ * @return Nuevo vector sumado
+ */
+Vector<T> Vector<T>::operator-(const Vector<T> &v) const {
+    if (this->dim == 2 && v.get_dim() == 2) {
+        return Vector<T>(this->get_i() - v.get_i(), this->get_j() - v.get_j());
+    } else if (this->dim == 3 && v.get_dim() == 3) {
+        return Vector<T>(this->get_i() - v.get_i(), this->get_j() - v.get_j(), this->get_k() - v.get_k());
+    } else {
+        throw std::logic_error("Vector dimension is not the same");
+    }
+}
+
+template<class T>
+/**
+ * Resta un vector a sí mismo
+ *
+ * @tparam T Template
+ * @param v Vector a sumar
+ * @return El puntero al objeto
+ */
+Vector<T> &Vector<T>::operator-=(const Vector<T> &v) {
+    // Se restan componentes en i y j
+    this->set_i(this->get_i() - v.get_i());
+    this->set_j(this->get_j() - v.get_j());
+
+    // Comprobación dimensiones
+    if (this->dim == 3 && v.get_dim() == 2) {
+    } else if (this->dim == 3 && v.get_dim() == 3) {
+        this->set_k(this->get_k() - v.get_k());
+    } else {
+        throw std::logic_error("Invalid dimension to perform -= operator");
     }
 
     return *this;
