@@ -11,8 +11,8 @@
 #pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 
 // Importación de librerías
-#ifndef T1_CC5502_1_VECTOR_H
-#define T1_CC5502_1_VECTOR_H
+#ifndef T1_CC7515_1_VECTOR_H
+#define T1_CC7515_1_VECTOR_H
 
 #include <algorithm> // Para max
 #include <cmath>
@@ -443,42 +443,6 @@ std::ostream &operator<<(std::ostream &out, const Vector<T> &v) {
 
 template<class T>
 /**
- * Operador igualdad.
- *
- * @tparam T Template
- * @param v Vector
- * @return Indica si dos vectores son iguales
- */
-bool Vector<T>::operator==(const Vector<T> &v) const {
-    if (this->dim == 2 && v.get_dim() == 2) {
-        return this->get_i() == v.get_i() && this->get_j() == v.get_j();
-    } else if (this->dim == 3 && v.get_dim() == 3) {
-        return this->get_i() == v.get_i() && this->get_j() == v.get_j() && this->get_k() == v.get_k();
-    } else {
-        throw std::logic_error("Vector dimension is not the same");
-    }
-}
-
-template<class T>
-/**
- * Operador desigualdad.
- *
- * @tparam T Template
- * @param v Vector
- * @return Indica si dos vectores son distintos
- */
-bool Vector<T>::operator!=(const Vector<T> &v) const {
-    if (this->dim == 2 && v.get_dim() == 2) {
-        return this->get_i() != v.get_i() || this->get_j() != v.get_j();
-    } else if (this->dim == 3 && v.get_dim() == 3) {
-        return this->get_i() != v.get_i() || this->get_j() != v.get_j() || this->get_k() != v.get_k();
-    } else {
-        throw std::logic_error("Vector dimension is not the same");
-    }
-}
-
-template<class T>
-/**
  * Suma dos vectores y retorna un tercero.
  *
  * @tparam T Template
@@ -644,5 +608,41 @@ Vector<T> &Vector<T>::operator/=(const T v) {
     return *this;
 }
 
+template<class T>
+/**
+ * Operador igualdad.
+ *
+ * @tparam T Template
+ * @param v Vector
+ * @return Indica si dos vectores son iguales
+ */
+bool Vector<T>::operator==(const Vector<T> &v) const {
+    if (this->dim == 2 && v.get_dim() == 2) {
+        return this->get_i() == v.get_i() && this->get_j() == v.get_j();
+    } else if (this->dim == 3 && v.get_dim() == 3) {
+        return this->get_i() == v.get_i() && this->get_j() == v.get_j() && this->get_k() == v.get_k();
+    } else {
+        throw std::logic_error("Vector dimension is not the same");
+    }
+}
+
+template<class T>
+/**
+ * Operador desigualdad.
+ *
+ * @tparam T Template
+ * @param v Vector
+ * @return Indica si dos vectores son distintos
+ */
+bool Vector<T>::operator!=(const Vector<T> &v) const {
+    if (this->dim == 2 && v.get_dim() == 2) {
+        return this->get_i() != v.get_i() || this->get_j() != v.get_j();
+    } else if (this->dim == 3 && v.get_dim() == 3) {
+        return this->get_i() != v.get_i() || this->get_j() != v.get_j() || this->get_k() != v.get_k();
+    } else {
+        throw std::logic_error("Vector dimension is not the same");
+    }
+}
+
 #pragma clang diagnostic pop
-#endif //T1_CC5502_1_VECTOR_H
+#endif //T1_CC7515_1_VECTOR_H

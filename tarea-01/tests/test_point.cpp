@@ -108,7 +108,7 @@ void test3D_length() {
  * Corre los test.
  */
 int main() {
-    std::cout << "Testeando punto" << std::endl;
+    std::cout << "Test Point" << std::endl;
 
     // Inicia los tests 2D
     test2D_int();

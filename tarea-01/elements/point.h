@@ -10,8 +10,8 @@
 #pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 
 // Importación de librerías
-#ifndef T1_CC5502_1_PUNTO_H
-#define T1_CC5502_1_PUNTO_H
+#ifndef T1_CC7515_1_PUNTO_H
+#define T1_CC7515_1_PUNTO_H
 
 #include <cmath>
 #include <iostream>
@@ -659,4 +659,4 @@ bool Point<T>::operator!=(const Point<T> &p) const {
 }
 
 #pragma clang diagnostic pop
-#endif //T1_CC5502_1_PUNTO_H
+#endif //T1_CC7515_1_PUNTO_H
