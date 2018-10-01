@@ -185,6 +185,14 @@ void test_substract() {
 }
 
 /**
+ * Testeo multiplicación.
+ */
+void test_mult() {
+    Vector<double> v1 = Vector<double>(-1, 1, -1);
+    assert(v1 * -1 == Vector<double>(1, -1, 1));
+}
+
+/**
  * Corre los test.
  */
 int main() {
@@ -200,6 +208,7 @@ int main() {
     test_eq_noteq();
     test_add();
     test_substract();
+    test_mult();
 
     // Retorna
     return 0;

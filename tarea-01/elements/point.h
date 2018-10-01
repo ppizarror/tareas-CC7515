@@ -110,7 +110,7 @@ public:
     Point<T> &operator+=(const Point<T> &p);
 
     // Resta dos puntos y retorna un tercero
-    Point<T> operator-(Point<T> &p) const;
+    Point<T> operator-(const Point<T> &p) const;
 
     // Resta un punto a sí mismo
     Point<T> &operator-=(const Point<T> &p);
@@ -119,16 +119,16 @@ public:
     Point<T> operator-() const;
 
     // Divide por un valor
-    Point<T> operator/(T v) const;
+    Point<T> operator/(const T v) const;
 
     // Divide por un valor a sí mismo
-    Point<T> &operator/=(T v);
+    Point<T> &operator/=(const T v);
 
     // Multiplica por un valor
-    Point<T> operator*(T v) const;
+    Point<T> operator*(const T v) const;
 
     // Multiplica por un valor a sí mismo
-    Point<T> &operator*=(T v);
+    Point<T> &operator*=(const T v);
 
     // Comprobación igualdad
     bool operator==(const Point<T> &p) const;
@@ -299,7 +299,7 @@ template<class T>
  * @param p Punto
  * @return
  */
-Point<T> Point<T>::operator-(Point<T> &p) const {
+Point<T> Point<T>::operator-(const Point<T> &p) const {
     if (this->dim == 2 && p.dim == 2) {
         return Point<T>(this->get_coord_x() - p.get_coord_x(), this->get_coord_y() - p.get_coord_y());
     } else if (this->dim == 3 && p.dim == 3) {
@@ -438,7 +438,7 @@ template<class T>
  * @param v valor
  * @return
  */
-Point<T> Point<T>::operator/(T v) const {
+Point<T> Point<T>::operator/(const T v) const {
     if (this->dim == 2) {
         return Point<T>(this->get_coord_x() / v, this->get_coord_y() / v);
     } else {
@@ -454,7 +454,7 @@ template<class T>
  * @param v valor
  * @return
  */
-Point<T> Point<T>::operator*(T v) const {
+Point<T> Point<T>::operator*(const T v) const {
     if (this->dim == 2) {
         return Point<T>(this->get_coord_x() * v, this->get_coord_y() * v);
     } else {
@@ -506,7 +506,7 @@ template<class T>
  * @param v Valor a dividir
  * @return Puntero al mismo objeto dividido
  */
-Point<T> &Point<T>::operator/=(T v) {
+Point<T> &Point<T>::operator/=(const T v) {
     // Se suman primero componente x e y
     this->coord[0] /= v;
     this->coord[1] /= v;
@@ -526,7 +526,7 @@ template<class T>
  * @param v Valor a dividir
  * @return Puntero al mismo objeto multiplicado
  */
-Point<T> &Point<T>::operator*=(T v) {
+Point<T> &Point<T>::operator*=(const T v) {
     // Se suman primero componente x e y
     this->coord[0] *= v;
     this->coord[1] *= v;
