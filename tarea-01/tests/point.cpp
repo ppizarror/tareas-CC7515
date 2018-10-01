@@ -46,8 +46,8 @@ void test2D_int() {
     assert(p2.dist(porigin) == 3 * sqrt(20129));
 
     // Divide por un valor
-    p2.setCoordX(5);
-    p2.setCoordY(5);
+    p2.set_coord_x(5);
+    p2.set_coord_y(5);
     p2 /= 5;
     assert(p2.get_coord_x() == 1 && p2.get_coord_y() == 1);
 

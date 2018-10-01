@@ -26,7 +26,7 @@ template<class T>
  */
 class Point {
 private:
-    T *coord = new T[3]; // Vector
+    T coord[3]; // Crea la lista de puntos, 3 dimensiones => se puede para n
     int dim; // Dimensión del punto
 public:
 
@@ -52,16 +52,16 @@ public:
     T get_coord_z() const;
 
     // Establece la coordenada x
-    void setCoordX(T x);
+    void set_coord_x(T x);
 
     // Establece la coordenada y
-    void setCoordY(T y);
+    void set_coord_y(T y);
 
     // Establece una coordenada z
-    void setCoordZ(T z);
+    void set_coord_z(T z);
 
     // Retorna el punto en forma de String
-    std::string toString() const;
+    std::string to_string() const;
 
     // Imprime el punto en la consola
     void print() const;
@@ -112,10 +112,10 @@ public:
     double dist2(Point<T> &p) const;
 
     // Retorna distancia punto al origen
-    double distOrigin() const;
+    double dist_origin() const;
 
     // Retorna la dimensión del punto
-    int getDimension() const;
+    int get_dim() const;
 
     // Operación concatenación con string
     template<class U>
@@ -128,7 +128,7 @@ public:
     int ccw(Point<T> &a, Point<T> &b);
 
     // Clona el punto
-    Point<T> clonar();
+    Point<T> clone();
 
     // Obtiene el coseno del ángulo entre un punto y otro
     double cos(Point<T> &a);
@@ -157,8 +157,8 @@ template<class T>
  */
 Point<T>::Point(T x, T y) {
     this->dim = 2;
-    this->setCoordX(x);
-    this->setCoordY(y);
+    this->set_coord_x(x);
+    this->set_coord_y(y);
 }
 
 template<class T>
@@ -172,9 +172,9 @@ template<class T>
  */
 Point<T>::Point(T x, T y, T z) {
     this->dim = 3;
-    this->setCoordX(x);
-    this->setCoordY(y);
-    this->setCoordZ(z);
+    this->set_coord_x(x);
+    this->set_coord_y(y);
+    this->set_coord_z(z);
 }
 
 template<class T>
@@ -229,7 +229,7 @@ template<class T>
  * @tparam T Template
  * @return String en forma (x,y) o (x,y,z)
  */
-std::string Point<T>::toString() const {
+std::string Point<T>::to_string() const {
     std::string s = "(" + std::to_string(this->get_coord_x()) + "," + std::to_string(this->get_coord_y()); // Point
     if (this->dim == 2) {
         s += ")";
@@ -246,7 +246,7 @@ template<class T>
  * @tparam T Template
  */
 void Point<T>::print() const {
-    std::cout << this->toString() << std::endl;
+    std::cout << this->to_string() << std::endl;
 }
 
 template<class T>
@@ -359,7 +359,7 @@ Point<T> &Point<T>::operator=(const Point<T> &p) {
     this->coord[1] = p.get_coord_y();
 
     // Comprobación dimensiones
-    if (p.getDimension() == 3) {
+    if (p.get_dim() == 3) {
         this->dim = 3;
         this->coord[2] = p.get_coord_z();
     } else {
@@ -390,7 +390,7 @@ template<class T>
  * @tparam T Template
  * @return
  */
-double Point<T>::distOrigin() const {
+double Point<T>::dist_origin() const {
     double d;
     if (this->dim == 2) {
         d = sqrt(pow(this->get_coord_x(), 2) + pow(this->get_coord_y(), 2));
@@ -468,7 +468,7 @@ template<class T>
  * @tparam T Template
  * @param x Valor de la coordenada
  */
-void Point<T>::setCoordX(T x) {
+void Point<T>::set_coord_x(T x) {
     this->coord[0] = x;
 }
 
@@ -479,7 +479,7 @@ template<class T>
  * @tparam T Template
  * @param y Valor de la coordenada
  */
-void Point<T>::setCoordY(T y) {
+void Point<T>::set_coord_y(T y) {
     this->coord[1] = y;
 }
 
@@ -490,7 +490,7 @@ template<class T>
  * @tparam T Template
  * @param z Valor de la coordenada
  */
-void Point<T>::setCoordZ(T z) {
+void Point<T>::set_coord_z(T z) {
     this->coord[2] = z;
     if (this->dim == 2) {
         this->dim = 3;
@@ -550,7 +550,7 @@ bool Point<T>::operator==(const Point<T> &p) const {
         return this->get_coord_x() == p.get_coord_x() && this->get_coord_y() == p.get_coord_y();
     } else if (this->dim == 3 && p.dim == 3) {
         return this->get_coord_x() == p.get_coord_x() && this->get_coord_y() == p.get_coord_y() &&
-                this->get_coord_z() == p.get_coord_z();
+               this->get_coord_z() == p.get_coord_z();
     } else {
         throw std::logic_error("Point dimension is not the same");
     }
@@ -563,7 +563,7 @@ template<class T>
  * @tparam T Template
  * @return Dimensión en N
  */
-int Point<T>::getDimension() const {
+int Point<T>::get_dim() const {
     return this->dim;
 }
 
@@ -574,7 +574,7 @@ template<class T>
  * @return Concatena con un strng
  */
 std::ostream &operator<<(std::ostream &out, const Point<T> &p) {
-    out << p.toString();
+    out << p.to_string();
     return out;
 }
 
@@ -615,7 +615,7 @@ template<class T>
  * @tparam T Template
  * @return Punto nuevo
  */
-Point<T> Point<T>::clonar() {
+Point<T> Point<T>::clone() {
     if (this->dim < 3)
         return Point<T>(this->get_coord_x(), this->get_coord_y());
     else

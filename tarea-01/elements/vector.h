@@ -347,7 +347,7 @@ template<class T>
  * @param p Punto
  */
 Vector<T>::Vector(Point<T> &p) {
-    this->dim = p.getDimension();
+    this->dim = p.get_dim();
     if (this->dim == 2) { // Inicia vector en 2D
         this->setI(p.get_coord_x());
         this->setJ(p.get_coord_y());
