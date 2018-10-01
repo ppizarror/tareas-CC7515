@@ -11,8 +11,8 @@
 #pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 
 // Importación de librerías
-#ifndef T1_CC7515_1_VECTOR_H
-#define T1_CC7515_1_VECTOR_H
+#ifndef T_CC7515_ELEMENTS_VECTOR_H
+#define T_CC7515_ELEMENTS_VECTOR_H
 
 #include <algorithm> // Para max
 #include <cmath>
@@ -645,4 +645,4 @@ bool Vector<T>::operator!=(const Vector<T> &v) const {
 }
 
 #pragma clang diagnostic pop
-#endif //T1_CC7515_1_VECTOR_H
+#endif //T_CC7515_ELEMENTS_VECTOR_H
