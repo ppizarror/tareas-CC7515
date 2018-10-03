@@ -10,11 +10,18 @@
 #define T_CC7515_HALFEDGE_FACE_H
 
 // Importación de librerías
+
 #include "h_edge.h"
 
+template<class T>
+/**
+ * Clase cara.
+ *
+ * @tparam T Template
+ */
 class Face {
 private:
-    H_Edge *edge;
+    H_Edge<T> *edge;
 };
 
 #endif //T_CC7515_HALFEDGE_FACE_H
