@@ -39,6 +39,9 @@ public:
     // Destructor
     ~H_Edge();
 
+    // Retorna la cara
+    Face<T> *get_face() const;
+
 };
 
 template<class T>
@@ -61,6 +64,7 @@ template<class T>
 H_Edge<T>::H_Edge(Point<T> *p, Face<T> *f) {
     this->vert = Vertex<T>(p, this);
     this->face = f;
+    this->face->add_hedge(this);
 }
 
 template<class T>
@@ -70,7 +74,19 @@ template<class T>
  * @tparam T Template
  */
 H_Edge<T>::~H_Edge() {
+    this->face->remove_hedge(this);
 
+}
+
+template<class T>
+/**
+ * Retorna la cara.
+ *
+ * @tparam T Template
+ * @return Cara asociada al HEdge
+ */
+Face<T> *H_Edge<T>::get_face() const {
+    return this->face;
 }
 
 #endif //T_CC7515_HALFEDGE_HEDGE_H

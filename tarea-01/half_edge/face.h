@@ -34,13 +34,16 @@ public:
     Face();
 
     // Añade un HalfEdge a la lista
-    void add_hedge(const H_Edge<T> *hedge);
+    void add_hedge(H_Edge<T> *hedge);
 
     // Elimina un HalfEdge de la lista
-    void remove_hedge(const H_Edge<T> *hedge);
-    
+    void remove_hedge(H_Edge<T> *hedge);
+
+    // Verifica si un HalfEdge está dentro de la lista o no
+    bool in_face_half_edge(H_Edge<T> *hedge) const;
+
     // Retorna el número de edges
-    int number_edges();
+    unsigned long number_edges() const;
 
 };
 
@@ -57,20 +60,55 @@ template<class T>
 /**
  * Añade una referencia a un hedge a la lista.
  *
- * @tparam T
- * @param hedge
+ * @tparam T Template
+ * @param hedge Puntero al edge
  */
-void Face<T>::add_hedge(const H_Edge<T> *hedge) {
+void Face<T>::add_hedge(H_Edge<T> *hedge) {
     this->edges.push_back(hedge);
 }
 
 template<class T>
-void Face<T>::remove_hedge(const H_Edge<T> *hedge) {
+/**
+ * Remueve un edge de la cara.
+ *
+ * @tparam T Template
+ * @param hedge Puntero al edge
+ */
+void Face<T>::remove_hedge(H_Edge<T> *hedge) {
     for (unsigned i = 0; i < this->edges.size(); ++i) {
         if (this->edges[i] == hedge) {
-            std::cout << "te pille" << std::endl;
+            this->edges.erase(this->edges.begin() + i);
+            return;
         }
     }
+}
+
+template<class T>
+/**
+ * Retorna el número de edges que llegan a la cara.
+ *
+ * @tparam T Template
+ * @return Número de edges
+ */
+unsigned long Face<T>::number_edges() const {
+    return this->edges.size();
+}
+
+template<class T>
+/**
+ * Indica si un HalfEdge está dentro de una cara o no.
+ *
+ * @tparam T Template
+ * @param hedge HalfEdGE
+ * @return
+ */
+bool Face<T>::in_face_half_edge(H_Edge<T> *hedge) const {
+    for (unsigned i = 0; i < this->edges.size(); ++i) {
+        if (this->edges[i] == hedge) {
+            return true;
+        }
+    }
+    return false;
 }
 
 #endif //T_CC7515_HALFEDGE_FACE_H
