@@ -34,10 +34,13 @@ public:
     Face();
 
     // Añade un HalfEdge a la lista
-    void add_hedge(H_Edge<T> *hedge);
+    void add_hedge(const H_Edge<T> *hedge);
 
     // Elimina un HalfEdge de la lista
-    void remove_hedge(H_Edge<T> *hedge);
+    void remove_hedge(const H_Edge<T> *hedge);
+    
+    // Retorna el número de edges
+    int number_edges();
 
 };
 
@@ -57,12 +60,12 @@ template<class T>
  * @tparam T
  * @param hedge
  */
-void Face<T>::add_hedge(H_Edge<T> *hedge) {
+void Face<T>::add_hedge(const H_Edge<T> *hedge) {
     this->edges.push_back(hedge);
 }
 
 template<class T>
-void Face<T>::remove_hedge(H_Edge<T> *hedge) {
+void Face<T>::remove_hedge(const H_Edge<T> *hedge) {
     for (unsigned i = 0; i < this->edges.size(); ++i) {
         if (this->edges[i] == hedge) {
             std::cout << "te pille" << std::endl;

@@ -7,7 +7,6 @@
  */
 
 // Define parámetros compilación
-#pragma clang diagnostic push
 #pragma ide diagnostic ignored "modernize-use-auto"
 
 // Importa librerías
@@ -32,8 +31,12 @@ void test_basic() {
     Point<double> p3 = Point<double>(1, 1);
     Point<double> p4 = Point<double>(0, 1);
 
-    // Crea un vértice
-    H_Edge<double> he12 = H_Edge<double>(&p1, &f);
+    // Crea los Hedge
+    H_Edge<double> he12 = H_Edge<double>(&p2, &f);
+    H_Edge<double> he21 = H_Edge<double>(&p1, &f);
+    
+    // Vé que edges están en face
+    
 
 }
 
@@ -41,6 +44,11 @@ void test_basic() {
  * Corre los tests.
  */
 int main() {
+
+    // Corre los tests
+    test_basic();
+
+    // Retorna
     return 0;
+
 }
-#pragma clang diagnostic pop

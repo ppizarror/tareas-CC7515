@@ -72,10 +72,10 @@ public:
     Point<T> abs() const;
 
     // Calcula la distancia entre dos puntos
-    double dist(Point<T> &p) const;
+    double dist(const Point<T> &p) const;
 
     // Calcula la distancia al cuadrado entre dos puntos
-    double dist2(Point<T> &p) const;
+    double dist2(const Point<T> &p) const;
 
     // Retorna distancia punto al origen
     double dist_origin() const;
@@ -91,16 +91,16 @@ public:
     // +1   ccw
     // 0    colineal
     // -1   no ccw
-    int ccw(Point<T> &a, Point<T> &b);
+    int ccw(const Point<T> &a, const Point<T> &b);
 
     // Clona el punto
     Point<T> clone();
 
     // Obtiene el coseno del ángulo entre un punto y otro
-    double cos(Point<T> &a);
+    double cos(const Point<T> &a);
 
     // Obtiene el coseno del ángulo entre un punto y otro
-    double cos(Point<T> &a, double dist);
+    double cos(const Point<T> &a, double dist);
 
     // Asignación
     Point<T> &operator=(const Point<T> &p);
@@ -292,7 +292,7 @@ template<class T>
  * @param p Punto
  * @return
  */
-double Point<T>::dist2(Point<T> &p) const {
+double Point<T>::dist2(const Point<T> &p) const {
     if (this->dim == 2) {
         return pow(this->get_coord_x() - p.get_coord_x(), 2) + pow(this->get_coord_y() - p.get_coord_y(), 2);
     } else {
@@ -309,7 +309,7 @@ template<class T>
  * @param p Punto
  * @return
  */
-double Point<T>::dist(Point<T> &p) const {
+double Point<T>::dist(const Point<T> &p) const {
     return sqrt(this->dist2(p));
 }
 
@@ -380,7 +380,7 @@ template<class T>
  * @param b Punto b
  * @return -1 si no es ccw, 1 si es ccw
  */
-int Point<T>::ccw(Point<T> &a, Point<T> &b) {
+int Point<T>::ccw(const Point<T> &a, const Point<T> &b) {
     T area = (a.get_coord_x() - this->get_coord_x()) * (b.get_coord_y() - this->get_coord_y()) -
              (a.get_coord_y() - this->get_coord_y()) * (b.get_coord_x() - this->get_coord_x());
     if (area > 0.0f)
@@ -411,7 +411,7 @@ template<class T>
  * @param a - Punto
  * @return Valor del coseno
  */
-double Point<T>::cos(Point<T> &a) {
+double Point<T>::cos(const Point<T> &a) {
     if (a.get_coord_x() == this->get_coord_x())
         return 0.0f;
     if (a.get_coord_y() == this->get_coord_y()) {
@@ -429,7 +429,7 @@ template<class T>
  * @param a - Punto
  * @return Valor del coseno
  */
-double Point<T>::cos(Point<T> &a, double dist) {
+double Point<T>::cos(const Point<T> &a, double dist) {
     if (a.get_coord_x() == this->get_coord_x() || dist == 0)
         return 0;
     if (a.get_coord_y() == this->get_coord_y()) {
