@@ -44,6 +44,9 @@ public:
     template<class U>
     friend std::ostream &operator<<(std::ostream &out, const Vertex<U> &v);
 
+    // Retorna el punto
+    Point<T> *get_point() const;
+
 };
 
 template<class T>
@@ -89,6 +92,17 @@ template<class U>
 std::ostream &operator<<(std::ostream &out, const Vertex<U> &v) {
     out << v.p->to_string();
     return out;
+}
+
+template<class T>
+/**
+ * Retorna el punto.
+ *
+ * @tparam T Template
+ * @return Punto
+ */
+Point<T> *Vertex<T>::get_point() const {
+    return this->p;
 }
 
 #endif //T_CC7515_HALFEDGE_VERTEX_H

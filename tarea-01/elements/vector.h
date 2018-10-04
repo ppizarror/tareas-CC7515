@@ -256,9 +256,7 @@ template<class T>
  * @return Componente en z
  */
 T Vector<T>::get_k() const {
-    if (this->dim < 3) {
-        throw std::logic_error("K vector component does not exist in a 2D vector");
-    }
+    if (this->dim < 3) throw std::logic_error("K vector component does not exist in a 2D vector");
     return this->c[2];
 }
 

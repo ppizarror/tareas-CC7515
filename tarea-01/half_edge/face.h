@@ -12,6 +12,7 @@
 #define T_CC7515_HALFEDGE_FACE_H
 
 // Importa librerías
+#include "../elements/vector.h"
 #include <iostream>
 #include <vector>
 
@@ -28,6 +29,16 @@ template<class T>
 class Face {
 private:
     std::vector<H_Edge<T> *> edges; // Vector de todos los edges que llegan a esa cara
+
+    // Calcula el determinante de
+    // a b c
+    // d e f
+    // g h i
+    T determinant(T a, T b, T c, T d, T e, T f, T g, T h, T i) const;
+
+    // Calcula el área entre 3 puntos
+    T area2(const Point<T> &a, const Point<T> &b, const Point<T> &c) const;
+
 public:
 
     // Inicializa la cara
@@ -44,6 +55,12 @@ public:
 
     // Retorna el número de edges
     unsigned long number_edges() const;
+
+    // Retorna el número de la cadena
+    int chain_length() const;
+
+    // Obtiene el área de la cara
+    T get_area();
 
 };
 
@@ -109,6 +126,102 @@ bool Face<T>::in_face_half_edge(H_Edge<T> *hedge) const {
         }
     }
     return false;
+}
+
+template<class T>
+/**
+ * Retorna el área de la cara.l
+ *
+ * @tparam T Template
+ * @return
+ */
+T Face<T>::get_area() {
+    if (this->number_edges() == 0) return 0;
+
+    // Itera desde el primer HE, para ello recorre next hasta llegar al mismo
+    T areaTotal;
+    H_Edge<T> *he = this->edges[0];
+    H_Edge<T> *he1, *he2;
+    Point<T> p0 = *he->get_point(); // Elige un punto cualquiera
+
+    while (true) {
+        he1 = he->get_next();
+        he2 = he->get_next()->get_next();
+        areaTotal += this->area2(p0, *he1->get_point(), *he2->get_point());
+        he = he->get_next();
+        if (he == this->edges[0]) break; // Se cumple el ciclo, termina
+    }
+
+    return areaTotal;
+
+}
+
+template<class T>
+/**
+ * Calcula el determinante de:
+ *  a b c
+ *  d e f
+ *  g h i
+ *
+ * @tparam T Template
+ * @param a
+ * @param b
+ * @param c
+ * @param d
+ * @param e
+ * @param f
+ * @param g
+ * @param h
+ * @param i
+ * @return
+ */
+T Face<T>::determinant(T a, T b, T c, T d, T e, T f, T g, T h, T i) const {
+    return a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g);
+}
+
+template<class T>
+/**
+ * Calcula el área entre tres puntos, algoritmo visto en CC5502.
+ *
+ * @tparam T Template
+ * @param a Punto A
+ * @param b Punto B
+ * @param c Punto C
+ * @return Área entre los tres puntos
+ */
+T Face<T>::area2(const Point<T> &a, const Point<T> &b, const Point<T> &c) const {
+    T _area;
+    if (a.get_dim() == 2 && b.get_dim() == 2 && c.get_dim() == 2) {
+        _area = this->determinant(a.get_coord_x(), a.get_coord_y(), 1,
+                                  b.get_coord_x(), b.get_coord_y(), 1,
+                                  c.get_coord_x(), c.get_coord_y(), 1);
+    } else if (a.get_dim() == 3 && b.get_dim() == 3 && c.get_dim() == 3) {
+        _area = this->determinant(a.get_coord_x(), a.get_coord_y(), a.get_coord_z(),
+                                  b.get_coord_x(), b.get_coord_y(), b.get_coord_z(),
+                                  c.get_coord_x(), c.get_coord_y(), c.get_coord_z());
+    } else {
+        throw std::invalid_argument("Cant perform area with different point coordinates");
+    }
+    return 0.5 * _area;
+}
+
+template<class T>
+/**
+ * Retorna el número de la cadena de HalfEdges que conforman una cara.
+ *
+ * @tparam T Template
+ * @return
+ */
+int Face<T>::chain_length() const {
+    if (this->number_edges() == 0) return 0;
+    H_Edge<T> *he = this->edges[0]; // Parte desde cualquiera
+    int chain = 0;
+    while (true) {
+        he = he->get_next();
+        chain++;
+        if (he == this->edges[0]) break; // Se cumple el ciclo, termina
+    }
+    return chain;
 }
 
 #endif //T_CC7515_HALFEDGE_FACE_H

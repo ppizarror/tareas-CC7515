@@ -15,6 +15,7 @@
 // Importa librerías
 #include "face.h"
 #include "vertex.h"
+#include <stdexcept>
 
 /**
  * Clase principal HalfEdge.
@@ -28,6 +29,13 @@ private:
     Face<T> *face; // Cara que contiene al Half-Edge
     H_Edge *prev, *next; // Indica los half-edge anterior y posterior
     H_Edge *pair; // Half edge par, que contiene como vértice director el vértice origen
+
+    // Añade el HalfEdge anterior
+    void set_prev(H_Edge<T> *he);
+
+    // Establece la referencia al HalfEdge par del mismo objeto
+    void set_pair_reference(H_Edge<T> *he);
+
 public:
 
     // Constuctor vacío
@@ -44,6 +52,24 @@ public:
 
     // Imprime en consola
     void print() const;
+
+    // Añade el HalfEdge par
+    void set_pair(H_Edge<T> *he);
+
+    // Añade el HalfEdge posterior;
+    void set_next(H_Edge<T> *he);
+
+    // Obtiene el HalfEdge par
+    H_Edge<T> *get_pair() const;
+
+    // Obtiene el HalfEdge siguiente
+    H_Edge<T> *get_next() const;
+
+    // Obtiene el HalfEdge anterior
+    H_Edge<T> *get_prev() const;
+
+    // Entrega el punto al que apunta cada HalfEdge
+    Point<T> *get_point() const;
 
 };
 
@@ -100,6 +126,100 @@ template<class T>
  */
 void H_Edge<T>::print() const {
     std::cout << "he -> " << this->vert << std::endl;
+}
+
+template<class T>
+/**
+ * Añade el HalfEdge par.
+ *
+ * @tparam T Template
+ * @param he Puntero al HalfEdge
+ */
+void H_Edge<T>::set_pair(H_Edge<T> *he) {
+    if (this == he) throw std::invalid_argument("Pair HalfEdge cant be the same");
+    this->pair = he;
+    he->set_pair_reference(this); // El he tiene como par al mismo objeto
+}
+
+template<class T>
+
+/**
+ * Añade la referencia al HalfEdge par.
+ *
+ * @tparam T Template
+ * @param he Puntero al HalfEdge
+ */
+void H_Edge<T>::set_pair_reference(H_Edge<T> *he) {
+    this->pair = he;
+}
+
+template<class T>
+/**
+ * Añade el HalfEdge siguiente.
+ *
+ * @tparam T Template
+ * @param he Puntero al HalfEdge
+ */
+void H_Edge<T>::set_next(H_Edge<T> *he) {
+    if (this == he) throw std::invalid_argument("Next HalfEdge cant be the same");
+    this->next = he;
+    he->set_prev(this);
+}
+
+template<class T>
+/**
+ * Añade el HalfEdge previo.
+ *
+ * @tparam T Template
+ * @param he Puntero al HalfEdge
+ */
+void H_Edge<T>::set_prev(H_Edge<T> *he) {
+    if (this == he) throw std::invalid_argument("Prev HalfEdge cant be the same");
+    this->prev = he;
+}
+
+template<class T>
+/**
+ * Retorna el puntero al HalfEdge par.
+ *
+ * @tparam T Template
+ * @return
+ */
+H_Edge<T> *H_Edge<T>::get_pair() const {
+    return this->pair;
+}
+
+template<class T>
+/**
+ * Retorna el puntero al HalfEdge siguiente.
+ *
+ * @tparam T Template
+ * @return
+ */
+H_Edge<T> *H_Edge<T>::get_next() const {
+    return this->next;
+}
+
+template<class T>
+/**
+ * Retorna el puntero al HalfEdge previo.
+ *
+ * @tparam T Template
+ * @return
+ */
+H_Edge<T> *H_Edge<T>::get_prev() const {
+    return this->prev;
+}
+
+template<class T>
+/**
+ * Retorna el punto al que apunta el HalfEdge.
+ *
+ * @tparam T Template
+ * @return
+ */
+Point<T> *H_Edge<T>::get_point() const {
+    return this->vert.get_point();
 }
 
 #endif //T_CC7515_HALFEDGE_HEDGE_H

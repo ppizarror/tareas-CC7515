@@ -172,7 +172,7 @@ void test_substract() {
     Vector<double> v2 = Vector<double>(1, -1, 1);
     assert(v1 - v2 == Vector<double>(0, 2, 0)); // Modo nuevo objeto
 
-    v1 += v2; // Modo resta a sí mismo
+    v1 -= v2; // Modo resta a sí mismo
     Vector<double> v3 = Vector<double>(0, 2, 0);
     assert(v1 == v3);
 
@@ -208,6 +208,26 @@ void test_div() {
 }
 
 /**
+ * Test área 3D de una cara.
+ */
+void test_3d_area() {
+    Point<double> a = Point<double>(119.91227722167969, 122.7717056274414, 39.3568115234375);
+    Point<double> b = Point<double>(119.8951187133789, 122.7717056274414, 39.38057327270508);
+    Point<double> c = Point<double>(121.11941528320312, 123.2818832397461, 38.41301345825195);
+    Vector<double> v1 = Vector<double>(b.get_coord_x() - a.get_coord_x(), b.get_coord_y() - a.get_coord_y(),
+                                       b.get_coord_z() - a.get_coord_z());
+    Vector<double> v2 = Vector<double>(c.get_coord_x() - a.get_coord_x(), c.get_coord_y() - a.get_coord_y(),
+                                       c.get_coord_z() - a.get_coord_z());
+    double r1 = 0.5 * v1.cross(v2).norm();
+    Point<double> ba = b - a;
+    Point<double> ca = c - a;
+    v1 = Vector<double>(ba);
+    v2 = Vector<double>(ca);
+    double r2 = 0.5 * v1.cross(v2).norm();
+    assert(r1 == r2); // 0.0097413991
+}
+
+/**
  * Corre los test.
  */
 int main() {
@@ -225,6 +245,7 @@ int main() {
     test_substract();
     test_mult();
     test_div();
+    test_3d_area();
 
     // Retorna
     return 0;
