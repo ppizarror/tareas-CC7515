@@ -39,6 +39,9 @@ private:
     // Calcula el área entre 3 puntos
     T area2(const Point<T> &a, const Point<T> &b, const Point<T> &c) const;
 
+    // Calcula la distancia entre dos puntos
+    T dist_points(const Point<T> &a, const Point<T> &b) const;
+
 public:
 
     // Inicializa la cara
@@ -60,7 +63,10 @@ public:
     int chain_length() const;
 
     // Obtiene el área de la cara
-    T get_area();
+    T get_area() const;
+
+    // Obtiene el perímetro de la cara
+    T get_perimeter() const;
 
 };
 
@@ -130,16 +136,16 @@ bool Face<T>::in_face_half_edge(H_Edge<T> *hedge) const {
 
 template<class T>
 /**
- * Retorna el área de la cara.l
+ * Retorna el área de la cara.
  *
  * @tparam T Template
  * @return
  */
-T Face<T>::get_area() {
-    if (this->number_edges() == 0) return 0;
+T Face<T>::get_area() const {
+    if (this->number_edges() < 3) return 0;
 
     // Itera desde el primer HE, para ello recorre next hasta llegar al mismo
-    T areaTotal;
+    T tarea;
     H_Edge<T> *he = this->edges[0];
     H_Edge<T> *he1, *he2;
     Point<T> p0 = *he->get_point(); // Elige un punto cualquiera
@@ -147,21 +153,46 @@ T Face<T>::get_area() {
     while (true) {
         he1 = he->get_next();
         he2 = he->get_next()->get_next();
-        areaTotal += this->area2(p0, *he1->get_point(), *he2->get_point());
+        tarea += this->area2(p0, *he1->get_point(), *he2->get_point());
         he = he->get_next();
         if (he == this->edges[0]) break; // Se cumple el ciclo, termina
     }
 
-    return areaTotal;
-
+    return tarea;
 }
 
 template<class T>
 /**
+ * Retorna el perímetro de la cara.
+ *
+ * @tparam T Template
+ * @return
+ */
+T Face<T>::get_perimeter() const {
+    if (this->number_edges() < 3) return 0;
+
+    // Itera desde el primer HE, para ello recorre next hasta llegar al mismo
+    T tperim;
+    H_Edge<T> *he = this->edges[0];
+    H_Edge<T> *he1; // Almacena el siguiente
+
+    while (true) {
+        he1 = he->get_next();
+        tperim += this->dist_points(*he->get_point(), *he1->get_point());
+        he = he->get_next();
+        if (he == this->edges[0]) break; // Se cumple el ciclo, termina
+    }
+
+    return tperim;
+}
+
+
+template<class T>
+/**
  * Calcula el determinante de:
- *  a b c
- *  d e f
- *  g h i
+ *  | a b c |
+ *  | d e f |
+ *  | g h i |
  *
  * @tparam T Template
  * @param a
@@ -187,7 +218,7 @@ template<class T>
  * @param a Punto A
  * @param b Punto B
  * @param c Punto C
- * @return Área entre los tres puntos
+ * @return Área entre los tres puntos, puedes ser positiva o negativa
  */
 T Face<T>::area2(const Point<T> &a, const Point<T> &b, const Point<T> &c) const {
     T _area;
@@ -222,6 +253,20 @@ int Face<T>::chain_length() const {
         if (he == this->edges[0]) break; // Se cumple el ciclo, termina
     }
     return chain;
+}
+
+template<class T>
+/**
+ * Calcula distancia entre dos puntos.
+ *
+ * @tparam T Template
+ * @param a Punto A
+ * @param b Punto B
+ * @return retorna ||A-B||
+ */
+T Face<T>::dist_points(const Point<T> &a, const Point<T> &b) const {
+    Point<T> c = b - a;
+    return Vector<T>(c).norm();
 }
 
 #endif //T_CC7515_HALFEDGE_FACE_H

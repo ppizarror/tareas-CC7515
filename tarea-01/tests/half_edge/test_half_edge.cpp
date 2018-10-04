@@ -17,10 +17,7 @@
  * Test básico, genera un cuadrado.
  */
 void test_basic() {
-
-    /**
-     * Crea una cara
-     */
+    // Crea una cara
     Face<double> f = Face<double>();
 
     /**
@@ -50,7 +47,7 @@ void test_basic() {
     H_Edge<double> he41 = H_Edge<double>(&p1, &f);
 
     // Realiza algunos prints
-    std::cout << "Orden CCW" << std::endl;
+    std::cout << "Orden:" << std::endl;
     he12.print();
     he23.print();
     he34.print();
@@ -101,7 +98,7 @@ void test_basic() {
      */
     assert(f.get_area() == MOD * MOD);
     assert(f.chain_length() == 4);
-
+    assert(f.get_perimeter() == 4 * MOD);
 }
 
 /**
