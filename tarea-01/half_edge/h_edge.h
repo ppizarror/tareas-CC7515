@@ -7,6 +7,8 @@
  */
 
 // Inicia el bloque
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "modernize-use-equals-default"
 #ifndef T_CC7515_HALFEDGE_HEDGE_H
 #define T_CC7515_HALFEDGE_HEDGE_H
 
@@ -22,14 +24,17 @@
 template<class T>
 class H_Edge {
 private:
-    Vertex<T> *vert; // Vértice al que apunta
+    Vertex<T> vert; // Vértice al que apunta
     Face<T> *face; // Cara que contiene al Half-Edge
     H_Edge *prev, *next; // Indica los half-edge anterior y posterior
     H_Edge *pair; // Half edge par, que contiene como vértice director el vértice origen
 public:
 
+    // Constuctor vacío
+    H_Edge();
+
     // Constructor con un vértice
-    H_Edge(Vertex<T> &v, Face<T> &f);
+    H_Edge(Point<T> *p, Face<T> *f);
 
     // Destructor
     ~H_Edge();
@@ -38,14 +43,23 @@ public:
 
 template<class T>
 /**
+ * Constructor vacío.
+ *
+ * @tparam T Template
+ */
+H_Edge<T>::H_Edge() {
+}
+
+template<class T>
+/**
  * Constructor de clase, recibe el vértice al que apunta y la cara que lo contiene.
  *
  * @tparam T Template
- * @param v Vértice al que apunta
+ * @param p Punto al que apunta
  * @param f Cara que lo contiene
  */
-H_Edge<T>::H_Edge(Vertex<T> &v, Face<T> &f) {
-    this->vert = v;
+H_Edge<T>::H_Edge(Point<T> *p, Face<T> *f) {
+    this->vert = Vertex<T>(p, this);
     this->face = f;
 }
 
@@ -60,3 +74,4 @@ H_Edge<T>::~H_Edge() {
 }
 
 #endif //T_CC7515_HALFEDGE_HEDGE_H
+#pragma clang diagnostic pop

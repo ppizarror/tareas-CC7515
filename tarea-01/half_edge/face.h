@@ -6,8 +6,14 @@
  * @date 01/10/2018
  */
 
+#pragma clang diagnostic ignored "-Wunknown-pragmas"
+#pragma ide diagnostic ignored "modernize-use-equals-default"
 #ifndef T_CC7515_HALFEDGE_FACE_H
 #define T_CC7515_HALFEDGE_FACE_H
+
+// Importa librerías
+#include <iostream>
+#include <vector>
 
 // Definición de clase
 template<class T>
@@ -21,7 +27,47 @@ template<class T>
  */
 class Face {
 private:
-    H_Edge<T> *edge;
+    std::vector<H_Edge<T> *> edges; // Vector de todos los edges que llegan a esa cara
+public:
+
+    // Inicializa la cara
+    Face();
+
+    // Añade un HalfEdge a la lista
+    void add_hedge(H_Edge<T> *hedge);
+
+    // Elimina un HalfEdge de la lista
+    void remove_hedge(H_Edge<T> *hedge);
+
 };
+
+template<class T>
+/**
+ * Crea la cara.
+ *
+ * @tparam T
+ */
+Face<T>::Face() {
+}
+
+template<class T>
+/**
+ * Añade una referencia a un hedge a la lista.
+ *
+ * @tparam T
+ * @param hedge
+ */
+void Face<T>::add_hedge(H_Edge<T> *hedge) {
+    this->edges.push_back(hedge);
+}
+
+template<class T>
+void Face<T>::remove_hedge(H_Edge<T> *hedge) {
+    for (unsigned i = 0; i < this->edges.size(); ++i) {
+        if (this->edges[i] == hedge) {
+            std::cout << "te pille" << std::endl;
+        }
+    }
+}
 
 #endif //T_CC7515_HALFEDGE_FACE_H
