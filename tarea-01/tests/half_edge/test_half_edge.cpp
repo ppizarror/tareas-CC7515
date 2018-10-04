@@ -46,6 +46,8 @@ void test_basic() {
     // Verifica que ambos he estén dentro de la cara
     assert(f.in_face_half_edge(&he12) && f.in_face_half_edge(&he21));
 
+    he12.print();
+
 }
 
 /**

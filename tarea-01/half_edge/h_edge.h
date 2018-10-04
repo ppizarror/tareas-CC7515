@@ -42,6 +42,9 @@ public:
     // Retorna la cara
     Face<T> *get_face() const;
 
+    // Imprime en consola
+    void print() const;
+
 };
 
 template<class T>
@@ -87,6 +90,16 @@ template<class T>
  */
 Face<T> *H_Edge<T>::get_face() const {
     return this->face;
+}
+
+template<class T>
+/**
+ * Imprime en consola.
+ *
+ * @tparam T Template
+ */
+void H_Edge<T>::print() const {
+    std::cout << "he -> " << this->vert << std::endl;
 }
 
 #endif //T_CC7515_HALFEDGE_HEDGE_H

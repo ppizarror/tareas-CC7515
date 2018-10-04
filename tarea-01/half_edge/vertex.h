@@ -40,6 +40,10 @@ public:
     // Destructor
     ~Vertex();
 
+    // Operación concatenación con string
+    template<class U>
+    friend std::ostream &operator<<(std::ostream &out, const Vertex<U> &v);
+
 };
 
 template<class T>
@@ -71,6 +75,20 @@ template<class T>
  * @tparam T Template
  */
 Vertex<T>::~Vertex() {
+}
+
+template<class U>
+/**
+ * Concatenación con strings, concatena el punto.
+ *
+ * @tparam U Template
+ * @param out Salida
+ * @param v Vértice a imprimir
+ * @return Concatenación
+ */
+std::ostream &operator<<(std::ostream &out, const Vertex<U> &v) {
+    out << v.p->to_string();
+    return out;
 }
 
 #endif //T_CC7515_HALFEDGE_VERTEX_H
