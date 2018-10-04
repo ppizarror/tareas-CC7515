@@ -137,6 +137,7 @@ public:
 
     // Comprobación desigualdad
     bool operator!=(const Point<T> &p) const;
+
 };
 
 template<class T>

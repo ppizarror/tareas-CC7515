@@ -12,7 +12,10 @@
 
 // Importación de librerías
 #include "../elements/vector.h"
-#include "h_edge.h"
+
+// Definición de clase
+template<class T>
+class H_Edge;
 
 template<class T>
 /**

@@ -9,9 +9,9 @@
 #ifndef T_CC7515_HALFEDGE_FACE_H
 #define T_CC7515_HALFEDGE_FACE_H
 
-// Importación de librerías
-
-#include "h_edge.h"
+// Definición de clase
+template<class T>
+class H_Edge;
 
 template<class T>
 /**
