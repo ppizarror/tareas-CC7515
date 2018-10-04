@@ -18,13 +18,14 @@
  */
 void test_basic() {
     // Crea una cara
-    Face<double> f = Face<double>();
+    Face<double> f = Face<double>("F");
 
     /**
      * Crea algunos puntos, modificado por MOD
      *
      * p4 (0,1) -- p3 (1,1)
      * |           |
+     * |     F     |
      * |           |
      * p1 (0,0) -- p2 (1,0)
      */
@@ -38,12 +39,8 @@ void test_basic() {
      * Crea los Hedge
      */
     H_Edge<double> he12 = H_Edge<double>(&p2, &f);
-    H_Edge<double> he21 = H_Edge<double>(&p1, &f);
     H_Edge<double> he23 = H_Edge<double>(&p3, &f);
-    H_Edge<double> he32 = H_Edge<double>(&p2, &f);
     H_Edge<double> he34 = H_Edge<double>(&p4, &f);
-    H_Edge<double> he43 = H_Edge<double>(&p3, &f);
-    H_Edge<double> he14 = H_Edge<double>(&p4, &f);
     H_Edge<double> he41 = H_Edge<double>(&p1, &f);
 
     // Realiza algunos prints
@@ -53,31 +50,8 @@ void test_basic() {
     he34.print();
     he41.print();
 
-    // Vé que edges están en face
-    assert(f.number_edges() == 8);
-
-    // Verifica que el puntero de la cara sea el mismo
-    assert(&f == he12.get_face() && &f == he21.get_face());
-
-    // Verifica que ambos he estén dentro de la cara
-    assert(f.in_face_half_edge(&he12) && f.in_face_half_edge(&he21));
-
-    // Verifica que punto sea el mismo
-    assert(he12.get_point() == &p2);
-
-    /**
-     * Crea las relaciones pares
-     */
-    he12.set_pair(&he21);
-    he23.set_pair(&he32);
-    he34.set_pair(&he43);
-    he14.set_pair(&he41);
-
-    // Verifica relaciones
-    assert(he12.get_pair() == &he21 && he21.get_pair() == &he12);
-    assert(he23.get_pair() == &he32 && he32.get_pair() == &he23);
-    assert(he34.get_pair() == &he43 && he43.get_pair() == &he34);
-    assert(he41.get_pair() == &he14 && he14.get_pair() == &he41);
+    // Verifica que sea nulo
+    assert(he12.get_next() == nullptr);
 
     /**
      * Crea los siguiente/posterior
@@ -92,6 +66,15 @@ void test_basic() {
     assert(he23.get_prev() == &he12);
     assert(he12.get_next()->get_next()->get_next()->get_next() == &he12);
     assert(he12.get_prev()->get_prev()->get_prev()->get_prev() == &he12);
+
+    // Verifica que el puntero de la cara sea el mismo
+    assert(&f == he12.get_face() && &f == he23.get_face() && &f == he34.get_face());
+
+    // Verifica que ambos he estén dentro de la cara
+    assert(f.in_face(&he12) && f.in_face(&he23) && f.in_face(&he34) && f.in_face(&he41));
+
+    // Verifica que punto sea el mismo
+    assert(he12.get_point() == &p2);
 
     /**
      * Verifica propiedades geométricas

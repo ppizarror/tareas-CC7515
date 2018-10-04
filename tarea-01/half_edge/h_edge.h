@@ -8,6 +8,7 @@
 
 // Inicia el bloque
 #pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 #pragma ide diagnostic ignored "modernize-use-equals-default"
 #ifndef T_CC7515_HALFEDGE_HEDGE_H
 #define T_CC7515_HALFEDGE_HEDGE_H
@@ -26,15 +27,12 @@ template<class T>
 class H_Edge {
 private:
     Vertex<T> vert; // Vértice al que apunta
-    Face<T> *face; // Cara que contiene al Half-Edge
-    H_Edge *prev, *next; // Indica los half-edge anterior y posterior
-    H_Edge *pair; // Half edge par, que contiene como vértice director el vértice origen
+    Face<T> *face = nullptr; // Cara que contiene al Half-Edge
+    H_Edge *prev = nullptr, *next = nullptr; // Indica los half-edge anterior y posterior
+    H_Edge *pair = nullptr; // Half edge par, que contiene como vértice director el vértice origen
 
     // Añade el HalfEdge anterior
     void set_prev(H_Edge<T> *he);
-
-    // Establece la referencia al HalfEdge par del mismo objeto
-    void set_pair_reference(H_Edge<T> *he);
 
 public:
 
@@ -93,7 +91,7 @@ template<class T>
 H_Edge<T>::H_Edge(Point<T> *p, Face<T> *f) {
     this->vert = Vertex<T>(p, this);
     this->face = f;
-    this->face->add_hedge(this);
+    this->face->set_hedge(this); // Guarda el último
 }
 
 template<class T>
@@ -103,8 +101,6 @@ template<class T>
  * @tparam T Template
  */
 H_Edge<T>::~H_Edge() {
-    this->face->remove_hedge(this);
-
 }
 
 template<class T>
@@ -125,7 +121,7 @@ template<class T>
  * @tparam T Template
  */
 void H_Edge<T>::print() const {
-    std::cout << "he -> " << this->vert << std::endl;
+    std::cout << "HE -> " << this->vert << " | FACE: " << this->face->get_name() << std::endl;
 }
 
 template<class T>
@@ -137,19 +133,6 @@ template<class T>
  */
 void H_Edge<T>::set_pair(H_Edge<T> *he) {
     if (this == he) throw std::invalid_argument("Pair HalfEdge cant be the same");
-    this->pair = he;
-    he->set_pair_reference(this); // El he tiene como par al mismo objeto
-}
-
-template<class T>
-
-/**
- * Añade la referencia al HalfEdge par.
- *
- * @tparam T Template
- * @param he Puntero al HalfEdge
- */
-void H_Edge<T>::set_pair_reference(H_Edge<T> *he) {
     this->pair = he;
 }
 

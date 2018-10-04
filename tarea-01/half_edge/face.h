@@ -6,6 +6,8 @@
  * @date 01/10/2018
  */
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 #pragma clang diagnostic ignored "-Wunknown-pragmas"
 #pragma ide diagnostic ignored "modernize-use-equals-default"
 #ifndef T_CC7515_HALFEDGE_FACE_H
@@ -14,7 +16,7 @@
 // Importa librerías
 #include "../elements/vector.h"
 #include <iostream>
-#include <vector>
+#include <string>
 
 // Definición de clase
 template<class T>
@@ -28,7 +30,10 @@ template<class T>
  */
 class Face {
 private:
-    std::vector<H_Edge<T> *> edges; // Vector de todos los edges que llegan a esa cara
+
+    // Variables internas
+    H_Edge<T> *edge = nullptr; // Puntero a un edge de la cara
+    std::string name = "undefined_face";
 
     // Calcula el determinante de
     // a b c
@@ -47,17 +52,14 @@ public:
     // Inicializa la cara
     Face();
 
-    // Añade un HalfEdge a la lista
-    void add_hedge(H_Edge<T> *hedge);
+    // Inicializa la cara con un nombre
+    Face(std::string name);
 
-    // Elimina un HalfEdge de la lista
-    void remove_hedge(H_Edge<T> *hedge);
+    // Añade un HalfEdge a la lista
+    void set_hedge(H_Edge<T> *hedge);
 
     // Verifica si un HalfEdge está dentro de la lista o no
-    bool in_face_half_edge(H_Edge<T> *hedge) const;
-
-    // Retorna el número de edges
-    unsigned long number_edges() const;
+    bool in_face(H_Edge<T> *hedge) const;
 
     // Retorna el número de la cadena
     int chain_length() const;
@@ -67,6 +69,9 @@ public:
 
     // Obtiene el perímetro de la cara
     T get_perimeter() const;
+
+    // Obtiene el nombre de la cara
+    std::string get_name() const;
 
 };
 
@@ -81,57 +86,13 @@ Face<T>::Face() {
 
 template<class T>
 /**
- * Añade una referencia a un hedge a la lista.
+ * Se guarda la referencia al puntero.
  *
  * @tparam T Template
  * @param hedge Puntero al edge
  */
-void Face<T>::add_hedge(H_Edge<T> *hedge) {
-    this->edges.push_back(hedge);
-}
-
-template<class T>
-/**
- * Remueve un edge de la cara.
- *
- * @tparam T Template
- * @param hedge Puntero al edge
- */
-void Face<T>::remove_hedge(H_Edge<T> *hedge) {
-    for (unsigned i = 0; i < this->edges.size(); ++i) {
-        if (this->edges[i] == hedge) {
-            this->edges.erase(this->edges.begin() + i);
-            return;
-        }
-    }
-}
-
-template<class T>
-/**
- * Retorna el número de edges que llegan a la cara.
- *
- * @tparam T Template
- * @return Número de edges
- */
-unsigned long Face<T>::number_edges() const {
-    return this->edges.size();
-}
-
-template<class T>
-/**
- * Indica si un HalfEdge está dentro de una cara o no.
- *
- * @tparam T Template
- * @param hedge HalfEdGE
- * @return
- */
-bool Face<T>::in_face_half_edge(H_Edge<T> *hedge) const {
-    for (unsigned i = 0; i < this->edges.size(); ++i) {
-        if (this->edges[i] == hedge) {
-            return true;
-        }
-    }
-    return false;
+void Face<T>::set_hedge(H_Edge<T> *hedge) {
+    this->edge = hedge;
 }
 
 template<class T>
@@ -142,11 +103,11 @@ template<class T>
  * @return
  */
 T Face<T>::get_area() const {
-    if (this->number_edges() < 3) return 0;
+    if (this->chain_length() < 3) return 0;
 
     // Itera desde el primer HE, para ello recorre next hasta llegar al mismo
     T tarea;
-    H_Edge<T> *he = this->edges[0];
+    H_Edge<T> *he = this->edge;
     H_Edge<T> *he1, *he2;
     Point<T> p0 = *he->get_point(); // Elige un punto cualquiera
 
@@ -155,7 +116,7 @@ T Face<T>::get_area() const {
         he2 = he->get_next()->get_next();
         tarea += this->area2(p0, *he1->get_point(), *he2->get_point());
         he = he->get_next();
-        if (he == this->edges[0]) break; // Se cumple el ciclo, termina
+        if (he == this->edge) break; // Se cumple el ciclo, termina
     }
 
     return tarea;
@@ -169,18 +130,18 @@ template<class T>
  * @return
  */
 T Face<T>::get_perimeter() const {
-    if (this->number_edges() < 3) return 0;
+    if (this->chain_length() < 3) return 0;
 
     // Itera desde el primer HE, para ello recorre next hasta llegar al mismo
     T tperim;
-    H_Edge<T> *he = this->edges[0];
+    H_Edge<T> *he = this->edge;
     H_Edge<T> *he1; // Almacena el siguiente
 
     while (true) {
         he1 = he->get_next();
         tperim += this->dist_points(*he->get_point(), *he1->get_point());
         he = he->get_next();
-        if (he == this->edges[0]) break; // Se cumple el ciclo, termina
+        if (he == this->edge) break; // Se cumple el ciclo, termina
     }
 
     return tperim;
@@ -244,13 +205,13 @@ template<class T>
  * @return
  */
 int Face<T>::chain_length() const {
-    if (this->number_edges() == 0) return 0;
-    H_Edge<T> *he = this->edges[0]; // Parte desde cualquiera
+    if (this->edge == nullptr) return 0;
+    H_Edge<T> *he = this->edge;
     int chain = 0;
     while (true) {
         he = he->get_next();
         chain++;
-        if (he == this->edges[0]) break; // Se cumple el ciclo, termina
+        if (he == this->edge) break; // Se cumple el ciclo, termina
     }
     return chain;
 }
@@ -269,4 +230,46 @@ T Face<T>::dist_points(const Point<T> &a, const Point<T> &b) const {
     return Vector<T>(c).norm();
 }
 
+template<class T>
+/**
+ * Indica si un HalfEdge está en una cara o no.
+ *
+ * @tparam T Template
+ * @param hedge Puntero al HalfEdge objetivo
+ * @return
+ */
+bool Face<T>::in_face(H_Edge<T> *hedge) const {
+    if (this->edge == nullptr || hedge == nullptr) return false;
+    H_Edge<T> *he = this->edge;
+    while (true) {
+        if (he == hedge) return true;
+        he = he->get_next();
+        if (he == this->edge) break; // Se cumple el ciclo, termina
+    }
+    return false;
+}
+
+template<class T>
+/**
+ * Inicia la cara con un nombre.
+ *
+ * @tparam T Template
+ * @param name Nombre de la cara
+ */
+Face<T>::Face(std::string name) {
+    this->name = name;
+}
+
+template<class T>
+/**
+ * Retorna el nombre de la cara.
+ *
+ * @tparam T Template
+ * @return
+ */
+std::string Face<T>::get_name() const {
+    return this->name;
+}
+
 #endif //T_CC7515_HALFEDGE_FACE_H
+#pragma clang diagnostic pop
