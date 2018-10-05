@@ -27,8 +27,16 @@ template<class T>
  */
 class Vertex {
 private:
-    Point<T> *p; // Punto del vértice, en 3D
-    H_Edge<T> *edge; // Puntero del half-edge que lo contiene
+
+    // Punto del vértice, en 3D
+    Point<T> *p;
+
+    // Puntero del half-edge que lo contiene
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
+    H_Edge<T> *edge;
+#pragma clang diagnostic pop
+
 public:
 
     // Constructor vacío

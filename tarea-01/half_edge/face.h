@@ -30,14 +30,16 @@ template<class T>
 class Face {
 private:
 
-    // Variables internas
-    H_Edge<T> *edge = nullptr; // Puntero a un edge de la cara
-    std::string name = "undefined_face";
+    // Puntero a un edge de la cara
+    H_Edge<T> *edge = nullptr;
+
+    // Nombre de la cara
+    std::string name = "FACE";
 
     // Calcula el determinante de
-    // a b c
-    // d e f
-    // g h i
+    // | a b c |
+    // | d e f |
+    // | g h i |
     T determinant(T a, T b, T c, T d, T e, T f, T g, T h, T i) const;
 
     // Calcula el área entre 3 puntos

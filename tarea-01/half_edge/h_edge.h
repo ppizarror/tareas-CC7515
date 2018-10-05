@@ -25,10 +25,18 @@
 template<class T>
 class H_Edge {
 private:
-    Vertex<T> vert; // Vértice al que apunta
-    Face<T> *face = nullptr; // Cara que contiene al Half-Edge
-    H_Edge *prev = nullptr, *next = nullptr; // Indica los half-edge anterior y posterior
-    H_Edge *pair = nullptr; // Half edge par, que contiene como vértice director el vértice origen
+
+    // Vértice al que apunta
+    Vertex<T> vert;
+
+    // Cara que contiene al Half-Edge
+    Face<T> *face = nullptr;
+
+    // Indica los half-edge anterior y posterior
+    H_Edge *prev = nullptr, *next = nullptr;
+
+    // Half edge par, que está en la otra cara
+    H_Edge *pair = nullptr;
 
     // Añade el HalfEdge anterior
     void set_prev(H_Edge<T> *he);
