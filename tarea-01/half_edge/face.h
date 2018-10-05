@@ -7,7 +7,6 @@
  */
 
 #pragma clang diagnostic push
-#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 #pragma clang diagnostic ignored "-Wunknown-pragmas"
 #pragma ide diagnostic ignored "modernize-use-equals-default"
 #ifndef T_CC7515_HALFEDGE_FACE_H
@@ -42,10 +41,13 @@ private:
     T determinant(T a, T b, T c, T d, T e, T f, T g, T h, T i) const;
 
     // Calcula el área entre 3 puntos
-    T area2(const Point<T> &a, const Point<T> &b, const Point<T> &c) const;
+    T points_area(const Point<T> &a, const Point<T> &b, const Point<T> &c) const;
 
     // Calcula la distancia entre dos puntos
-    T dist_points(const Point<T> &a, const Point<T> &b) const;
+    T points_dist(const Point<T> &a, const Point<T> &b) const;
+
+    // Verifica si tres puntos están en ccw
+    bool points_ccw(const Point<T> &a, const Point<T> &b, const Point<T> &c) const;
 
 public:
 
@@ -114,7 +116,7 @@ T Face<T>::get_area() const {
     while (true) {
         he1 = he->get_next();
         he2 = he->get_next()->get_next();
-        tarea += this->area2(p0, *he1->get_point(), *he2->get_point());
+        tarea += this->points_area(p0, *he1->get_point(), *he2->get_point());
         he = he->get_next();
         if (he == this->edge) break; // Se cumple el ciclo, termina
     }
@@ -139,7 +141,7 @@ T Face<T>::get_perimeter() const {
 
     while (true) {
         he1 = he->get_next();
-        tperim += this->dist_points(*he->get_point(), *he1->get_point());
+        tperim += this->points_dist(*he->get_point(), *he1->get_point());
         he = he->get_next();
         if (he == this->edge) break; // Se cumple el ciclo, termina
     }
@@ -181,7 +183,7 @@ template<class T>
  * @param c Punto C
  * @return Área entre los tres puntos, puedes ser positiva o negativa
  */
-T Face<T>::area2(const Point<T> &a, const Point<T> &b, const Point<T> &c) const {
+T Face<T>::points_area(const Point<T> &a, const Point<T> &b, const Point<T> &c) const {
     T _area;
     if (a.get_dim() == 2 && b.get_dim() == 2 && c.get_dim() == 2) {
         _area = this->determinant(a.get_coord_x(), a.get_coord_y(), 1,
@@ -195,6 +197,34 @@ T Face<T>::area2(const Point<T> &a, const Point<T> &b, const Point<T> &c) const 
         throw std::invalid_argument("Cant perform area with different point coordinates");
     }
     return 0.5 * _area;
+}
+
+template<class T>
+/**
+ * Calcula distancia entre dos puntos.
+ *
+ * @tparam T Template
+ * @param a Punto A
+ * @param b Punto B
+ * @return retorna ||A-B||
+ */
+T Face<T>::points_dist(const Point<T> &a, const Point<T> &b) const {
+    Point<T> c = b - a;
+    return Vector<T>(c).norm();
+}
+
+template<class T>
+/**
+ * Verifica si tres puntos están en ccw o no.
+ *
+ * @tparam T Template
+ * @param a Punto A
+ * @param b Punto B
+ * @param c Punto C
+ * @return
+ */
+bool Face<T>::points_ccw(const Point<T> &a, const Point<T> &b, const Point<T> &c) const {
+    return false;
 }
 
 template<class T>
@@ -214,20 +244,6 @@ int Face<T>::chain_length() const {
         if (he == this->edge) break; // Se cumple el ciclo, termina
     }
     return chain;
-}
-
-template<class T>
-/**
- * Calcula distancia entre dos puntos.
- *
- * @tparam T Template
- * @param a Punto A
- * @param b Punto B
- * @return retorna ||A-B||
- */
-T Face<T>::dist_points(const Point<T> &a, const Point<T> &b) const {
-    Point<T> c = b - a;
-    return Vector<T>(c).norm();
 }
 
 template<class T>

@@ -85,12 +85,20 @@ void test_basic() {
 }
 
 /**
+ * Realiza un test básico con una figura compuesta por dos caras.
+ */
+void test_2face() {
+
+}
+
+/**
  * Corre los tests.
  */
 int main() {
 
     // Corre los tests
     test_basic();
+    test_2face();
 
     // Retorna
     return 0;

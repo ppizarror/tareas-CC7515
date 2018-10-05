@@ -8,7 +8,6 @@
 
 // Inicia el bloque
 #pragma clang diagnostic push
-#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 #pragma ide diagnostic ignored "modernize-use-equals-default"
 #ifndef T_CC7515_HALFEDGE_HEDGE_H
 #define T_CC7515_HALFEDGE_HEDGE_H
