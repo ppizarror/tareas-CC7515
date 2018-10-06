@@ -121,6 +121,13 @@ void Face<T>::set_hedge(H_Edge<T> *hedge) {
 }
 
 template<class T>
+/**
+ * Calcula el largo de la cadnena, si es menor que cero existen errores.
+ *
+ * @tparam T Template
+ * @param showerr Indica si muestra el error o no
+ * @return
+ */
 int Face<T>::chain_length(bool showerr) const {
     if (this->edge == nullptr) return 0;
     H_Edge<T> *he = this->edge;
@@ -128,7 +135,7 @@ int Face<T>::chain_length(bool showerr) const {
     while (true) {
         if (he->get_next() == nullptr) {
             if (showerr) {
-                std::cerr << "Halfedge {" + he->get_name() + "} don't point to any next HalfEdge structure"
+                std::cout << "Halfedge {" + he->get_name() + "} don't point to any next HalfEdge structure"
                           << std::endl;
                 return 0;
             }
@@ -137,9 +144,9 @@ int Face<T>::chain_length(bool showerr) const {
         he = he->get_next();
         if (length > MAX_RECURSION_DEPTH) {
             if (showerr) {
-                std::cerr << "Face " + this->get_name() << " reached maximum recursion depth" << std::endl;
+                std::cout << "Face " + this->get_name() << " reached maximum recursion depth" << std::endl;
             }
-            return 0;
+            return -1;
         }
         if (he == this->edge) break; // Se cumple el ciclo, termina
         length++;
@@ -177,7 +184,7 @@ template<class T>
  * @return
  */
 T Face<T>::get_area() const {
-    if (!this->is_valid()) return false;
+    if (!this->is_valid()) return 0;
 
     // Itera desde el primer HE, para ello recorre next hasta llegar al mismo
     T tarea;
@@ -371,8 +378,13 @@ template<class T>
  * @tparam T Template
  */
 void Face<T>::print_points() const {
-    if (this->edge == nullptr) {
+    int clen = this->chain_length(false); // Verifica el largo de la cadena
+    if (clen == 0) {
         std::cout << this->get_name() << " : EMPTY" << std::endl;
+        return;
+    }
+    if (clen < 0) {
+        std::cout << this->get_name() << " : ∞" << std::endl;
         return;
     }
     H_Edge<T> *he = this->edge;
@@ -397,13 +409,18 @@ void Face<T>::print_points() const {
 
 template<class T>
 /**
- * Imprime la estructura de halfEdges.
+ * Imprime la estructura de HalfEdges.
  *
  * @tparam T Template
  */
 void Face<T>::print_hedges() const {
-    if (this->edge == nullptr) {
+    int clen = this->chain_length(false); // Verifica el largo de la cadena
+    if (clen == 0) {
         std::cout << this->get_name() << " : EMPTY" << std::endl;
+        return;
+    }
+    if (clen < 0) {
+        std::cout << this->get_name() << " : ∞" << std::endl;
         return;
     }
     H_Edge<T> *he = this->edge;

@@ -387,6 +387,43 @@ void test_deletion_complex() {
 }
 
 /**
+ * Testea las caras con largos infinitos.
+ */
+void test_infinite_loop() {
+
+    print_title("Test-infinite-loop");
+
+    /**
+     * Crea la estructura
+     * x -> p2 -> p3 -> p4
+     *   a     b     c
+     */
+    Face<double> f = Face<double>("F1");
+    Point<double> p1 = Point<double>(0, 0);
+    Point<double> p2 = Point<double>(1, 0);
+    Point<double> p3 = Point<double>(2, 0);
+    H_Edge<double> b = H_Edge<double>(&p2, &f, "b");
+    H_Edge<double> c = H_Edge<double>(&p3, &f, "c");
+    H_Edge<double> a = H_Edge<double>(&p1, &f, "a");
+    a.set_next(&b);
+    b.set_next(&c);
+    c.set_next(&b); // Acá hay un loop, salta de a>b>c>b>c...
+
+    /**
+     * Chequea que el largo de la cadena sea un error
+     */
+    f.print_hedges();
+    f.print_points();
+    assert(f.get_chain_length() == -1);
+    assert(f.get_area() == 0);
+    assert(!f.is_ccw());
+    assert(!f.is_valid());
+    assert(!f.in_face(&a));
+    assert(!f.in_face(&b));
+    assert(!f.in_face(&c));
+}
+
+/**
  * Corre los tests.
  */
 int main() {
@@ -400,6 +437,7 @@ int main() {
     test_2face();
     test_deletion_simple();
     test_deletion_complex();
+    test_infinite_loop();
 
     // Retorna
     return 0;
