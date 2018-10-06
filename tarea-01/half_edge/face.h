@@ -358,16 +358,54 @@ void Face<T>::print_points() const {
     H_Edge<T> *he = this->edge;
     Point<T> *p;
     std::string point_list = ""; // Almacena la lista en formato a->b->c...
-    while (true) {
+    while (true) { // Recorre cada he y pregunta por los puntos
         p = he->get_point();
-        point_list += p;
+        point_list += p->to_string();
         he = he->get_next();
         if (he == nullptr) {
             point_list += "NULL";
             break;
         }
-        if (he == this->edge) break;
+        if (he == this->edge) {
+            break;
+        } else {
+            point_list += " -> ";
+        }
     }
+    std::cout << this->get_name() << " : " << point_list << std::endl; // Imprime la cadena
+}
+
+template<class T>
+/**
+ * Imprime la estructura de halfEdges.
+ *
+ * @tparam T Template
+ */
+void Face<T>::print_hedges() const {
+    if (this->edge == nullptr) return;
+    H_Edge<T> *he = this->edge;
+    H_Edge<T> *hp = nullptr; // Puntero al HalfEdge par
+    std::string edge_list = "";
+    while (true) { // Recorre cada he y pregunta por los HE
+        edge_list += "{" + he->get_name();
+        // Si tiene par entonces imprime el nombre y el nombre de la cara contenedora
+        hp = he->get_pair();
+        if (hp != nullptr) {
+            edge_list += "/" + hp->get_name() + "<" + hp->get_face()->get_name() + ">";
+        }
+        edge_list += "}";
+        he = he->get_next();
+        if (he == nullptr) {
+            edge_list += "NULL";
+            break;
+        }
+        if (he == this->edge) {
+            break;
+        } else {
+            edge_list += " -> ";
+        }
+    }
+    std::cout << this->get_name() << " : " << edge_list << std::endl; // Imprime la cadena
 }
 
 #endif //T_CC7515_HALFEDGE_FACE_H

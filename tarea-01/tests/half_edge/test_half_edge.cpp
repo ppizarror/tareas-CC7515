@@ -30,7 +30,7 @@ bool num_equal(T a, T b) {
  * Test básico, genera un cuadrado.
  */
 void test_basic() {
-   
+
     /**
      * Crea algunos puntos, modificado por MOD
      *
@@ -255,6 +255,14 @@ void test_deletion() {
     he43.set_next(&he32);
     he32.set_next(&he24);
     he23.set_pair(&he32);
+    f1.print_points();
+    f1.print_hedges();
+
+    /**
+     * Borra un elemento
+     */
+    delete &he12;
+    f1.print_points();
 
 }
 

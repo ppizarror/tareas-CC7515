@@ -35,9 +35,6 @@ private:
     // Dimensión del punto
     int dim;
 
-    // Retorna el punto en forma de String
-    std::string to_string() const;
-
 public:
 
     // Point vacío
@@ -69,6 +66,9 @@ public:
 
     // Establece una coordenada z
     void set_coord_z(T z);
+
+    // Retorna el punto en forma de String
+    std::string to_string() const;
 
     // Imprime el punto en la consola
     void print() const;
