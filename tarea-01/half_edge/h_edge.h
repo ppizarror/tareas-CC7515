@@ -96,6 +96,8 @@ public:
     template<class U>
     friend std::ostream &operator<<(std::ostream &out, const H_Edge<U> &he);
 
+    void destroy();
+
 };
 
 template<class T>
@@ -135,8 +137,8 @@ H_Edge<T>::H_Edge(Point<T> *p, Face<T> *f, std::string name) {
     H_Edge();
     this->vert = Vertex<T>(p, this);
     this->face = f;
-    this->face->set_hedge(this); // Guarda el último
     this->name = name;
+    f->set_hedge(this);
 }
 
 template<class T>
@@ -146,7 +148,6 @@ template<class T>
  * @tparam T Template
  */
 H_Edge<T>::~H_Edge() {
-    std::cout << ":(" << std::endl;
 }
 
 template<class T>
@@ -167,6 +168,10 @@ template<class T>
  * @tparam T Template
  */
 void H_Edge<T>::print() const {
+    if (this->face == nullptr) {
+        std::cout << this->to_string() << std::endl;
+        return;
+    }
     std::cout << "HE " << this->name << " -> " << this->vert << " | FACE: " << this->face->get_name() << std::endl;
 }
 
@@ -319,6 +324,53 @@ template<class T>
 std::ostream &operator<<(std::ostream &out, const H_Edge<T> &he) {
     out << he.to_string();
     return out;
+}
+
+template<class T>
+/**
+ * Destruye las relaciones del elemento.
+ *
+ * @tparam T
+ */
+void H_Edge<T>::destroy() {
+    // Obtiene los extremos
+    H_Edge<T> *hp = this->prev;
+    H_Edge<T> *hn = this->next;
+
+    if (hp == hn && hp != nullptr) {
+        hp->next = nullptr;
+        hn->prev = nullptr;
+    }
+
+    // Ve el anterior
+    if (hp != nullptr) {
+        hp->next = hn;
+        if (hp->next == this || hp->next == hp) hp->next = nullptr;
+    }
+
+    // Ve el siguiente
+    if (hn != nullptr) {
+        hn->prev = hp;
+        if (hn->prev == this || hn->prev == hn) hn->prev = nullptr;
+    }
+
+    // Elimina parámetros internos
+    this->next = nullptr;
+    this->prev = nullptr;
+    this->name = this->name + "<destroyed>";
+    this->pair = nullptr;
+
+    // Si el puntero de la cara apunta al mismo entonces lo corre
+    if (this->face->get_hedge() == this) {
+        if (hp != nullptr && hp != this) {
+            this->face->set_hedge(hp);
+        } else if (hn != nullptr && hn != this) {
+            this->face->set_hedge(hn);
+        } else {
+            this->face->set_hedge(nullptr);
+        };
+        this->face = nullptr;
+    }
 }
 
 #endif //T_CC7515_HALFEDGE_HEDGE_H

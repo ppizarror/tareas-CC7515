@@ -92,6 +92,9 @@ public:
     // Imprime los HalfEdge en lista
     void print_hedges() const;
 
+    // Obtiene el puntero al objeto
+    H_Edge<T> *get_hedge() const;
+
 };
 
 template<class T>
@@ -127,8 +130,8 @@ int Face<T>::get_chain_length() const {
     int length = 0; // Contador de la cadena
     while (true) {
         if (he->get_next() == nullptr) {
-            std::cerr << "Halfedge " + he->get_name() + " don't point to any next HalfEdge structure" << std::endl;
-            throw std::logic_error("Cannot compute chain length of an non-closed Face");
+            std::cerr << "Halfedge {" + he->get_name() + "} don't point to any next HalfEdge structure" << std::endl;
+            return 0;
         }
         he = he->get_next();
         length++;
@@ -187,7 +190,7 @@ template<class T>
  * @return
  */
 T Face<T>::get_perimeter() const {
-    if (!this->is_valid()) return false;
+    if (!this->is_valid()) return 0;
 
     // Itera desde el primer HE, para ello recorre next hasta llegar al mismo
     T tperim;
@@ -248,7 +251,7 @@ T Face<T>::points_area(const Point<T> &a, const Point<T> &b, const Point<T> &c) 
                                   b.get_coord_x(), b.get_coord_y(), b.get_coord_z(),
                                   c.get_coord_x(), c.get_coord_y(), c.get_coord_z());
     } else {
-        throw std::invalid_argument("Cant perform area with different point coordinates");
+        throw std::invalid_argument("Can't perform area with different point coordinates");
     }
     return 0.5 * _area;
 }
@@ -354,7 +357,10 @@ template<class T>
  * @tparam T Template
  */
 void Face<T>::print_points() const {
-    if (this->edge == nullptr) return;
+    if (this->edge == nullptr) {
+        std::cout << this->get_name() << " : EMPTY" << std::endl;
+        return;
+    }
     H_Edge<T> *he = this->edge;
     Point<T> *p;
     std::string point_list = ""; // Almacena la lista en formato a->b->c...
@@ -363,13 +369,13 @@ void Face<T>::print_points() const {
         point_list += p->to_string();
         he = he->get_next();
         if (he == nullptr) {
-            point_list += "NULL";
+            point_list += " <-> NULL";
             break;
         }
         if (he == this->edge) {
             break;
         } else {
-            point_list += " -> ";
+            point_list += " <-> ";
         }
     }
     std::cout << this->get_name() << " : " << point_list << std::endl; // Imprime la cadena
@@ -382,23 +388,38 @@ template<class T>
  * @tparam T Template
  */
 void Face<T>::print_hedges() const {
-    if (this->edge == nullptr) return;
+    if (this->edge == nullptr) {
+        std::cout << this->get_name() << " : EMPTY" << std::endl;
+        return;
+    }
     H_Edge<T> *he = this->edge;
     std::string edge_list = "";
     while (true) { // Recorre cada he y pregunta por los HE
         edge_list += he->to_string();
         he = he->get_next();
         if (he == nullptr) {
-            edge_list += "NULL";
+            edge_list += " <-> NULL";
             break;
         }
         if (he == this->edge) {
+            edge_list += " ↻";
             break;
         } else {
-            edge_list += " -> ";
+            edge_list += " <-> ";
         }
     }
     std::cout << this->get_name() << " : " << edge_list << std::endl; // Imprime la cadena
+}
+
+template<class T>
+/**
+ * Obtiene el puntero al HEedge de la cara.
+ *
+ * @tparam T Temlate
+ * @return
+ */
+H_Edge<T> *Face<T>::get_hedge() const {
+    return this->edge;
 }
 
 #endif //T_CC7515_HALFEDGE_FACE_H

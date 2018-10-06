@@ -7,6 +7,7 @@
  */
 
 // Define parámetros compilación
+#pragma ide diagnostic ignored "performance-unnecessary-value-param"
 #pragma ide diagnostic ignored "modernize-use-auto"
 
 // Importa librerías
@@ -27,9 +28,22 @@ bool num_equal(T a, T b) {
 }
 
 /**
+ * Imprime el título del test
+ * @param title Título del test
+ */
+void print_title(std::string title) {
+    std::cout << "" << std::endl;
+    std::cout << "----------------------------------------------------------" << std::endl;
+    std::cout << title << std::endl;
+    std::cout << "----------------------------------------------------------" << std::endl;
+}
+
+/**
  * Test básico, genera un cuadrado.
  */
 void test_basic() {
+
+    print_title("Test-basic");
 
     /**
      * Crea algunos puntos, modificado por MOD
@@ -104,6 +118,8 @@ void test_basic() {
  */
 void test_ccw() {
 
+    print_title("Test-ccw");
+
     /**
      * Crea una cara en ccw y otra no, modificada por MOD
      *
@@ -157,6 +173,8 @@ void test_ccw() {
  * Realiza un test básico con una figura compuesta por dos caras.
  */
 void test_2face() {
+
+    print_title("Test-2face");
 
     /**
      * Crea una cara en ccw y otra no, modificada por MOD
@@ -220,6 +238,92 @@ void test_2face() {
 }
 
 /**
+ * Testea borrado simple.
+ */
+void test_deletion_simple() {
+
+    print_title("Test-deletion-simple");
+
+    /**
+     * Crea la estructura
+     * p1 -> p2 -> p3 -> p4
+     *    a     b     c
+     */
+    Face<double> f = Face<double>("F1");
+    Point<double> p1 = Point<double>(0, 0);
+    Point<double> p2 = Point<double>(1, 0);
+    Point<double> p3 = Point<double>(2, 0);
+    Point<double> p4 = Point<double>(3, 0);
+    H_Edge<double> b = H_Edge<double>(&p3, &f, "b");
+    H_Edge<double> c = H_Edge<double>(&p4, &f, "c");
+    H_Edge<double> a = H_Edge<double>(&p2, &f, "a");
+    H_Edge<double> d;
+    a.set_next(&b);
+    b.set_next(&c);
+
+    assert(a.get_next() == &b);
+    assert(c.get_prev() == &b);
+    b.destroy();
+    f.print_hedges();
+    assert(a.get_next() == &c);
+    assert(c.get_prev() == &a);
+
+    // Si borro a entonces el puntero de la cara debe cambiar a c
+    a.destroy();
+    assert(a.get_next() == nullptr && c.get_prev() == nullptr);
+    f.print_hedges();
+    c.destroy();
+    f.print_hedges();
+
+    // Testeo cara vacía
+    assert(f.get_perimeter() == 0);
+    assert(f.get_area() == 0);
+    assert(f.get_chain_length() == 0);
+    assert(f.get_hedge() == nullptr);
+
+    /**
+      * Crea la estructura
+      * p1 -> p2 -> p3 -> p4
+      *    a     b     c
+      */
+    a = H_Edge<double>(&p2, &f, "a");
+    b = H_Edge<double>(&p3, &f, "b");
+    c = H_Edge<double>(&p4, &f, "c");
+    d = H_Edge<double>(&p1, &f, "d");
+    f.set_hedge(&a);
+    a.set_next(&b);
+    b.set_next(&c);
+    c.set_next(&d);
+    d.set_next(&a);
+    assert(f.get_hedge() == &a);
+    assert(a.get_next() == &b);
+    assert(a.get_next()->get_next() == &c);
+    assert(a.get_next()->get_next()->get_next() == &d);
+    assert(d.get_next() == &a);
+    assert(f.get_hedge()->get_next() == &b);
+    assert(a.get_prev() == &d);
+    f.print_hedges();
+    assert(a.get_next() == &b && b.get_next() == &c && c.get_next() == &d && d.get_next() == &a);
+    assert(a.get_prev() == &d && d.get_prev() == &c && c.get_prev() == &b && b.get_prev() == &a);
+
+    d.destroy();
+    f.print_hedges();
+    assert(a.get_next() == &b && b.get_next() == &c && c.get_next() == &a);
+    assert(a.get_prev() == &c && c.get_prev() == &b && b.get_prev() == &a);
+
+    b.destroy();
+    f.print_hedges();
+    assert(a.get_next() == &c && c.get_next() == &a);
+    assert(a.get_prev() == &c && c.get_prev() == &a);
+
+    c.destroy();
+    f.print_hedges();
+    assert(a.get_next() == nullptr);
+    assert(a.get_prev() == nullptr);
+
+}
+
+/**
  * Testea eliminación de estructuras.
  * Crea una cara en ccw y otra no, modificada por MOD
  *
@@ -230,24 +334,26 @@ void test_2face() {
  *    p1 (0,0) -- p2 (1,0)
  *
  */
-void test_deletion() {
+void test_deletion_complex() {
+
+    print_title("Test-deletion-complex");
 
     /**
      * Crea la estructura
      */
     double MOD = 1.5;
-    Face<double> f1 = Face<double>("T1");
-    Face<double> f2 = Face<double>("T2");
+    Face<double> t1 = Face<double>("T1");
+    Face<double> t2 = Face<double>("T2");
     Point<double> p1 = Point<double>(0, 0) * MOD;
     Point<double> p2 = Point<double>(1, 0) * MOD;
     Point<double> p3 = Point<double>(0, 1) * MOD;
     Point<double> p4 = Point<double>(1, 1) * MOD;
-    H_Edge<double> he12 = H_Edge<double>(&p2, &f1, "12");
-    H_Edge<double> he23 = H_Edge<double>(&p3, &f1, "23");
-    H_Edge<double> he31 = H_Edge<double>(&p1, &f1, "31");
-    H_Edge<double> he24 = H_Edge<double>(&p4, &f2, "24");
-    H_Edge<double> he43 = H_Edge<double>(&p3, &f2, "43");
-    H_Edge<double> he32 = H_Edge<double>(&p2, &f2, "32");
+    H_Edge<double> he12 = H_Edge<double>(&p2, &t1, "12");
+    H_Edge<double> he23 = H_Edge<double>(&p3, &t1, "23");
+    H_Edge<double> he31 = H_Edge<double>(&p1, &t1, "31");
+    H_Edge<double> he24 = H_Edge<double>(&p4, &t2, "24");
+    H_Edge<double> he43 = H_Edge<double>(&p3, &t2, "43");
+    H_Edge<double> he32 = H_Edge<double>(&p2, &t2, "32");
     he12.set_next(&he23);
     he23.set_next(&he31);
     he31.set_next(&he12);
@@ -255,14 +361,13 @@ void test_deletion() {
     he43.set_next(&he32);
     he32.set_next(&he24);
     he23.set_pair(&he32);
-    f1.print_points();
-    f1.print_hedges();
+    t1.print_hedges();
+    t2.print_hedges();
 
     /**
      * Borra un elemento
      */
-    delete &he12;
-    f1.print_points();
+    // he23.destroy();
 
 }
 
@@ -271,11 +376,15 @@ void test_deletion() {
  */
 int main() {
 
+    // Mensaje en consola
+    std::cout << "TEST HALF EDGE" << std::endl;
+    
     // Corre los tests
     test_basic();
     test_ccw();
     test_2face();
-    test_deletion();
+    test_deletion_simple();
+    test_deletion_complex();
 
     // Retorna
     return 0;
