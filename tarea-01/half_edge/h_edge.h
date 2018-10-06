@@ -16,6 +16,7 @@
 #include "face.h"
 #include "vertex.h"
 #include <stdexcept>
+#include <string>
 
 /**
  * Clase principal HalfEdge.
@@ -38,6 +39,9 @@ private:
     // Half edge par, que está en la otra cara
     H_Edge *pair = nullptr;
 
+    // Nombre del HalfEdge
+    std::string name = "%HALFEDGE_NAME";
+
     // Añade el HalfEdge anterior
     void set_prev(H_Edge<T> *he);
 
@@ -46,8 +50,11 @@ public:
     // Constuctor vacío
     H_Edge();
 
-    // Constructor con un vértice
+    // Constructor con un vértice y cara
     H_Edge(Point<T> *p, Face<T> *f);
+
+    // Constructor con vértice, cara y nombre
+    H_Edge(Point<T> *p, Face<T> *f, std::string name);
 
     // Destructor
     ~H_Edge();
@@ -76,6 +83,9 @@ public:
     // Entrega el punto al que apunta cada HalfEdge
     Point<T> *get_point() const;
 
+    // Retorna el nombre del HalfEdge
+    std::string get_name() const;
+
 };
 
 template<class T>
@@ -96,9 +106,27 @@ template<class T>
  * @param f Cara que lo contiene
  */
 H_Edge<T>::H_Edge(Point<T> *p, Face<T> *f) {
+    H_Edge();
     this->vert = Vertex<T>(p, this);
     this->face = f;
     this->face->set_hedge(this); // Guarda el último
+}
+
+template<class T>
+/**
+ * Constructor de clase, recibe el vértice al que apunta, la cara que lo contiene y el nombre.
+ *
+ * @tparam T Template
+ * @param p Punto al que apunta
+ * @param f Cara que lo contiene
+ * @param name Nombre del HalfEdge
+ */
+H_Edge<T>::H_Edge(Point<T> *p, Face<T> *f, std::string name) {
+    H_Edge();
+    this->vert = Vertex<T>(p, this);
+    this->face = f;
+    this->face->set_hedge(this); // Guarda el último
+    this->name = name;
 }
 
 template<class T>
@@ -128,7 +156,7 @@ template<class T>
  * @tparam T Template
  */
 void H_Edge<T>::print() const {
-    std::cout << "HE -> " << this->vert << " | FACE: " << this->face->get_name() << std::endl;
+    std::cout << "HE " << this->name << " -> " << this->vert << " | FACE: " << this->face->get_name() << std::endl;
 }
 
 template<class T>
@@ -210,6 +238,17 @@ template<class T>
  */
 Point<T> *H_Edge<T>::get_point() const {
     return this->vert.get_point();
+}
+
+template<class T>
+/**
+ * Retorna el nombre del HalfEdge.
+ *
+ * @tparam T Template
+ * @return
+ */
+std::string H_Edge<T>::get_name() const {
+    return this->name;
 }
 
 #endif //T_CC7515_HALFEDGE_HEDGE_H

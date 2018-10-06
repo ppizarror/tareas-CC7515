@@ -38,10 +38,10 @@ void test_basic() {
     /**
      * Crea los Hedge
      */
-    H_Edge<double> he12 = H_Edge<double>(&p2, &f);
-    H_Edge<double> he23 = H_Edge<double>(&p3, &f);
-    H_Edge<double> he34 = H_Edge<double>(&p4, &f);
-    H_Edge<double> he41 = H_Edge<double>(&p1, &f);
+    H_Edge<double> he12 = H_Edge<double>(&p2, &f, "12");
+    H_Edge<double> he23 = H_Edge<double>(&p3, &f, "23");
+    H_Edge<double> he34 = H_Edge<double>(&p4, &f, "34");
+    H_Edge<double> he41 = H_Edge<double>(&p1, &f, "41");
 
     // Realiza algunos prints
     std::cout << "Orden:" << std::endl;
@@ -109,9 +109,9 @@ void test_ccw() {
     /**
      * Crea los Hedge
      */
-    H_Edge<double> he12 = H_Edge<double>(&p2, &f);
-    H_Edge<double> he23 = H_Edge<double>(&p3, &f);
-    H_Edge<double> he31 = H_Edge<double>(&p1, &f);
+    H_Edge<double> he12 = H_Edge<double>(&p2, &f, "12");
+    H_Edge<double> he23 = H_Edge<double>(&p3, &f, "23");
+    H_Edge<double> he31 = H_Edge<double>(&p1, &f, "31");
 
     // Verifica que sea nulo
     assert(he12.get_next() == nullptr);
@@ -127,7 +127,16 @@ void test_ccw() {
      * Testea propiedades geométricas
      */
     assert(f.is_ccw());
-    assert(f.get_perimeter() == 3 * MOD);
+    assert(fabs(f.get_perimeter() - 2 * MOD + MOD * sqrt(2)) < 1e15);
+    assert(f.get_area() == MOD * MOD / 2);
+
+    /**
+     * Ahora cambia la relación de orden
+     */
+    he12.set_next(&he31);
+    he23.set_next(&he12);
+    he31.set_next(&he23);
+    assert(!f.is_ccw());
 }
 
 /**

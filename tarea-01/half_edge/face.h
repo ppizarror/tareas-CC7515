@@ -17,6 +17,9 @@
 #include <iostream>
 #include <string>
 
+// Constantes
+const int MAX_RECURSION_DEPTH = 1000;
+
 // Definición de clase
 template<class T>
 class H_Edge;
@@ -34,7 +37,7 @@ private:
     H_Edge<T> *edge = nullptr;
 
     // Nombre de la cara
-    std::string name = "FACE";
+    std::string name = "%FACE_NAME";
 
     // Calcula el determinante de
     // | a b c |
@@ -80,8 +83,8 @@ public:
     // Indica que la cara está en ccw
     bool is_ccw() const;
 
-    // Verifica si la cara es conexa o no
-    bool is_connected() const;
+    // Verifica si una cara es válida (+3 puntos conexos conectados)
+    bool is_valid() const;
 
 };
 
@@ -107,13 +110,51 @@ void Face<T>::set_hedge(H_Edge<T> *hedge) {
 
 template<class T>
 /**
+ * Retorna el número de la cadena de HalfEdges que conforman una cara.
+ *
+ * @tparam T Template
+ * @return
+ */
+int Face<T>::chain_length() const {
+    if (this->edge == nullptr) return 0;
+    H_Edge<T> *he = this->edge;
+    int length = 0; // Contador de la cadena
+    while (true) {
+        if (he->get_next() == nullptr) {
+            std::cerr << "Halfedge " + he->get_name() + " don't point to any next HalfEdge structure" << std::endl;
+            return 0;
+        }
+        he = he->get_next();
+        length++;
+        if (length > MAX_RECURSION_DEPTH) {
+            std::cerr << "Face " + this->get_name() << " reached maximum recursion depth" << std::endl;
+            return 0;
+        }
+        if (he == this->edge) break; // Se cumple el ciclo, termina
+    }
+    return length; // Está conectado
+}
+
+template<class T>
+/**
+ * Indica si una cara es válida, debe tener al menos tres puntos, todos conexos entre sí.
+ *
+ * @tparam T Template
+ * @return
+ */
+bool Face<T>::is_valid() const {
+    return this->chain_length() >= 3;
+}
+
+template<class T>
+/**
  * Retorna el área de la cara.
  *
  * @tparam T Template
  * @return
  */
 T Face<T>::get_area() const {
-    if (this->chain_length() < 3) return 0;
+    if (!this->is_valid()) return false;
 
     // Itera desde el primer HE, para ello recorre next hasta llegar al mismo
     T tarea;
@@ -140,7 +181,7 @@ template<class T>
  * @return
  */
 T Face<T>::get_perimeter() const {
-    if (this->chain_length() < 3) return 0;
+    if (!this->is_valid()) return false;
 
     // Itera desde el primer HE, para ello recorre next hasta llegar al mismo
     T tperim;
@@ -156,7 +197,6 @@ T Face<T>::get_perimeter() const {
 
     return tperim;
 }
-
 
 template<class T>
 /**
@@ -237,25 +277,6 @@ bool Face<T>::points_ccw(const Point<T> &a, const Point<T> &b, const Point<T> &c
 
 template<class T>
 /**
- * Retorna el número de la cadena de HalfEdges que conforman una cara.
- *
- * @tparam T Template
- * @return
- */
-int Face<T>::chain_length() const {
-    if (this->edge == nullptr) return 0;
-    H_Edge<T> *he = this->edge;
-    int chain = 0;
-    while (true) {
-        he = he->get_next();
-        chain++;
-        if (he == this->edge) break; // Se cumple el ciclo, termina
-    }
-    return chain;
-}
-
-template<class T>
-/**
  * Indica si un HalfEdge está en una cara o no.
  *
  * @tparam T Template
@@ -263,7 +284,7 @@ template<class T>
  * @return
  */
 bool Face<T>::in_face(H_Edge<T> *hedge) const {
-    if (this->edge == nullptr || hedge == nullptr) return false;
+    if (!this->is_valid() || hedge == nullptr) return false;
     H_Edge<T> *he = this->edge;
     while (true) {
         if (he == hedge) return true;
@@ -281,6 +302,7 @@ template<class T>
  * @param name Nombre de la cara
  */
 Face<T>::Face(std::string name) {
+    Face(); // Llama al constructor vacío
     this->name = name;
 }
 
@@ -303,6 +325,7 @@ template<class T>
  * @return
  */
 bool Face<T>::is_ccw() const {
+    if (!this->is_valid()) return false;
     H_Edge<T> *he = this->edge;
     H_Edge<T> *he2 = this->edge->get_next(); // Punto siguiente siguiente
     H_Edge<T> *he3 = he2->get_next(); // Punto siguiente siguiente
@@ -316,24 +339,6 @@ bool Face<T>::is_ccw() const {
         if (he == this->edge) break; // Se cumple el ciclo, termina
     }
     return true;
-}
-
-template<class T>
-/**
- * Verifica si la cara está conectada o no.
- *
- * @tparam T Template
- * @return
- */
-bool Face<T>::is_connected() const {
-    if (this->edge == nullptr || this->chain_length() < 3) return false;
-    H_Edge<T> *he = this->edge;
-    while (true) {
-        if(he == nullptr) throw std::logic_error("Halfedge")
-        he = he->get_next();
-        if (he == this->edge) break; // Se cumple el ciclo, termina
-    }
-    return false;
 }
 
 #endif //T_CC7515_HALFEDGE_FACE_H
