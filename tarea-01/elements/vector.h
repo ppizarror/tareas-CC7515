@@ -256,7 +256,10 @@ template<class T>
  * @return Componente en z
  */
 T Vector<T>::get_k() const {
-    if (this->dim < 3) throw std::logic_error("K vector component does not exist in a 2D vector");
+    if (this->dim < 3) {
+        std::cerr << "K vector component does not exists in a 2D vector" << std::endl;
+        throw std::logic_error("K vector component does not exists in a 2D vector");
+    }
     return this->c[2];
 }
 
@@ -344,6 +347,7 @@ Vector<T> Vector<T>::dot(const Vector<T> &v) const {
         k = this->get_k() * v.get_k();
         return Vector<T>(i, j, k);
     } else {
+        std::cerr << "Cant perform dot operator between two vectors with different dimension" << std::endl;
         throw std::logic_error("Cant perform dot operator between two vectors with different dimension");
     }
 }
@@ -455,6 +459,7 @@ Vector<T> Vector<T>::operator+(const Vector<T> &v) const {
     } else if (this->dim == 3 && v.get_dim() == 3) {
         return Vector<T>(this->get_i() + v.get_i(), this->get_j() + v.get_j(), this->get_k() + v.get_k());
     } else {
+        std::cerr << "Vector dimension is not the same" << std::endl;
         throw std::logic_error("Vector dimension is not the same");
     }
 }
@@ -477,6 +482,7 @@ Vector<T> &Vector<T>::operator+=(const Vector<T> &v) {
     } else if (this->dim == 3 && v.get_dim() == 3) {
         this->set_k(this->get_k() + v.get_k());
     } else {
+        std::cerr << "Invalid dimension to perform += operator" << std::endl;
         throw std::logic_error("Invalid dimension to perform += operator");
     }
 
@@ -497,6 +503,7 @@ Vector<T> Vector<T>::operator-(const Vector<T> &v) const {
     } else if (this->dim == 3 && v.get_dim() == 3) {
         return Vector<T>(this->get_i() - v.get_i(), this->get_j() - v.get_j(), this->get_k() - v.get_k());
     } else {
+        std::cerr << "Vector dimension is not the same" << std::endl;
         throw std::logic_error("Vector dimension is not the same");
     }
 }
@@ -519,6 +526,7 @@ Vector<T> &Vector<T>::operator-=(const Vector<T> &v) {
     } else if (this->dim == 3 && v.get_dim() == 3) {
         this->set_k(this->get_k() - v.get_k());
     } else {
+        std::cerr << "Invalid dimension to perform -= operator" << std::endl;
         throw std::logic_error("Invalid dimension to perform -= operator");
     }
 
@@ -582,7 +590,10 @@ template<class T>
  * @return Nuevo vector
  */
 Vector<T> Vector<T>::operator/(const T v) const {
-    if (v == 0) throw std::logic_error("Can't divide by zero");
+    if (v == 0) {
+        std::cerr << "Can't divide by zero" << std::endl;
+        throw std::logic_error("Can't divide by zero");
+    }
     if (this->dim == 2) {
         return Vector<T>(this->get_i() / v, this->get_j() / v);
     } else {
@@ -599,7 +610,10 @@ template<class T>
  * @return El puntero al objeto
  */
 Vector<T> &Vector<T>::operator/=(const T v) {
-    if (v == 0) throw std::logic_error("Can't divide by zero");
+    if (v == 0) {
+        std::cerr << "Can't divide by zero" << std::endl;
+        throw std::logic_error("Can't divide by zero");
+    }
     this->set_i(this->get_i() / v);
     this->set_j(this->get_j() / v);
     if (this->dim == 3) {
@@ -622,6 +636,7 @@ bool Vector<T>::operator==(const Vector<T> &v) const {
     } else if (this->dim == 3 && v.get_dim() == 3) {
         return this->get_i() == v.get_i() && this->get_j() == v.get_j() && this->get_k() == v.get_k();
     } else {
+        std::cerr << "Vector dimension is not the same" << std::endl;
         throw std::logic_error("Vector dimension is not the same");
     }
 }
@@ -640,6 +655,7 @@ bool Vector<T>::operator!=(const Vector<T> &v) const {
     } else if (this->dim == 3 && v.get_dim() == 3) {
         return this->get_i() != v.get_i() || this->get_j() != v.get_j() || this->get_k() != v.get_k();
     } else {
+        std::cerr << "Vector dimension is not the same" << std::endl;
         throw std::logic_error("Vector dimension is not the same");
     }
 }
