@@ -86,6 +86,12 @@ public:
     // Verifica si una cara es válida (+3 puntos conexos conectados)
     bool is_valid() const;
 
+    // Imprime los puntos en lista
+    void print_points() const;
+
+    // Imprime los HalfEdge en lista
+    void print_hedges() const;
+
 };
 
 template<class T>
@@ -339,6 +345,29 @@ bool Face<T>::is_ccw() const {
         if (he == this->edge) break; // Se cumple el ciclo, termina
     }
     return true;
+}
+
+template<class T>
+/**
+ * Imprime la lista de puntos.
+ *
+ * @tparam T Template
+ */
+void Face<T>::print_points() const {
+    if (this->edge == nullptr) return;
+    H_Edge<T> *he = this->edge;
+    Point<T> *p;
+    std::string point_list = ""; // Almacena la lista en formato a->b->c...
+    while (true) {
+        p = he->get_point();
+        point_list += p;
+        he = he->get_next();
+        if (he == nullptr) {
+            point_list += "NULL";
+            break;
+        }
+        if (he == this->edge) break;
+    }
 }
 
 #endif //T_CC7515_HALFEDGE_FACE_H

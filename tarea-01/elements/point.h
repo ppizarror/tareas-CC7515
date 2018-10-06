@@ -28,8 +28,16 @@ template<class T>
  */
 class Point {
 private:
-    T coord[3]; // Crea la lista de puntos, 3 dimensiones => se puede para n
-    int dim; // Dimensión del punto
+
+    // Crea la lista de puntos, 3 dimensiones => se puede para n
+    T coord[3];
+
+    // Dimensión del punto
+    int dim;
+
+    // Retorna el punto en forma de String
+    std::string to_string() const;
+
 public:
 
     // Point vacío
@@ -61,9 +69,6 @@ public:
 
     // Establece una coordenada z
     void set_coord_z(T z);
-
-    // Retorna el punto en forma de String
-    std::string to_string() const;
 
     // Imprime el punto en la consola
     void print() const;

@@ -30,9 +30,7 @@ bool num_equal(T a, T b) {
  * Test básico, genera un cuadrado.
  */
 void test_basic() {
-    // Crea una cara
-    Face<double> f = Face<double>("F");
-
+   
     /**
      * Crea algunos puntos, modificado por MOD
      *
@@ -43,6 +41,7 @@ void test_basic() {
      * p1 (0,0) -- p2 (1,0)
      */
     double MOD = 1.5;
+    Face<double> f = Face<double>("F");
     Point<double> p1 = Point<double>(0, 0) * MOD;
     Point<double> p2 = Point<double>(1, 0) * MOD;
     Point<double> p3 = Point<double>(1, 1) * MOD;
@@ -97,14 +96,13 @@ void test_basic() {
     assert(f.get_chain_length() == 4);
     assert(f.get_perimeter() == 4 * MOD);
     assert(f.is_ccw());
+
 }
 
 /**
  * Testea dos caras, una en ccw, otra no.
  */
 void test_ccw() {
-    // Crea una cara en ccw
-    Face<double> f = Face<double>("T-CCW");
 
     /**
      * Crea una cara en ccw y otra no, modificada por MOD
@@ -116,6 +114,7 @@ void test_ccw() {
      * p1 (0,0) -- p2 (1,0)
      */
     double MOD = 1.5;
+    Face<double> f = Face<double>("T-CCW");
     Point<double> p1 = Point<double>(0, 0) * MOD;
     Point<double> p2 = Point<double>(1, 0) * MOD;
     Point<double> p3 = Point<double>(0, 1) * MOD;
@@ -151,15 +150,13 @@ void test_ccw() {
     he23.set_next(&he12);
     he31.set_next(&he23);
     assert(!f.is_ccw());
+
 }
 
 /**
  * Realiza un test básico con una figura compuesta por dos caras.
  */
 void test_2face() {
-    // Crea las caras
-    Face<double> f1 = Face<double>("T1");
-    Face<double> f2 = Face<double>("T2");
 
     /**
      * Crea una cara en ccw y otra no, modificada por MOD
@@ -171,6 +168,8 @@ void test_2face() {
      * p1 (0,0) -- p2 (1,0)
      */
     double MOD = 1.5;
+    Face<double> f1 = Face<double>("T1");
+    Face<double> f2 = Face<double>("T2");
     Point<double> p1 = Point<double>(0, 0) * MOD;
     Point<double> p2 = Point<double>(1, 0) * MOD;
     Point<double> p3 = Point<double>(0, 1) * MOD;
@@ -217,6 +216,46 @@ void test_2face() {
     assert(he23.get_pair() == &he32 && he32.get_pair() == &he23);
     assert(h->get_next()->get_pair() == &he32);
     assert(h->get_next()->get_pair()->get_next()->get_next()->get_next()->get_pair()->get_next()->get_next() == &he12);
+
+}
+
+/**
+ * Testea eliminación de estructuras.
+ * Crea una cara en ccw y otra no, modificada por MOD
+ *
+ *    p3 (0,1) -- p4 (1,1)
+ *    |    \      |
+ *    |  T1  \ T2 |
+ *    |        \  |
+ *    p1 (0,0) -- p2 (1,0)
+ *
+ */
+void test_deletion() {
+
+    /**
+     * Crea la estructura
+     */
+    double MOD = 1.5;
+    Face<double> f1 = Face<double>("T1");
+    Face<double> f2 = Face<double>("T2");
+    Point<double> p1 = Point<double>(0, 0) * MOD;
+    Point<double> p2 = Point<double>(1, 0) * MOD;
+    Point<double> p3 = Point<double>(0, 1) * MOD;
+    Point<double> p4 = Point<double>(1, 1) * MOD;
+    H_Edge<double> he12 = H_Edge<double>(&p2, &f1, "12");
+    H_Edge<double> he23 = H_Edge<double>(&p3, &f1, "23");
+    H_Edge<double> he31 = H_Edge<double>(&p1, &f1, "31");
+    H_Edge<double> he24 = H_Edge<double>(&p4, &f2, "24");
+    H_Edge<double> he43 = H_Edge<double>(&p3, &f2, "43");
+    H_Edge<double> he32 = H_Edge<double>(&p2, &f2, "32");
+    he12.set_next(&he23);
+    he23.set_next(&he31);
+    he31.set_next(&he12);
+    he24.set_next(&he43);
+    he43.set_next(&he32);
+    he32.set_next(&he24);
+    he23.set_pair(&he32);
+
 }
 
 /**
@@ -228,6 +267,7 @@ int main() {
     test_basic();
     test_ccw();
     test_2face();
+    test_deletion();
 
     // Retorna
     return 0;
