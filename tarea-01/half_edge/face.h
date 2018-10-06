@@ -384,16 +384,9 @@ template<class T>
 void Face<T>::print_hedges() const {
     if (this->edge == nullptr) return;
     H_Edge<T> *he = this->edge;
-    H_Edge<T> *hp = nullptr; // Puntero al HalfEdge par
     std::string edge_list = "";
     while (true) { // Recorre cada he y pregunta por los HE
-        edge_list += "{" + he->get_name();
-        // Si tiene par entonces imprime el nombre y el nombre de la cara contenedora
-        hp = he->get_pair();
-        if (hp != nullptr) {
-            edge_list += "/" + hp->get_name() + "<" + hp->get_face()->get_name() + ">";
-        }
-        edge_list += "}";
+        edge_list += he->to_string();
         he = he->get_next();
         if (he == nullptr) {
             edge_list += "NULL";

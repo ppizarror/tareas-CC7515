@@ -89,6 +89,13 @@ public:
     // Retorna el nombre del HalfEdge
     std::string get_name() const;
 
+    // Retorna la forma en string del HalfEdge
+    std::string to_string() const;
+
+    // Operación concatenación con string
+    template<class U>
+    friend std::ostream &operator<<(std::ostream &out, const H_Edge<U> &he);
+
 };
 
 template<class T>
@@ -139,6 +146,7 @@ template<class T>
  * @tparam T Template
  */
 H_Edge<T>::~H_Edge() {
+    std::cout << ":(" << std::endl;
 }
 
 template<class T>
@@ -278,6 +286,39 @@ template<class T>
  */
 std::string H_Edge<T>::get_name() const {
     return this->name;
+}
+
+template<class T>
+/**
+ * Retorna el nombre del HalfEdge.
+ *
+ * @tparam T Template
+ * @return
+ */
+std::string H_Edge<T>::to_string() const {
+    std::string str = "";
+    str += "{" + this->get_name();
+
+    // Si tiene par entonces imprime el nombre y el nombre de la cara contenedora
+    H_Edge<T> *hp = this->get_pair();
+    if (hp != nullptr) {
+        str += "/" + hp->get_name() + "<" + hp->get_face()->get_name() + ">";
+    }
+    str += "}";
+
+    // Retorna el valor
+    return str;
+}
+
+template<class T>
+/**
+ * Operador concatenación con strings.
+ *
+ * @return Concatena con un strng
+ */
+std::ostream &operator<<(std::ostream &out, const H_Edge<T> &he) {
+    out << he.to_string();
+    return out;
 }
 
 #endif //T_CC7515_HALFEDGE_HEDGE_H
