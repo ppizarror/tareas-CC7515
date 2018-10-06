@@ -69,7 +69,7 @@ public:
     bool in_face(H_Edge<T> *hedge) const;
 
     // Retorna el número de la cadena
-    int chain_length() const;
+    int get_chain_length() const;
 
     // Obtiene el área de la cara
     T get_area() const;
@@ -115,7 +115,7 @@ template<class T>
  * @tparam T Template
  * @return
  */
-int Face<T>::chain_length() const {
+int Face<T>::get_chain_length() const {
     if (this->edge == nullptr) return 0;
     H_Edge<T> *he = this->edge;
     int length = 0; // Contador de la cadena
@@ -143,7 +143,7 @@ template<class T>
  * @return
  */
 bool Face<T>::is_valid() const {
-    return this->chain_length() >= 3;
+    return this->get_chain_length() >= 3;
 }
 
 template<class T>
