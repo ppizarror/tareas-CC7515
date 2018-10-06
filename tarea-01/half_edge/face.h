@@ -122,13 +122,13 @@ int Face<T>::chain_length() const {
     while (true) {
         if (he->get_next() == nullptr) {
             std::cerr << "Halfedge " + he->get_name() + " don't point to any next HalfEdge structure" << std::endl;
-            return 0;
+            throw std::logic_error("Cannot compute chain length of an non-closed Face");
         }
         he = he->get_next();
         length++;
         if (length > MAX_RECURSION_DEPTH) {
             std::cerr << "Face " + this->get_name() << " reached maximum recursion depth" << std::endl;
-            return 0;
+            throw std::logic_error("Exceeded recursion depth in Face HalfEdge path");
         }
         if (he == this->edge) break; // Se cumple el ciclo, termina
     }

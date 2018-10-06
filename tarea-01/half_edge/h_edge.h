@@ -167,7 +167,14 @@ template<class T>
  * @param he Puntero al HalfEdge
  */
 void H_Edge<T>::set_pair(H_Edge<T> *he) {
-    if (this == he) throw std::invalid_argument("Pair HalfEdge cant be the same");
+    if (he == nullptr) {
+        std::cerr << "HalfEdge pair pointer cannot be null";
+        throw std::invalid_argument("Pair HalfEdge pointer cannot be null");
+    }
+    if (this == he) {
+        std::cerr << "HalfEdge pointer " << he << " is invalid";
+        throw std::invalid_argument("Pair HalfEdge pointer cant be the same");
+    }
     this->pair = he;
 }
 
@@ -179,7 +186,14 @@ template<class T>
  * @param he Puntero al HalfEdge
  */
 void H_Edge<T>::set_next(H_Edge<T> *he) {
-    if (this == he) throw std::invalid_argument("Next HalfEdge cant be the same");
+    if (he == nullptr) {
+        std::cerr << "HalfEdge next pointer cannot be null";
+        throw std::invalid_argument("Next HalfEdge cannot be null");
+    }
+    if (this == he) {
+        std::cerr << "HalfEdge pointer " << he << " is invalid";
+        throw std::invalid_argument("Next HalfEdge cannot be the same");
+    }
     this->next = he;
     he->set_prev(this);
 }
