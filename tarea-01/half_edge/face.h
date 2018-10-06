@@ -77,6 +77,12 @@ public:
     // Obtiene el nombre de la cara
     std::string get_name() const;
 
+    // Indica que la cara está en ccw
+    bool is_ccw() const;
+
+    // Verifica si la cara es conexa o no
+    bool is_connected() const;
+
 };
 
 template<class T>
@@ -226,7 +232,7 @@ template<class T>
  * @return
  */
 bool Face<T>::points_ccw(const Point<T> &a, const Point<T> &b, const Point<T> &c) const {
-    return false;
+    return this->points_area(a, b, c) > 0;
 }
 
 template<class T>
@@ -287,6 +293,47 @@ template<class T>
  */
 std::string Face<T>::get_name() const {
     return this->name;
+}
+
+template<class T>
+/**
+ * Indica que la cara está en CCW.
+ *
+ * @tparam T Template
+ * @return
+ */
+bool Face<T>::is_ccw() const {
+    H_Edge<T> *he = this->edge;
+    H_Edge<T> *he2 = this->edge->get_next(); // Punto siguiente siguiente
+    H_Edge<T> *he3 = he2->get_next(); // Punto siguiente siguiente
+    while (true) {
+        he->get_next();
+        he2->get_next();
+        he3->get_next();
+        if (!this->points_ccw(*he->get_point(), *he2->get_point(), *he3->get_point())) {
+            return false;
+        }
+        if (he == this->edge) break; // Se cumple el ciclo, termina
+    }
+    return true;
+}
+
+template<class T>
+/**
+ * Verifica si la cara está conectada o no.
+ *
+ * @tparam T Template
+ * @return
+ */
+bool Face<T>::is_connected() const {
+    if (this->edge == nullptr || this->chain_length() < 3) return false;
+    H_Edge<T> *he = this->edge;
+    while (true) {
+        if(he == nullptr) throw std::logic_error("Halfedge")
+        he = he->get_next();
+        if (he == this->edge) break; // Se cumple el ciclo, termina
+    }
+    return false;
 }
 
 #endif //T_CC7515_HALFEDGE_FACE_H

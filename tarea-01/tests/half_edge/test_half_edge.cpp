@@ -82,6 +82,52 @@ void test_basic() {
     assert(f.get_area() == MOD * MOD);
     assert(f.chain_length() == 4);
     assert(f.get_perimeter() == 4 * MOD);
+    assert(f.is_ccw());
+}
+
+/**
+ * Testea dos caras, una en ccw, otra no.
+ */
+void test_ccw() {
+    // Crea una cara en ccw
+    Face<double> f = Face<double>("T-CCW");
+
+    /**
+     * Crea una cara en ccw y otra no, modificada por MOD
+     *
+     * p3 (0,1)
+     * |     \
+     * |  T    \
+     * |         \
+     * p1 (0,0) -- p2 (1,0)
+     */
+    double MOD = 1.5;
+    Point<double> p1 = Point<double>(0, 0) * MOD;
+    Point<double> p2 = Point<double>(1, 0) * MOD;
+    Point<double> p3 = Point<double>(0, 1) * MOD;
+
+    /**
+     * Crea los Hedge
+     */
+    H_Edge<double> he12 = H_Edge<double>(&p2, &f);
+    H_Edge<double> he23 = H_Edge<double>(&p3, &f);
+    H_Edge<double> he31 = H_Edge<double>(&p1, &f);
+
+    // Verifica que sea nulo
+    assert(he12.get_next() == nullptr);
+
+    /**
+     * Crea los siguiente/posterior
+     */
+    he12.set_next(&he23);
+    he23.set_next(&he31);
+    he31.set_next(&he12);
+
+    /**
+     * Testea propiedades geométricas
+     */
+    assert(f.is_ccw());
+    assert(f.get_perimeter() == 3 * MOD);
 }
 
 /**
@@ -98,6 +144,7 @@ int main() {
 
     // Corre los tests
     test_basic();
+    test_ccw();
     test_2face();
 
     // Retorna
