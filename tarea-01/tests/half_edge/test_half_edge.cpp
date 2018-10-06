@@ -155,6 +155,7 @@ void test_ccw() {
     /**
      * Testea propiedades geométricas
      */
+    f.print_hedges();
     assert(f.is_ccw());
     assert(num_equal<double>(f.get_perimeter(), 2 * MOD + MOD * sqrt(2)));
     assert(f.get_area() == MOD * MOD / 2);
@@ -222,6 +223,10 @@ void test_2face() {
     /**
      * Verifica condiciones geométricas
      */
+    f1.print_hedges();
+    f1.print_points();
+    f2.print_hedges();
+    f2.print_points();
     assert(num_equal<double>(f1.get_area(), f2.get_area()));
     assert(num_equal<double>(f1.get_perimeter(), f2.get_perimeter()));
     assert(f1.is_ccw() && f2.is_ccw());
@@ -348,12 +353,12 @@ void test_deletion_complex() {
     Point<double> p2 = Point<double>(1, 0) * MOD;
     Point<double> p3 = Point<double>(0, 1) * MOD;
     Point<double> p4 = Point<double>(1, 1) * MOD;
-    H_Edge<double> he12 = H_Edge<double>(&p2, &t1, "12");
     H_Edge<double> he23 = H_Edge<double>(&p3, &t1, "23");
     H_Edge<double> he31 = H_Edge<double>(&p1, &t1, "31");
+    H_Edge<double> he12 = H_Edge<double>(&p2, &t1, "12");
     H_Edge<double> he24 = H_Edge<double>(&p4, &t2, "24");
-    H_Edge<double> he43 = H_Edge<double>(&p3, &t2, "43");
     H_Edge<double> he32 = H_Edge<double>(&p2, &t2, "32");
+    H_Edge<double> he43 = H_Edge<double>(&p3, &t2, "43");
     he12.set_next(&he23);
     he23.set_next(&he31);
     he31.set_next(&he12);
@@ -367,7 +372,17 @@ void test_deletion_complex() {
     /**
      * Borra un elemento
      */
-    // he23.destroy();
+    std::cout << "HE23 DELETED" << std::endl;
+    he23.destroy();
+    t1.print_hedges();
+    t2.print_hedges();
+    assert(he32.get_pair() == nullptr && he23.get_pair() == nullptr);
+
+    std::cout << "HE12 DELETED" << std::endl;
+    he12.destroy();
+    t1.print_hedges();
+    assert(!he31.is_conected());
+    assert(t1.get_chain_length() == 1);
 
 }
 
@@ -378,7 +393,7 @@ int main() {
 
     // Mensaje en consola
     std::cout << "TEST HALF EDGE" << std::endl;
-    
+
     // Corre los tests
     test_basic();
     test_ccw();

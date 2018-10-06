@@ -54,6 +54,9 @@ private:
     // Verifica si tres puntos están en ccw
     bool points_ccw(const Point<T> &a, const Point<T> &b, const Point<T> &c) const;
 
+    // Retorna el número de la cadena
+    int chain_length(bool showerr) const;
+
 public:
 
     // Inicializa la cara
@@ -118,6 +121,33 @@ void Face<T>::set_hedge(H_Edge<T> *hedge) {
 }
 
 template<class T>
+int Face<T>::chain_length(bool showerr) const {
+    if (this->edge == nullptr) return 0;
+    H_Edge<T> *he = this->edge;
+    int length = 1; // Contador de la cadena
+    while (true) {
+        if (he->get_next() == nullptr) {
+            if (showerr) {
+                std::cerr << "Halfedge {" + he->get_name() + "} don't point to any next HalfEdge structure"
+                          << std::endl;
+                return 0;
+            }
+            break;
+        }
+        he = he->get_next();
+        if (length > MAX_RECURSION_DEPTH) {
+            if (showerr) {
+                std::cerr << "Face " + this->get_name() << " reached maximum recursion depth" << std::endl;
+            }
+            return 0;
+        }
+        if (he == this->edge) break; // Se cumple el ciclo, termina
+        length++;
+    }
+    return length; // Está conectado
+}
+
+template<class T>
 /**
  * Retorna el número de la cadena de HalfEdges que conforman una cara.
  *
@@ -125,23 +155,7 @@ template<class T>
  * @return
  */
 int Face<T>::get_chain_length() const {
-    if (this->edge == nullptr) return 0;
-    H_Edge<T> *he = this->edge;
-    int length = 0; // Contador de la cadena
-    while (true) {
-        if (he->get_next() == nullptr) {
-            std::cerr << "Halfedge {" + he->get_name() + "} don't point to any next HalfEdge structure" << std::endl;
-            return 0;
-        }
-        he = he->get_next();
-        length++;
-        if (length > MAX_RECURSION_DEPTH) {
-            std::cerr << "Face " + this->get_name() << " reached maximum recursion depth" << std::endl;
-            throw std::logic_error("Exceeded recursion depth in Face HalfEdge path");
-        }
-        if (he == this->edge) break; // Se cumple el ciclo, termina
-    }
-    return length; // Está conectado
+    return this->chain_length(false);
 }
 
 template<class T>
@@ -152,7 +166,7 @@ template<class T>
  * @return
  */
 bool Face<T>::is_valid() const {
-    return this->get_chain_length() >= 3;
+    return this->chain_length(true) >= 3;
 }
 
 template<class T>

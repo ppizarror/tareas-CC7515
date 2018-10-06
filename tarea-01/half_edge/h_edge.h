@@ -96,7 +96,11 @@ public:
     template<class U>
     friend std::ostream &operator<<(std::ostream &out, const H_Edge<U> &he);
 
+    // Destruye el HalfEdge
     void destroy();
+
+    // Indica que el HalfEdge no está conectado
+    bool is_conected() const;
 
 };
 
@@ -354,6 +358,11 @@ void H_Edge<T>::destroy() {
         if (hn->prev == this || hn->prev == hn) hn->prev = nullptr;
     }
 
+    // Ve el par
+    if (this->pair != nullptr) {
+        this->pair->pair = nullptr;
+    }
+
     // Elimina parámetros internos
     this->next = nullptr;
     this->prev = nullptr;
@@ -371,6 +380,17 @@ void H_Edge<T>::destroy() {
         };
         this->face = nullptr;
     }
+}
+
+template<class T>
+/**
+ * Indica que la estructura está conectada.
+ *
+ * @tparam T Template
+ * @return
+ */
+bool H_Edge<T>::is_conected() const {
+    return this->pair != nullptr && this->next != nullptr && this->prev != nullptr;
 }
 
 #endif //T_CC7515_HALFEDGE_HEDGE_H
