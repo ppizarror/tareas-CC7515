@@ -45,6 +45,9 @@ private:
     // Añade el HalfEdge anterior
     void set_prev(H_Edge<T> *he);
 
+    // Establece la referencia al HalfEdge par del mismo objeto
+    void set_pair_reference(H_Edge<T> *he);
+
 public:
 
     // Constuctor vacío
@@ -175,6 +178,18 @@ void H_Edge<T>::set_pair(H_Edge<T> *he) {
         std::cerr << "HalfEdge pointer " << he << " is invalid";
         throw std::invalid_argument("Pair HalfEdge pointer cant be the same");
     }
+    this->pair = he;
+    he->set_pair_reference(this); // Doble link
+}
+
+template<class T>
+/**
+ * Añade la referencia al HalfEdge par.
+ *
+ * @tparam T Template
+ * @param he Puntero al HalfEdge
+ */
+void H_Edge<T>::set_pair_reference(H_Edge<T> *he) {
     this->pair = he;
 }
 

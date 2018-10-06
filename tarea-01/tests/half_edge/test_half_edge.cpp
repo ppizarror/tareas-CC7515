@@ -210,6 +210,13 @@ void test_2face() {
     assert(f1.is_ccw() && f2.is_ccw());
     assert(f1.get_chain_length() == f2.get_chain_length() && f1.get_chain_length() == 3);
 
+    /**
+     * Verifica condiciones link par
+     */
+    H_Edge<double> *h = &he12;
+    assert(he23.get_pair() == &he32 && he32.get_pair() == &he23);
+    assert(h->get_next()->get_pair() == &he32);
+    assert(h->get_next()->get_pair()->get_next()->get_next()->get_next()->get_pair()->get_next()->get_next() == &he12);
 }
 
 /**
