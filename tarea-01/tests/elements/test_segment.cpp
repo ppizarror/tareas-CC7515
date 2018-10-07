@@ -25,7 +25,7 @@ void test_length() {
 
     // Crea el segmento
     Segment<float> s = Segment<float>(p1, p2);
-    assert(s.getLength() == 5.0f); // Debe ser 5
+    assert(s.get_length() == 5.0f); // Debe ser 5
 }
 
 /**

@@ -16,9 +16,9 @@
  */
 void test_creation() {
     Polygon<double> poly = Polygon<double>();
-    poly.addPoint(Point<double>(1, 2));
-    poly.addPoint(Point<double>(3, 4));
-    poly.addPoint(Point<double>(5, 6));
+    poly.add_point(Point<double>(1, 2));
+    poly.add_point(Point<double>(3, 4));
+    poly.add_point(Point<double>(5, 6));
 }
 
 /**
@@ -29,12 +29,12 @@ void test_poly_ccw() {
     Point<float> plist[] = {Point<float>(5, 0), Point<float>(6, 4), Point<float>(4, 5), Point<float>(1, 5),
                             Point<float>(1, 0)};
     Polygon<float> poly = Polygon<float>(plist, 5);
-    assert(poly.inCCW());
+    assert(poly.in_ccw());
 
     // No CCW
     Point<float> plist2[] = {Point<float>(0, 0), Point<float>(0, 1), Point<float>(1, 1)};
     poly = Polygon<float>(plist2, 3);
-    assert(!poly.inCCW());
+    assert(!poly.in_ccw());
 }
 
 /**
@@ -70,20 +70,20 @@ void test_in_poly() {
 
     // Deben estar dentro
     p = Point<float>(0.5, 0.5);
-    assert(poly.inPoly(p));
+    assert(poly.in_poly(p));
     p = Point<float>(0.2, 0.5);
-    assert(poly.inPoly(p));
+    assert(poly.in_poly(p));
 
     // Verifica que cada punto de la lista exista en el polígono
     for (auto &i : plist) {
-        assert(poly.isVertex(i));
+        assert(poly.is_vertex(i));
     }
 
     // Deben estar fuera
     p = Point<float>(0, 1.1);
-    assert(!poly.inPoly(p));
+    assert(!poly.in_poly(p));
     p = Point<float>(1.1, 0);
-    assert(!poly.inPoly(p));
+    assert(!poly.in_poly(p));
 
     /**
      * Polígono más complicado
@@ -107,41 +107,41 @@ void test_in_poly() {
 
     // Deben estar fuera
     p = Point<float>(0.5, 0.24);
-    assert(!poly.inPoly(p));
+    assert(!poly.in_poly(p));
     p = Point<float>(0.4, 0.2);
-    assert(!poly.inPoly(p));
+    assert(!poly.in_poly(p));
 
     // Deben estar dentro, SAD REACC ONLY
     p = Point<float>(0.5, 0.26);
-    assert(poly.inPoly(p));
+    assert(poly.in_poly(p));
     p = Point<float>(0.1, 0.1);
-    assert(poly.inPoly(p));
+    assert(poly.in_poly(p));
 }
 
 /**
  * Testea el perímetro
  */
-void testPerimetro() {
+void test_poly_perimeter() {
     // Cuadrado 1x1
     Point<float> plist[] = {Point<float>(0, 0), Point<float>(1, 0), Point<float>(1, 1),
                             Point<float>(0, 1)};
     Polygon<float> poly = Polygon<float>(plist, 4);
 
-    assert(poly.perimetro() == 4.0f);
+    assert(poly.perimeter() == 4.0f);
 
-    // Aumenta cada lado del cuadrado al doble, cuadrado 2x2, perimetro 8
+    // Aumenta cada lado del cuadrado al doble, cuadrado 2x2, perimeter 8
     for (auto &i : plist) {
         i *= 2;
     }
     poly = Polygon<float>(plist, 4);
-    assert(poly.perimetro() == 8.0f);
+    assert(poly.perimeter() == 8.0f);
 
-    // Vuelve a aumentar el lado al cuadruple, 8x8 perimetro 8x4=32 y área 64
+    // Vuelve a aumentar el lado al cuadruple, 8x8 perimeter 8x4=32 y área 64
     for (auto &i : plist) {
         i *= 4;
     }
     poly = Polygon<float>(plist, 4);
-    assert(poly.perimetro() == 32.0f);
+    assert(poly.perimeter() == 32.0f);
     assert(poly.area() == 64.0f);
 }
 
@@ -156,7 +156,7 @@ int main() {
     test_poly_ccw();
     test_poly_area();
     test_in_poly();
-    testPerimetro();
+    test_poly_perimeter();
 
     // Retorna
     return 0;

@@ -55,13 +55,13 @@ public:
     ~Polygon();
 
     // Agrega un punto
-    void addPoint(const Point<T> &p);
+    void add_point(const Point<T> &p);
 
     // Retorna el polígono en forma de string
-    std::string toString() const;
+    std::string to_string() const;
 
     // Chequea que el polígono sea CCW
-    bool inCCW() const;
+    bool in_ccw() const;
 
     // Operación concatenación con string
     template<class U>
@@ -77,21 +77,22 @@ public:
     T area() const;
 
     // Calcula el perímetro
-    T perimetro() const;
+    T perimeter() const;
 
     // Comprueba que un punto está dentro del polígono
-    bool inPoly(Point<T> &p) const;
+    bool in_poly(Point<T> &p) const;
 
     // Comprueba que un punto sea vértice del polígono
-    bool isVertex(Point<T> &p) const;
+    bool is_vertex(Point<T> &p) const;
 
     // Comprueba que el polígono tiene los mismos puntos que otro
-    bool mismosPuntos(const Polygon<T> &poly);
+    bool same_points(const Polygon<T> &poly);
 };
 
 template<class T>
 /**
  * Constructor sin parámetros.
+ *
  * @tparam T - Template
  */
 Polygon<T>::Polygon() {
@@ -101,6 +102,7 @@ Polygon<T>::Polygon() {
 template<class T>
 /**
  * Crea polígono usando lista de puntos.
+ *
  * @tparam T - Template
  * @param size - Largo de la lista de puntos
  * @param plist - Lista de puntos
@@ -111,13 +113,14 @@ Polygon<T>::Polygon(Point<T> *plist, int size) {
 
     // Recorre cada punto y lo añade
     for (int i = 0; i < size; i++) {
-        this->addPoint(plist[i]);
+        this->add_point(plist[i]);
     }
 }
 
 template<class T>
 /**
  * Destructor.
+ *
  * @tparam T - Template
  */
 Polygon<T>::~Polygon() {
@@ -126,10 +129,11 @@ Polygon<T>::~Polygon() {
 template<class T>
 /**
  * Añade punto al polígono.
+ *
  * @tparam T - Template
  * @param p - Punto
  */
-void Polygon<T>::addPoint(const Point<T> &p) {
+void Polygon<T>::add_point(const Point<T> &p) {
     // Si se pasa del límite se aumenta límite de la lista
     if (this->totalp >= this->MAX_POINTS) {
         this->MAX_POINTS *= 10;
@@ -157,10 +161,11 @@ void Polygon<T>::addPoint(const Point<T> &p) {
 template<class T>
 /**
  * Crea string del polígono.
+ *
  * @tparam T - Template
  * @return
  */
-std::string Polygon<T>::toString() const {
+std::string Polygon<T>::to_string() const {
     std::string s = "";
     for (int i = 0; i < this->totalp; i++) {
         s += this->puntos[i].toString();
@@ -174,10 +179,11 @@ std::string Polygon<T>::toString() const {
 template<class T>
 /**
  * Chequea que el polígono esté en CCW.
+ *
  * @tparam T - Template
  * @return
  */
-bool Polygon<T>::inCCW() const {
+bool Polygon<T>::in_ccw() const {
     T sum = 0;
 
     if (this->totalp >= 3) {
@@ -197,25 +203,28 @@ bool Polygon<T>::inCCW() const {
 template<class T>
 /**
  * Operador concatenación con strings.
+ *
  * @return
  */
 std::ostream &operator<<(std::ostream &out, const Polygon<T> &p) {
-    out << p.toString();
+    out << p.to_string();
     return out;
 }
 
 template<class T>
 /**
  * Imprime el punto en la consola.
+ *
  * @tparam T - Template
  */
 void Polygon<T>::print() const {
-    std::cout << this->toString() << std::endl;
+    std::cout << this->to_string() << std::endl;
 }
 
 template<class T>
 /**
  * Operador asignación a otro polígono, clona lista de puntos.
+ *
  * @tparam T - Template
  * @param poly - Polígono
  * @return
@@ -237,11 +246,12 @@ Polygon<T> &Polygon<T>::operator=(const Polygon<T> &poly) {
 template<class T>
 /**
  * Calcula el área del polígono.
+ *
  * @tparam T - Template
  * @return
  */
 T Polygon<T>::area() const {
-    if (this->inCCW() or true) {
+    if (this->in_ccw() or true) {
         T _sumarea = 0.0;
 
         // Se crea un punto cualquiera P en el origen para calcular el área
@@ -260,11 +270,12 @@ T Polygon<T>::area() const {
 template<class T>
 /**
  * Chequea si un punto está dentro de un polígono.
+ *
  * @tparam T - Template
  * @param p - Punto
  * @return
  */
-bool Polygon<T>::inPoly(Point<T> &p) const {
+bool Polygon<T>::in_poly(Point<T> &p) const {
     int i, j;
     bool c = false;
     for (i = 0, j = this->totalp - 1; i < this->totalp; j = i++) {
@@ -281,6 +292,7 @@ bool Polygon<T>::inPoly(Point<T> &p) const {
 template<class T>
 /**
  * Calcula el área entre tres puntos.
+ *
  * @tparam T - Template
  * @param a - Punto A
  * @param b - Punto B
@@ -296,10 +308,11 @@ T Polygon<T>::area2(Point<T> &a, Point<T> &b, Point<T> &c) const {
 template<class T>
 /**
  * Calcula el perímetro de un polígono.
+ *
  * @tparam T Template
  * @return
  */
-T Polygon<T>::perimetro() const {
+T Polygon<T>::perimeter() const {
     Segment<T> s;
     T sum = 0;
 
@@ -313,15 +326,16 @@ T Polygon<T>::perimetro() const {
 
 template<class T>
 /**
- * Verifica que el polígono tiene iguales puntos que otro
+ * Verifica que el polígono tiene iguales puntos que otro.
+ *
  * @tparam T - Template
  * @param poly - Polígono a comparar
  * @return
  */
-bool Polygon<T>::mismosPuntos(const Polygon<T> &poly) {
+bool Polygon<T>::same_points(const Polygon<T> &poly) {
     // Recorre cada punto del polígono y verifica que exista en el arreglo de puntos del otro
     for (int i = 0; i < this->totalp; i++) {
-        if (!poly.isVertex(this->puntos[i])) {
+        if (!poly.is_vertex(this->puntos[i])) {
             std::cout << "El siguiente punto no pertenece a ambas cerraduras:\t" << std::endl;
             this->puntos[i].print();
             return false;
@@ -332,12 +346,13 @@ bool Polygon<T>::mismosPuntos(const Polygon<T> &poly) {
 
 template<class T>
 /**
- * Verifica que un punto es vértice del polígono
+ * Verifica que un punto es vértice del polígono.
+ *
  * @tparam T - Template
  * @param p - Punto
  * @return
  */
-bool Polygon<T>::isVertex(Point<T> &p) const {
+bool Polygon<T>::is_vertex(Point<T> &p) const {
     for (int i = 0; i < this->totalp; i++) {
         if (fabs(this->puntos[i].getCoordX() - p.getCoordX()) < 1e-5 &&
             fabs(this->puntos[i].getCoordY() - p.getCoordY()) < 1e-5)
