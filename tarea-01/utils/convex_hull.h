@@ -135,18 +135,18 @@ std::pair<Polygon<T>, int> giftWrapping(Point<T> *cloud, int cloud_size) {
     do {
         P[i] = pointOnHull; // Añade el punto que se sabe que pertenece a CH
         endpoint = new_cloud[0];
-        Segmento<T> arco = Segmento<T>(P[i], endpoint);
+        Segment<T> arco = Segment<T>(P[i], endpoint);
         double lastdist = -1, newdist;
         for (j = 1; j < cloud_size; j++) {
             if (endpoint == pointOnHull or arco.left(new_cloud[j])) {
-                arco = Segmento<T>(P[i], endpoint);
+                arco = Segment<T>(P[i], endpoint);
                 endpoint = new_cloud[j];
                 lastdist = P[i].dist2(new_cloud[j]);
             } else if (arco.on(new_cloud[j]) && lastdist != -1) { // Punto colineal
                 newdist = P[i].dist2(new_cloud[j]);
                 if (newdist > lastdist) {
                     endpoint = new_cloud[j];
-                    arco = Segmento<T>(P[i], endpoint);
+                    arco = Segment<T>(P[i], endpoint);
                     lastdist = newdist;
                 }
             }

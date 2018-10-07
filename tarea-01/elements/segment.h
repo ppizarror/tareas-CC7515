@@ -11,6 +11,7 @@
 #ifndef T_CC7515_SEGMENT_H
 #define T_CC7515_SEGMENT_H
 #pragma clang diagnostic push
+#pragma ide diagnostic ignored "modernize-use-equals-default"
 #pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 #pragma ide diagnostic ignored "OCUnusedStructInspection"
 
@@ -23,23 +24,23 @@ template<class T>
  *
  * @tparam T Template
  */
-class Segmento {
+class Segment {
 private:
 
     // Puntos del segmento
-    Punto <T> *a;
-    Punto <T> *b;
+    Point<T> *a;
+    Point<T> *b;
 
     // Calcula el doble del área entre el segmento y un punto externo
-    T area2(Punto <T> &c);
+    T area2(Point<T> &c);
 
 public:
 
     // Constructor vacío
-    Segmento();
+    Segment();
 
     // Constructor, recibe dos puntos
-    Segmento(Punto <T> &p1, Punto <T> &p2);
+    Segment(Point<T> &p1, Point<T> &p2);
 
     // Retorna el tamaño del segmento
     double getLength() const;
@@ -48,19 +49,19 @@ public:
     double norm() const;
 
     // Indica si un punto está estrictamente a la izquierda del segmento
-    bool left(Punto <T> &p);
+    bool left(Point<T> &p);
 
     // Indica si un punto está estrictamente a la derecha del segmento
-    bool right(Punto <T> &p);
+    bool right(Point<T> &p);
 
     // Indica que un punto está encima del segmento
-    bool on(Punto <T> &p);
+    bool on(Point<T> &p);
 
     // Indica si un punto está a la izquierda o sobre el segmento
-    bool leftOn(Punto <T> &p);
+    bool leftOn(Point<T> &p);
 
     // Indica si un punto está a la izquierda o sobre el segmento
-    bool rightOn(Punto <T> &p);
+    bool rightOn(Point<T> &p);
 
     // Imprime el segmento en consola
     void print() const;
@@ -73,7 +74,7 @@ template<class T>
  * @param p1 - Punto 1
  * @param p2 - Punto 2
  */
-Segmento<T>::Segmento(Punto <T> &p1, Punto <T> &p2) {
+Segment<T>::Segment(Point<T> &p1, Point<T> &p2) {
     this->a = &p1;
     this->b = &p2;
 }
@@ -84,7 +85,7 @@ template<class T>
  * @tparam T - Template
  * @return
  */
-double Segmento<T>::getLength() const {
+double Segment<T>::getLength() const {
     return this->a->dist(*this->b);
 }
 
@@ -94,7 +95,7 @@ template<class T>
  * @tparam T - Template
  * @return
  */
-double Segmento<T>::norm() const {
+double Segment<T>::norm() const {
     return this->getLength();
 }
 
@@ -105,7 +106,7 @@ template<class T>
  * @param c - Punto a calcular área
  * @return
  */
-T Segmento<T>::area2(Punto <T> &c) {
+T Segment<T>::area2(Point<T> &c) {
     T area = (this->b->getCoordX() - this->a->getCoordX()) * (c.getCoordY() - this->a->getCoordY()) -
              (this->b->getCoordY() - this->a->getCoordY()) * (c.getCoordX() - this->a->getCoordX());
     return area;
@@ -118,7 +119,7 @@ template<class T>
  * @param p - Punto
  * @return
  */
-bool Segmento<T>::left(Punto <T> &p) {
+bool Segment<T>::left(Point<T> &p) {
     return this->area2(p) > 0.0f;
 }
 
@@ -129,7 +130,7 @@ template<class T>
  * @param p - Punto
  * @return
  */
-bool Segmento<T>::right(Punto <T> &p) {
+bool Segment<T>::right(Point<T> &p) {
     return this->area2(p) < 0.0f;
 }
 
@@ -140,7 +141,7 @@ template<class T>
  * @param p - Punto
  * @return
  */
-bool Segmento<T>::on(Punto <T> &p) {
+bool Segment<T>::on(Point<T> &p) {
     return this->area2(p) == 0.0f;
 }
 
@@ -151,7 +152,7 @@ template<class T>
  * @param p - Punto
  * @return
  */
-bool Segmento<T>::leftOn(Punto <T> &p) {
+bool Segment<T>::leftOn(Point<T> &p) {
     return this->area2(p) >= 0.0f;
 }
 
@@ -162,7 +163,7 @@ template<class T>
  * @param p - Punto
  * @return
  */
-bool Segmento<T>::rightOn(Punto <T> &p) {
+bool Segment<T>::rightOn(Point<T> &p) {
     return this->area2(p) <= 0.0f;
 }
 
@@ -171,16 +172,15 @@ template<class T>
  * Constructor vacío
  * @tparam T - Template
  */
-Segmento<T>::Segmento() {}
+Segment<T>::Segment() {}
 
 template<class T>
 /**
  * Imprime el segmento en la consola
  * @tparam T - Template
  */
-void Segmento<T>::print() const {
+void Segment<T>::print() const {
     std::cout << this->a->toString() << "->" << this->b->toString() << std::endl;
 }
 
-#pragma clang diagnostic pop
 #endif //T_CC7515_SEGMENT_H

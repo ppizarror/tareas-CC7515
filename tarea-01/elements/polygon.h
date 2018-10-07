@@ -300,12 +300,12 @@ template<class T>
  * @return
  */
 T Polygon<T>::perimetro() const {
-    Segmento<T> s;
+    Segment<T> s;
     T sum = 0;
 
     // Se recorren cada par de puntos creando segmentos
     for (int i = 0; i < this->totalp; i++) {
-        s = Segmento<T>(this->puntos[i], this->puntos[(i + 1) % (this->totalp)]);
+        s = Segment<T>(this->puntos[i], this->puntos[(i + 1) % (this->totalp)]);
         sum += s.norm();
     }
     return sum;

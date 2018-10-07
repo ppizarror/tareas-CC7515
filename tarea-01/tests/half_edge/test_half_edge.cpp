@@ -116,7 +116,7 @@ void test_basic() {
 /**
  * Testea dos caras, una en ccw, otra no.
  */
-void test_ccw() {
+void test_he_ccw() {
 
     print_title("Test-ccw");
 
@@ -550,7 +550,7 @@ int main() {
 
     // Corre los tests
     test_basic();
-    test_ccw();
+    test_he_ccw();
     test_2face();
     test_deletion_simple();
     test_deletion_complex();
