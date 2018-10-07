@@ -168,7 +168,7 @@ template<class T>
 std::string Polygon<T>::to_string() const {
     std::string s = "";
     for (int i = 0; i < this->totalp; i++) {
-        s += this->puntos[i].toString();
+        s += this->puntos[i].to_string();
         if (i < this->totalp - 1) {
             s += "->";
         }
@@ -188,8 +188,8 @@ bool Polygon<T>::in_ccw() const {
 
     if (this->totalp >= 3) {
         for (int i = 0; i < this->totalp; i++) {
-            sum += (this->puntos[(i + 1) % (this->totalp)].getCoordX() - this->puntos[i].getCoordX()) *
-                   (this->puntos[i].getCoordY() + this->puntos[(i + 1) % (this->totalp)].getCoordY());
+            sum += (this->puntos[(i + 1) % (this->totalp)].get_coord_x() - this->puntos[i].get_coord_x()) *
+                   (this->puntos[i].get_coord_y() + this->puntos[(i + 1) % (this->totalp)].get_coord_y());
         }
 
         // Es CCW si la suma es menor a cero
@@ -279,11 +279,11 @@ bool Polygon<T>::in_poly(Point<T> &p) const {
     int i, j;
     bool c = false;
     for (i = 0, j = this->totalp - 1; i < this->totalp; j = i++) {
-        if (((this->puntos[i].getCoordY() > p.getCoordY()) != (this->puntos[j].getCoordY() > p.getCoordY())) &&
-            (p.getCoordX() < (this->puntos[j].getCoordX() - this->puntos[i].getCoordX()) *
-                             (p.getCoordY() - this->puntos[i].getCoordY()) /
-                             (this->puntos[j].getCoordY() - this->puntos[i].getCoordY()) +
-                             this->puntos[i].getCoordX()))
+        if (((this->puntos[i].get_coord_y() > p.get_coord_y()) != (this->puntos[j].get_coord_y() > p.get_coord_y())) &&
+            (p.get_coord_x() < (this->puntos[j].get_coord_x() - this->puntos[i].get_coord_x()) *
+                             (p.get_coord_y() - this->puntos[i].get_coord_y()) /
+                             (this->puntos[j].get_coord_y() - this->puntos[i].get_coord_y()) +
+                             this->puntos[i].get_coord_x()))
             c = !c;
     }
     return c;
@@ -300,8 +300,8 @@ template<class T>
  * @return
  */
 T Polygon<T>::area2(Point<T> &a, Point<T> &b, Point<T> &c) const {
-    T _area = (b.getCoordX() - a.getCoordX()) * (c.getCoordY() - a.getCoordY()) -
-              (b.getCoordY() - a.getCoordY()) * (c.getCoordX() - a.getCoordX());
+    T _area = (b.get_coord_x() - a.get_coord_x()) * (c.get_coord_y() - a.get_coord_y()) -
+              (b.get_coord_y() - a.get_coord_y()) * (c.get_coord_x() - a.get_coord_x());
     return 0.5 * _area;
 }
 
@@ -354,8 +354,8 @@ template<class T>
  */
 bool Polygon<T>::is_vertex(Point<T> &p) const {
     for (int i = 0; i < this->totalp; i++) {
-        if (fabs(this->puntos[i].getCoordX() - p.getCoordX()) < 1e-5 &&
-            fabs(this->puntos[i].getCoordY() - p.getCoordY()) < 1e-5)
+        if (fabs(this->puntos[i].get_coord_x() - p.get_coord_x()) < 1e-5 &&
+            fabs(this->puntos[i].get_coord_y() - p.get_coord_y()) < 1e-5)
             return true;
     }
     return false;

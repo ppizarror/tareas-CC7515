@@ -15,11 +15,11 @@
 #pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 
 // Importación de librerías
+#include "../elements/polygon.h"
 #include <algorithm>
 #include <ctime>
 #include <stack>
 #include <vector>
-#include "../elements/polygon.h"
 
 // Configuraciones de Graham-Scan
 static double GRAHAM_SCAN_PARTITION = 1e6; // Partición de los puntos
@@ -61,7 +61,7 @@ template<class T>
  */
 void swapPunto(Point<T> arr[], int i, int j) {
     if (i == j) return;
-    Point<T> t = arr[i].clonar();
+    Point<T> t = arr[i].clone();
     arr[i] = arr[j];
     arr[j] = t;
 }
@@ -93,15 +93,15 @@ std::pair<Polygon<T>, int> giftWrapping(Point<T> *cloud, int cloud_size) {
      */
     Point<T> pointOnHull;
     int j = 0; // Almacena el índice del punto más hacia la izquierda
-    T min_x = cloud[0].getCoordX();
-    T min_y = cloud[0].getCoordY();
+    T min_x = cloud[0].get_coord_x();
+    T min_y = cloud[0].get_coord_y();
     for (int i = 1; i < cloud_size; i++) {
 
         // Se encontró un punto más hacia la izquierda y abajo
-        if ((cloud[i].getCoordX() < min_x) or (min_x == cloud[i].getCoordX() && cloud[i].getCoordY() < min_y)) {
+        if ((cloud[i].get_coord_x() < min_x) or (min_x == cloud[i].get_coord_x() && cloud[i].get_coord_y() < min_y)) {
             j = i; // Actualiza el índice
-            min_x = cloud[i].getCoordX();
-            min_y = cloud[i].getCoordY();
+            min_x = cloud[i].get_coord_x();
+            min_y = cloud[i].get_coord_y();
         }
 
     }
@@ -110,11 +110,11 @@ std::pair<Polygon<T>, int> giftWrapping(Point<T> *cloud, int cloud_size) {
     /**
      * Se crea un nuevo arreglo de puntos todos centrados en el plano +X+Y
      */
-    T lx = pointOnHull.getCoordX();
-    T ly = pointOnHull.getCoordY();
+    T lx = pointOnHull.get_coord_x();
+    T ly = pointOnHull.get_coord_y();
     Point<T> *new_cloud = new Point<T>[cloud_size];
     for (int i = 0; i < cloud_size; i++) {
-        new_cloud[i] = Point<T>(cloud[i].getCoordX() - lx, cloud[i].getCoordY() - ly);
+        new_cloud[i] = Point<T>(cloud[i].get_coord_x() - lx, cloud[i].get_coord_y() - ly);
     }
     swapPunto(new_cloud, j, 0);
     pointOnHull = new_cloud[0];
@@ -327,13 +327,13 @@ std::pair<Point<T> *, int> __grahamScan(Point<T> *cloud, int cloud_size) {
      * Se elige el punto con la menor coordenada ordenada, si hay varios iguales
      * se elige aquel con el menor x
      */
-    T ymin = cloud[0].getCoordY(); // Valor más chico de y
+    T ymin = cloud[0].get_coord_y(); // Valor más chico de y
     int min = 0; // Posición en la nube con el punto ganador
     for (int i = 1; i < cloud_size; i++) { // O(n)
-        T y = cloud[i].getCoordY();
+        T y = cloud[i].get_coord_y();
 
         // Se encontró un punto con menor coordenada y, o uno que tiene igual y pero menor x
-        if ((y < ymin) or (y == ymin and cloud[i].getCoordX() < cloud[min].getCoordX())) {
+        if ((y < ymin) or (y == ymin and cloud[i].get_coord_x() < cloud[min].get_coord_x())) {
             ymin = y;
             min = i;
         }

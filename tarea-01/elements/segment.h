@@ -111,8 +111,8 @@ template<class T>
  * @return
  */
 T Segment<T>::area2(Point<T> &c) {
-    T area = (this->b->getCoordX() - this->a->getCoordX()) * (c.getCoordY() - this->a->getCoordY()) -
-             (this->b->getCoordY() - this->a->getCoordY()) * (c.getCoordX() - this->a->getCoordX());
+    T area = (this->b->get_coord_x() - this->a->get_coord_x()) * (c.get_coord_y() - this->a->get_coord_y()) -
+             (this->b->get_coord_y() - this->a->get_coord_y()) * (c.get_coord_x() - this->a->get_coord_x());
     return area;
 }
 
