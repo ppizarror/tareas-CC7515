@@ -167,6 +167,7 @@ Point<T>::Point(T x, T y) {
     this->dim = 2;
     this->set_coord_x(x);
     this->set_coord_y(y);
+    this->coord[2] = 0;
 }
 
 template<class T>
@@ -225,7 +226,7 @@ template<class T>
  */
 T Point<T>::get_coord_z() const {
     if (this->dim < 3) {
-        std::cerr << "Z coordinate does not exists in a 2D point" << std::endl;
+        std::cout << "Z coordinate does not exists in a 2D point" << std::endl;
         throw std::logic_error("Z coordinate does not exists in a 2D point");
     }
     return coord[2];
@@ -482,7 +483,7 @@ Point<T> Point<T>::operator+(const Point<T> &p) const {
         return Point<T>(this->get_coord_x() + p.get_coord_x(), this->get_coord_y() + p.get_coord_y(),
                         this->get_coord_z() + p.get_coord_z());
     } else {
-        std::cerr << "Invalid dimension to perform add operator" << std::endl;
+        std::cout << "Invalid dimension to perform add operator" << std::endl;
         throw std::logic_error("Invalid dimension to perform add operator");
     }
 }
@@ -504,7 +505,7 @@ Point<T> &Point<T>::operator+=(const Point<T> &p) {
     } else if (this->dim == 3 && p.dim == 3) {
         this->coord[2] += p.get_coord_z();
     } else {
-        std::cerr << "Invalid dimension to perform += operator" << std::endl;
+        std::cout << "Invalid dimension to perform += operator" << std::endl;
         throw std::logic_error("Invalid dimension to perform += operator");
     }
 
@@ -526,7 +527,7 @@ Point<T> Point<T>::operator-(const Point<T> &p) const {
         return Point<T>(this->get_coord_x() - p.get_coord_x(), this->get_coord_y() - p.get_coord_y(),
                         this->get_coord_z() - p.get_coord_z());
     } else {
-        std::cerr << "Invalid dimension to perform - operator" << std::endl;
+        std::cout << "Invalid dimension to perform - operator" << std::endl;
         throw std::logic_error("Invalid dimension to perform - operator");
     }
 }
@@ -548,7 +549,7 @@ Point<T> &Point<T>::operator-=(const Point<T> &p) {
     } else if (this->dim == 3 && p.dim == 3) {
         this->coord[2] -= p.get_coord_z();
     } else {
-        std::cerr << "Invalid dimension to perform -= operator" << std::endl;
+        std::cout << "Invalid dimension to perform -= operator" << std::endl;
         throw std::logic_error("Invalid dimension to perform -= operator");
     }
     return *this;
@@ -610,7 +611,7 @@ template<class T>
  */
 Point<T> Point<T>::operator/(const T v) const {
     if (v == 0) {
-        std::cerr << "Can't divide by zero" << std::endl;
+        std::cout << "Can't divide by zero" << std::endl;
         throw std::logic_error("Can't divide by zero");
     }
     if (this->dim == 2) {
@@ -630,7 +631,7 @@ template<class T>
  */
 Point<T> &Point<T>::operator/=(const T v) {
     if (v == 0) {
-        std::cerr << "Can't divide by zero" << std::endl;
+        std::cout << "Can't divide by zero" << std::endl;
         throw std::logic_error("Can't divide by zero");
     }
     this->coord[0] /= v;
@@ -674,7 +675,7 @@ bool Point<T>::operator!=(const Point<T> &p) const {
         return this->get_coord_x() != p.get_coord_x() || this->get_coord_y() != p.get_coord_y() ||
                this->get_coord_z() == p.get_coord_z();
     } else {
-        std::cerr << "Point dimension is not the same" << std::endl;
+        std::cout << "Point dimension is not the same" << std::endl;
         throw std::logic_error("Point dimension is not the same");
     }
 }

@@ -509,8 +509,15 @@ void test_connected_faces() {
     assert(a.is_valid());
 
     /**
-     * Verifica que una cara esté completamente conectada
+     * Verifica que no se puedan establecer relaciones inválidas
      */
+    try {
+        he24.set_pair(&he12);
+        assert(false);
+    } catch (...) {
+        static_assert(true, "");
+    }
+    assert(he24.get_pair() == &he42);
 
 }
 
