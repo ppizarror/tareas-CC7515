@@ -192,8 +192,15 @@ void H_Edge<T>::set_pair(H_Edge<T> *he) {
         throw std::invalid_argument("Pair HalfEdge pointer cannot be null");
     }
     if (this == he) {
-        std::cerr << "HalfEdge pointer cant be the same is invalid";
-        throw std::invalid_argument("Pair HalfEdge pointer cant be the same");
+        std::cerr << "HalfEdge pointer can't be the same";
+        throw std::invalid_argument("Pair HalfEdge pointer can't be the same");
+    }
+    if (he->get_face() == this->get_face()) {
+        std::cerr << "HalfEdge pointer can't be in the same face of the origin";
+        throw std::invalid_argument("HalfEdge pointer can't be in the same face of the origin");
+    }
+    if (this->pair != nullptr) { // Si ya había sido definida la relación borra el par de la referencia
+        this->pair->pair = nullptr;
     }
     this->pair = he;
     he->set_pair_reference(this); // Doble link

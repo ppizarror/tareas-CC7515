@@ -508,6 +508,10 @@ void test_connected_faces() {
     assert(a.is_ccw() && b.is_ccw() && c.is_ccw() && d.is_ccw());
     assert(a.is_valid());
 
+    /**
+     * Verifica que una cara esté completamente conectada
+     */
+
 }
 
 /**
