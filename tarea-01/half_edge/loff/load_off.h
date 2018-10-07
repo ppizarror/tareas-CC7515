@@ -15,6 +15,7 @@
 // Carga librerías
 #include "../h_edge.h"
 #include <fstream>
+#include <map>
 #include <stdexcept>
 #include <vector>
 
@@ -61,6 +62,12 @@ public:
 
     // Retorna el área total de la figura
     T get_total_area(const offObject<T> *off);
+
+    // Imprime cada cara del objeto (HalfEdges)
+    void print_hedges(const offObject<T> *off);
+
+    // Imprime cada cara del objeto (Points)
+    void print_points(const offObject<T> *off);
 
 };
 
@@ -148,6 +155,12 @@ offObject<T> LoadOff<T>::load(const std::string &filename, std::string obj_name)
     H_Edge<T> *he; // Arreglo de HalfEdges
     Face<T> *face;
 
+    /**
+     * Crea el mapa, estructura fundamental
+     * Almacena si en (i,j) existe HalfEdge -> (j,i) par
+     */
+    std::map<int, std::map<int, H_Edge<T> *>> hemap;
+
     for (int n = 0; n < off.num_faces; n++) {
         std::getline(in, readLine);
         this->cstr(&readLine);
@@ -172,14 +185,18 @@ offObject<T> LoadOff<T>::load(const std::string &filename, std::string obj_name)
         he = new H_Edge<T>[face_np + 1];
         for (int i = 1; i < face_np; i++) {
             he[i] = H_Edge<T>(&off.vertex[v[i]], face, std::to_string(v[i - 1]) + "-" + std::to_string(v[i]));
+            hemap[v[i - 1]][v[i]] = &he[i];
         }
         he[0] = H_Edge<T>(&off.vertex[v[0]], face, std::to_string(v[face_np - 1]) + "-" + std::to_string(v[0]));
+        hemap[v[face_np - 1]][v[0]] = &he[0];
 
         // Define relaciones
         for (int i = 0; i < face_np - 1; i++) {
             he[i].set_next(&he[i + 1]);
         }
         he[face_np - 1].set_next(&he[0]);
+
+        // Guarda el HalfEdge en la cara
         face->set_hedge(&he[1]);
 
         // Limpia variables
@@ -281,6 +298,36 @@ T LoadOff<T>::get_total_area(const offObject<T> *off) {
         total += face.get_area();
     }
     return total;
+}
+
+template<class T>
+/**
+ * Imprime cada cara del objeto.
+ *
+ * @tparam T Template
+ * @param off Objeto OFF
+ */
+void LoadOff<T>::print_hedges(const offObject<T> *off) {
+    Face<T> face; // Puntero a cada cara
+    for (int i = 0; i < off->num_faces; i++) {
+        face = off->faces[i];
+        face.print_hedges();
+    }
+}
+
+template<class T>
+/**
+ * Imprime cada cara del objeto.
+ *
+ * @tparam T Template
+ * @param off Objeto OFF
+ */
+void LoadOff<T>::print_points(const offObject<T> *off) {
+    Face<T> face; // Puntero a cada cara
+    for (int i = 0; i < off->num_faces; i++) {
+        face = off->faces[i];
+        face.print_hedges();
+    }
 }
 
 #endif // T_CC7515_HALFEDGE_LOFF_LOAD_OFF_H

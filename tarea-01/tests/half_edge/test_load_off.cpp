@@ -38,8 +38,13 @@ void test_load_good() {
      * Verifica que está en ccw
      */
     assert(lo.is_ccw(&off));
-    lo.print_area(&off);
     assert(lo.get_total_area(&off) == 3);
+
+    /**
+     * Imprime datos
+     */
+    lo.print_area(&off);
+    lo.print_hedges(&off);
 
 }
 
@@ -60,6 +65,7 @@ void test_load_bad() {
      * Verifica que está en ccw
      */
     assert(!lo.is_ccw(&off));
+    lo.print_points(&off);
 
 }
 
