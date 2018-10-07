@@ -26,6 +26,7 @@ template<class T>
 struct offObject {
     int num_faces = 0;
     int num_vertex = 0;
+    std::string name;
     std::vector<Face<T>> faces;
     std::vector<Point<T>> vertex;
 };
@@ -50,10 +51,16 @@ public:
     ~LoadOff();
 
     // Carga un archivo y retorna un vector de caras
-    offObject<T> load(const std::string &filename);
+    offObject<T> load(const std::string &filename, std::string obj_name);
 
     // Verifica si un off está en ccw
     bool is_ccw(const offObject<T> *off);
+
+    // Imprime el área de la figura, por cada cara y total
+    void print_area(const offObject<T> *off);
+
+    // Retorna el área total de la figura
+    T get_total_area(const offObject<T> *off);
 
 };
 
@@ -63,15 +70,17 @@ template<class T>
  *
  * @tparam T Template
  * @param filename Nombre del archivo
+ * @param obj_name Nombre del objeto
  * @return Arreglo de caras
  */
-offObject<T> LoadOff<T>::load(const std::string &filename) {
+offObject<T> LoadOff<T>::load(const std::string &filename, std::string obj_name) {
 
     /**
      * Crea la estructura
      */
     offObject<T> off = offObject<T>();
     off.faces = std::vector<Face<T>>();
+    off.name = obj_name;
 
     /**
      * Carga el archivo
@@ -233,6 +242,45 @@ bool LoadOff<T>::is_ccw(const offObject<T> *off) {
         }
     }
     return true;
+}
+
+template<class T>
+/**
+ * Imprime el área de cada cara y la total.
+ *
+ * @tparam T Template
+ * @param off Objeto OFF
+ */
+void LoadOff<T>::print_area(const offObject<T> *off) {
+    T total = 0; // Área total
+    T area; // Área de cada cara
+    Face<T> face; // Puntero a cada cara
+    std::cout << "OFF Object " + off->name << " area:" << std::endl;
+    for (int i = 0; i < off->num_faces; i++) {
+        face = off->faces[i];
+        area = face.get_area();
+        std::cout << "\tFace ID area: " << area << std::endl;
+        total += area;
+    }
+    std::cout << "\n\tTotal area: " << total << std::endl;
+}
+
+template<class T>
+/**
+ * Retorna el área total de la figura.
+ *
+ * @tparam T Template
+ * @param off Objeto
+ * @return
+ */
+T LoadOff<T>::get_total_area(const offObject<T> *off) {
+    T total = 0; // Área total
+    Face<T> face; // Puntero a cada cara
+    for (int i = 0; i < off->num_faces; i++) {
+        face = off->faces[i];
+        total += face.get_area();
+    }
+    return total;
 }
 
 #endif // T_CC7515_HALFEDGE_LOFF_LOAD_OFF_H

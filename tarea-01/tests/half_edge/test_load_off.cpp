@@ -32,13 +32,34 @@ void test_load_good() {
      * Carga el archivo bueno
      */
     LoadOff<double> lo = LoadOff<double>();
-    offObject<double> off = lo.load("../tests/half_edge/cubes2d_good.off");
+    offObject<double> off = lo.load("../tests/half_edge/cubes2d_good.off", "Cube-good");
 
     /**
      * Verifica que está en ccw
      */
     assert(lo.is_ccw(&off));
+    lo.print_area(&off);
+    assert(lo.get_total_area(&off) == 3);
 
+}
+
+/**
+ * Testeo carga archivo malo
+ */
+void test_load_bad() {
+
+    print_title("Test-load-bad");
+
+    /**
+     * Carga el archivo bueno
+     */
+    LoadOff<double> lo = LoadOff<double>();
+    offObject<double> off = lo.load("../tests/half_edge/cubes2d_bad.off", "Cube-bad");
+
+    /**
+     * Verifica que está en ccw
+     */
+    assert(!lo.is_ccw(&off));
 
 }
 
@@ -52,6 +73,7 @@ int main() {
 
     // Corre los tests
     test_load_good();
+    test_load_bad();
 
     // Retorna
     return 0;
