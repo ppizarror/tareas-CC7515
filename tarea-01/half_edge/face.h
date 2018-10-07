@@ -16,6 +16,7 @@
 #include "../elements/vector.h"
 #include <iostream>
 #include <string>
+#include <vector>
 
 // Constantes
 const int MAX_RECURSION_DEPTH = 1000;
@@ -97,6 +98,12 @@ public:
 
     // Obtiene el puntero al objeto
     H_Edge<T> *get_hedge() const;
+
+    // Indica si la cara está rodeada de caras distintas
+    bool is_surrounded() const;
+
+    // Retorna un vector con las caras que rodean a la cara
+    std::vector<Face<T> *> get_faces() const;
 
 };
 
@@ -356,7 +363,7 @@ template<class T>
  * @return
  */
 std::string Face<T>::get_name() const {
-    return this->name;
+    return "<" + this->name + ">";
 }
 
 template<class T>
@@ -407,13 +414,13 @@ void Face<T>::print_points() const {
         point_list += p->to_string();
         he = he->get_next();
         if (he == nullptr) {
-            point_list += " <-> NULL";
+            point_list += " ⇄ NULL";
             break;
         }
         if (he == this->edge) {
             break;
         } else {
-            point_list += " <-> ";
+            point_list += " ⇄ ";
         }
     }
     std::cout << this->get_name() << " : " << point_list << std::endl; // Imprime la cadena
@@ -441,14 +448,14 @@ void Face<T>::print_hedges() const {
         edge_list += he->to_string();
         he = he->get_next();
         if (he == nullptr) {
-            edge_list += " <-> NULL";
+            edge_list += " ⇄ NULL";
             break;
         }
         if (he == this->edge) {
             edge_list += " ↻";
             break;
         } else {
-            edge_list += " <-> ";
+            edge_list += " ⇄ ";
         }
     }
     std::cout << this->get_name() << " : " << edge_list << std::endl; // Imprime la cadena
@@ -463,6 +470,48 @@ template<class T>
  */
 H_Edge<T> *Face<T>::get_hedge() const {
     return this->edge;
+}
+
+template<class T>
+/**
+ * Indica que la cara está rodedada de caras distintas.
+ *
+ * @tparam T Template
+ * @return
+ */
+bool Face<T>::is_surrounded() const {
+    return this->get_faces().size() == this->get_chain_length();
+}
+
+template<class T>
+/**
+ * Retorna un vector con las caras que rodean a la cara.
+ *
+ * @tparam T Template
+ * @return
+ */
+std::vector<Face<T> *> Face<T>::get_faces() const {
+    std::vector<Face<T> *> faces;
+    if (!this->is_valid()) return faces;
+    H_Edge<T> *he = this->edge;
+    Face<T> *face = nullptr;
+    while (true) {
+        // Obtiene la cara del par
+        if (he->get_pair() != nullptr) {
+            face = he->get_pair()->get_face();
+        }
+        if (face == this) break; // Termina el ciclo si la cara es la misma
+
+        // La cara del actual he no se ha añadido
+        if (face != nullptr && std::find(faces.begin(), faces.end(), face) == faces.end()) {
+            faces.push_back(face);
+        }
+
+        // Avanza el loop
+        he = he->get_next();
+        if (he == this->edge) break; // Se cumple el ciclo, termina
+    }
+    return faces;
 }
 
 #endif //T_CC7515_HALFEDGE_FACE_H

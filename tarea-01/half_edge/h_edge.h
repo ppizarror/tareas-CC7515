@@ -176,7 +176,7 @@ void H_Edge<T>::print() const {
         std::cout << this->to_string() << std::endl;
         return;
     }
-    std::cout << "HE " << this->name << " -> " << this->vert << " | FACE: " << this->face->get_name() << std::endl;
+    std::cout << "HE " << this->name << " : " << this->vert << " | FACE: " << this->face->get_name() << std::endl;
 }
 
 template<class T>
@@ -188,15 +188,15 @@ template<class T>
  */
 void H_Edge<T>::set_pair(H_Edge<T> *he) {
     if (he == nullptr) {
-        std::cerr << "HalfEdge pair pointer cannot be null";
+        std::cerr << "HalfEdge pair pointer cannot be null" << std::endl;
         throw std::invalid_argument("Pair HalfEdge pointer cannot be null");
     }
     if (this == he) {
-        std::cerr << "HalfEdge pointer can't be the same";
+        std::cerr << "HalfEdge pointer {" << he->get_name() << "} can't be the same" << std::endl;
         throw std::invalid_argument("Pair HalfEdge pointer can't be the same");
     }
     if (he->get_face() == this->get_face()) {
-        std::cerr << "HalfEdge pointer can't be in the same face of the origin";
+        std::cerr << "HalfEdge pointer {" << he->get_name() << "} can't be in the same face of the origin" << std::endl;
         throw std::invalid_argument("HalfEdge pointer can't be in the same face of the origin");
     }
     if (this->pair != nullptr) { // Si ya había sido definida la relación borra el par de la referencia
@@ -226,12 +226,16 @@ template<class T>
  */
 void H_Edge<T>::set_next(H_Edge<T> *he) {
     if (he == nullptr) {
-        std::cerr << "HalfEdge next pointer cannot be null";
+        std::cerr << "HalfEdge next pointer cannot be null" << std::endl;
         throw std::invalid_argument("Next HalfEdge cannot be null");
     }
     if (this == he) {
-        std::cerr << "HalfEdge pointer " << he << " is invalid";
+        std::cerr << "HalfEdge pointer {" << he->get_name() << "} is invalid" << std::endl;
         throw std::invalid_argument("Next HalfEdge cannot be the same");
+    }
+    if (he->get_face() != this->get_face()) {
+        std::cerr << "HalfEdge pointer {" << he->get_name() << "} can't be outside face" << std::endl;
+        throw std::invalid_argument("Next HalfEdge cannot be outside target face");
     }
     this->next = he;
     he->set_prev(this);
@@ -318,7 +322,7 @@ std::string H_Edge<T>::to_string() const {
     // Si tiene par entonces imprime el nombre y el nombre de la cara contenedora
     H_Edge<T> *hp = this->get_pair();
     if (hp != nullptr) {
-        str += "/" + hp->get_name() + "<" + hp->get_face()->get_name() + ">";
+        str += "/" + hp->get_name() + hp->get_face()->get_name();
     }
     str += "}";
 

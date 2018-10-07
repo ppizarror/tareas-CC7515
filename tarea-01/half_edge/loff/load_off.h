@@ -16,8 +16,6 @@
 #include "../h_edge.h"
 #include <fstream>
 #include <map>
-#include <stdexcept>
-#include <vector>
 
 template<class T>
 /**
@@ -291,14 +289,15 @@ template<class T>
  */
 bool LoadOff<T>::is_ccw(const offObject<T> *off) {
     Face<T> face; // Puntero a cada cara
+    bool valid = true;
     for (int i = 0; i < off->num_faces; i++) {
         face = off->faces[i];
         if (!face.is_ccw()) {
-            std::cout << "Face ID " + face.get_name() + " is not ccw" << std::endl;
-            return false;
+            std::cout << "Face " + face.get_name() + " is not ccw" << std::endl;
+            valid = false;
         }
     }
-    return true;
+    return valid;
 }
 
 template<class T>
@@ -316,10 +315,11 @@ void LoadOff<T>::print_area(const offObject<T> *off) {
     for (int i = 0; i < off->num_faces; i++) {
         face = off->faces[i];
         area = face.get_area();
-        std::cout << "\tFace ID area: " << area << std::endl;
+        std::cout << "\tFace " << face.get_name() << " area: " << area << std::endl;
         total += area;
     }
-    std::cout << "\n\tTotal area: " << total << std::endl;
+    std::cout << "\t----------" << std::endl;
+    std::cout << "\tTotal area: " << total << std::endl;
 }
 
 template<class T>

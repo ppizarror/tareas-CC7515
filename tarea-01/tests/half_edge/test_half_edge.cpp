@@ -511,13 +511,32 @@ void test_connected_faces() {
     /**
      * Verifica que no se puedan establecer relaciones inválidas
      */
-    try {
+    try { // Establecer un par de la misma cara
         he24.set_pair(&he12);
         assert(false);
     } catch (...) {
         static_assert(true, "");
     }
     assert(he24.get_pair() == &he42);
+    try { // Establecer un par de la misma cara
+        he12.set_next(&he23);
+        assert(false);
+    } catch (...) {
+        static_assert(true, "");
+    }
+    assert(he12.get_next() == &he24);
+
+    /**
+     * Verifica caras que rodean
+     */
+    assert(a.get_chain_length() == 3);
+    assert(b.get_chain_length() == 3);
+    assert(c.get_chain_length() == 3);
+    assert(d.get_chain_length() == 3);
+    assert(!a.is_surrounded());
+    assert(!b.is_surrounded());
+    assert(!c.is_surrounded());
+    assert(d.is_surrounded());
 
 }
 

@@ -57,7 +57,8 @@ void test_load_bad() {
     print_title("Test-load-bad");
 
     /**
-     * Carga el archivo bueno
+     * Carga el archivo malo
+     * Caras 1 y 4 fueron modificadas en sentido horario (!ccw)
      */
     LoadOff<double> lo = LoadOff<double>();
     offObject<double> off = lo.load("../tests/half_edge/cubes2d_bad.off", "Cube-bad");
