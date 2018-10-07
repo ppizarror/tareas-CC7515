@@ -11,15 +11,34 @@
 #include "../../half_edge/loff/load_off.h"
 
 /**
+ * Imprime el título del test
+ * @param title Título del test
+ */
+void print_title(const std::string &title) {
+    std::cout << "" << std::endl;
+    std::cout << "----------------------------------------------------------" << std::endl;
+    std::cout << title << std::endl;
+    std::cout << "----------------------------------------------------------" << std::endl;
+}
+
+/**
  * Testeo carga archivo bueno
  */
 void test_load_good() {
 
+    print_title("Test-load-good");
+
     /**
      * Carga el archivo bueno
      */
-    LoadOff<double> loff = LoadOff<double>();
-    offObject<double> g = loff.load("../tests/half_edge/cubes2d_good.off");
+    LoadOff<double> lo = LoadOff<double>();
+    offObject<double> off = lo.load("../tests/half_edge/cubes2d_good.off");
+
+    /**
+     * Verifica que está en ccw
+     */
+    assert(lo.is_ccw(&off));
+
 
 }
 

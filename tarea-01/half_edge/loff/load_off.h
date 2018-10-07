@@ -24,9 +24,10 @@ template<class T>
  * @tparam T Template (tipo de valor)
  */
 struct offObject {
-    std::vector<Face<T>> faces;
     int num_faces = 0;
     int num_vertex = 0;
+    std::vector<Face<T>> faces;
+    std::vector<Point<T>> vertex;
 };
 
 template<class T>
@@ -50,6 +51,9 @@ public:
 
     // Carga un archivo y retorna un vector de caras
     offObject<T> load(const std::string &filename);
+
+    // Verifica si un off está en ccw
+    bool is_ccw(const offObject<T> *off);
 
 };
 
@@ -110,7 +114,7 @@ offObject<T> LoadOff<T>::load(const std::string &filename) {
     /**
      * Crea los puntos
      */
-    std::vector<Point<T>> p = std::vector<Point<T>>();
+    off.vertex = std::vector<Point<T>>();
     T x, y, z; // Coordenadas
 
     for (int n = 0; n < off.num_vertex; n++) {
@@ -124,8 +128,7 @@ offObject<T> LoadOff<T>::load(const std::string &filename) {
         y = atof(readLine.substr(d_1, d_2).c_str());
         d_3 = readLine.find(" ", d_2 + 1);
         z = atof(readLine.substr(d_2, d_3).c_str());
-        p.push_back(Point<T>(x, y, z));
-
+        off.vertex.push_back(Point<T>(x, y, z));
     }
 
     /**
@@ -159,23 +162,20 @@ offObject<T> LoadOff<T>::load(const std::string &filename) {
         // Crea los HalfEdge
         he = new H_Edge<T>[face_np + 1];
         for (int i = 1; i < face_np; i++) {
-            he[i] = H_Edge<T>(&p[v[i]], face, std::to_string(v[i - 1]) + "-" + std::to_string(v[i]));
+            he[i] = H_Edge<T>(&off.vertex[v[i]], face, std::to_string(v[i - 1]) + "-" + std::to_string(v[i]));
         }
-        he[0] = H_Edge<T>(&p[v[0]], face, std::to_string(v[face_np - 1]) + "-" + std::to_string(v[0]));
+        he[0] = H_Edge<T>(&off.vertex[v[0]], face, std::to_string(v[face_np - 1]) + "-" + std::to_string(v[0]));
 
         // Define relaciones
         for (int i = 0; i < face_np - 1; i++) {
             he[i].set_next(&he[i + 1]);
         }
         he[face_np - 1].set_next(&he[0]);
-
         face->set_hedge(&he[1]);
-        face->print_hedges();
 
         // Limpia variables
         delete[] v;
-        delete[] he;
-
+        // delete[] he; // Si se elimina esto GG
     }
 
     /**
@@ -213,6 +213,26 @@ template<class T>
 void LoadOff<T>::cstr(std::string *str) {
     str->erase(std::remove(str->begin(), str->end(), '\n'), str->end());
     str->erase(std::remove(str->begin(), str->end(), '\r'), str->end());
+}
+
+template<class T>
+/**
+ * Verifica si un objeto OFF está en ccw.
+ *
+ * @tparam T Template
+ * @param off Objeto off
+ * @return
+ */
+bool LoadOff<T>::is_ccw(const offObject<T> *off) {
+    Face<T> face; // Puntero a cada cara
+    for (int i = 0; i < off->num_faces; i++) {
+        face = off->faces[i];
+        if (!face.is_ccw()) {
+            std::cout << "Face ID " + face.get_name() + " is not ccw" << std::endl;
+            return false;
+        }
+    }
+    return true;
 }
 
 #endif // T_CC7515_HALFEDGE_LOFF_LOAD_OFF_H
