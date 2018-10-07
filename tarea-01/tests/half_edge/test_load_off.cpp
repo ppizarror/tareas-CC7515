@@ -44,8 +44,8 @@ void test_load_good() {
      * Imprime datos
      */
     lo.print_area(&off);
-    lo.print_points(&off);
     lo.print_hedges(&off);
+    lo.print_points(&off);
 
 }
 

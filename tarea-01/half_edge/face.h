@@ -124,6 +124,10 @@ template<class T>
  * @param hedge Puntero al edge
  */
 void Face<T>::set_hedge(H_Edge<T> *hedge) {
+    if (hedge!=nullptr && hedge->get_face() != this) {
+        std::cerr << "Cannot set HalfEdge from another face" << std::endl;
+        throw std::invalid_argument("Cannot set HalfEdge from another face");
+    }
     this->edge = hedge;
 }
 
@@ -157,6 +161,7 @@ int Face<T>::chain_length(bool showerr) const {
                          "} can't point to the same face" << std::endl;
             return 0;
         }
+
 
         he = he->get_next();
 

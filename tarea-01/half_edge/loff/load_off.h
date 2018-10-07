@@ -311,7 +311,7 @@ void LoadOff<T>::print_area(const offObject<T> *off) {
     T total = 0; // Área total
     T area; // Área de cada cara
     Face<T> face; // Puntero a cada cara
-    std::cout << "OFF Object " + off->name << " area:" << std::endl;
+    std::cout << "OFF Object {" + off->name << "} area:" << std::endl;
     for (int i = 0; i < off->num_faces; i++) {
         face = off->faces[i];
         area = face.get_area();

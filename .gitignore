@@ -38,7 +38,7 @@ cmake-build-debug/
 *.lnk
 
 # Ignora informe
-*informe.*
+*informe*
 
 # Entregas
 entregas/*

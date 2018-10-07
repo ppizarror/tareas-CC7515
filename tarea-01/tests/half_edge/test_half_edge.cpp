@@ -180,53 +180,57 @@ void test_2face() {
     /**
      * Crea una cara en ccw y otra no, modificada por MOD
      *
-     * p3 (0,1) -- p4 (1,1)
+     * p4 (0,1) -- p3 (1,1)
      * |    \      |
-     * |  T1  \ T2 |
+     * |  F1  \ F2 |
      * |        \  |
      * p1 (0,0) -- p2 (1,0)
      */
-    double MOD = 1.5;
-    Face<double> f1 = Face<double>("T1");
-    Face<double> f2 = Face<double>("T2");
+    double MOD = 1;
+    Face<double> f1 = Face<double>("F1");
+    Face<double> f2 = Face<double>("F2");
     Point<double> p1 = Point<double>(0, 0) * MOD;
     Point<double> p2 = Point<double>(1, 0) * MOD;
-    Point<double> p3 = Point<double>(0, 1) * MOD;
-    Point<double> p4 = Point<double>(1, 1) * MOD;
+    Point<double> p3 = Point<double>(1, 1) * MOD;
+    Point<double> p4 = Point<double>(0, 1) * MOD;
 
     /**
     * Crea los Hedge
     */
     H_Edge<double> he12 = H_Edge<double>(&p2, &f1, "12");
-    H_Edge<double> he23 = H_Edge<double>(&p3, &f1, "23");
-    H_Edge<double> he31 = H_Edge<double>(&p1, &f1, "31");
-    H_Edge<double> he24 = H_Edge<double>(&p4, &f2, "24");
-    H_Edge<double> he43 = H_Edge<double>(&p3, &f2, "43");
-    H_Edge<double> he32 = H_Edge<double>(&p2, &f2, "32");
+    H_Edge<double> he24 = H_Edge<double>(&p4, &f1, "24");
+    H_Edge<double> he41 = H_Edge<double>(&p1, &f1, "41");
+    H_Edge<double> he23 = H_Edge<double>(&p3, &f2, "23");
+    H_Edge<double> he34 = H_Edge<double>(&p4, &f2, "34");
+    H_Edge<double> he42 = H_Edge<double>(&p2, &f2, "42");
 
     /**
      * Crea las relaciones topológicas
      */
-    // T1
-    he12.set_next(&he23);
-    he23.set_next(&he31);
-    he31.set_next(&he12);
+    // F1
+    f1.set_hedge(&he12);
+    he12.set_next(&he24);
+    he24.set_next(&he41);
+    he41.set_next(&he12);
 
-    // T2
-    he24.set_next(&he43);
-    he43.set_next(&he32);
-    he32.set_next(&he24);
+    // F2
+    f2.set_hedge(&he34);
+    he23.set_next(&he34);
+    he34.set_next(&he42);
+    he42.set_next(&he23);
 
     // Par
-    he23.set_pair(&he32);
+    he24.set_pair(&he42);
 
     /**
      * Verifica condiciones geométricas
      */
     f1.print_hedges();
-    f1.print_points();
     f2.print_hedges();
+
+    f1.print_points();
     f2.print_points();
+
     assert(num_equal<double>(f1.get_area(), f2.get_area()));
     assert(num_equal<double>(f1.get_perimeter(), f2.get_perimeter()));
     assert(f1.is_ccw() && f2.is_ccw());
@@ -236,8 +240,8 @@ void test_2face() {
      * Verifica condiciones link par
      */
     H_Edge<double> *h = &he12;
-    assert(he23.get_pair() == &he32 && he32.get_pair() == &he23);
-    assert(h->get_next()->get_pair() == &he32);
+    assert(he24.get_pair() == &he42 && he42.get_pair() == &he24);
+    assert(h->get_next()->get_pair() == &he42);
     assert(h->get_next()->get_pair()->get_next()->get_next()->get_next()->get_pair()->get_next()->get_next() == &he12);
 
 }
