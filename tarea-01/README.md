@@ -206,7 +206,7 @@ he42.set_next(&he23);
 he24.set_pair(&he42);
 ```
 
-La librería se construyó lo suficientemente robusta como para arrojar errores por la salida estándar si se realizan operaciones inválidas o potencialmente peligrosas, como por ejemplo generar una cara no cíclica (por ejemplo he12->he23->he31->he23...), añadir un HalfEdge siguiente que no esté en la misma cara, añadir el mismo objeto como next HalfEdge, entre otros casos.
+La librería se construyó lo suficientemente robusta como para arrojar errores por la salida estándar si se realizan operaciones inválidas o potencialmente peligrosas, como por ejemplo generar una cara no cíclica (por ejemplo ```he12->he23->he31->he23...```), añadir un HalfEdge siguiente que no esté en la misma cara, añadir el mismo objeto como next HalfEdge, entre otros casos.
 
 La idea de la estructura es que una cara, al conocer un puntero a un HalfEdge (y la cara está bien definida) se puede recorrer siempre accediento a .get_next() de cada elemento. Algunas operaciones de las caras:
 
