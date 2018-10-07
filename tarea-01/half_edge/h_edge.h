@@ -188,15 +188,15 @@ template<class T>
  */
 void H_Edge<T>::set_pair(H_Edge<T> *he) {
     if (he == nullptr) {
-        std::cout << "HalfEdge pair pointer cannot be null";
+        std::cerr << "HalfEdge pair pointer cannot be null";
         throw std::invalid_argument("Pair HalfEdge pointer cannot be null");
     }
     if (this == he) {
-        std::cout << "HalfEdge pointer can't be the same";
+        std::cerr << "HalfEdge pointer can't be the same";
         throw std::invalid_argument("Pair HalfEdge pointer can't be the same");
     }
     if (he->get_face() == this->get_face()) {
-        std::cout << "HalfEdge pointer can't be in the same face of the origin";
+        std::cerr << "HalfEdge pointer can't be in the same face of the origin";
         throw std::invalid_argument("HalfEdge pointer can't be in the same face of the origin");
     }
     if (this->pair != nullptr) { // Si ya había sido definida la relación borra el par de la referencia
@@ -226,11 +226,11 @@ template<class T>
  */
 void H_Edge<T>::set_next(H_Edge<T> *he) {
     if (he == nullptr) {
-        std::cout << "HalfEdge next pointer cannot be null";
+        std::cerr << "HalfEdge next pointer cannot be null";
         throw std::invalid_argument("Next HalfEdge cannot be null");
     }
     if (this == he) {
-        std::cout << "HalfEdge pointer " << he << " is invalid";
+        std::cerr << "HalfEdge pointer " << he << " is invalid";
         throw std::invalid_argument("Next HalfEdge cannot be the same");
     }
     this->next = he;

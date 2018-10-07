@@ -137,7 +137,7 @@ int Face<T>::chain_length(bool showerr) const {
         // Verifica que no tenga enlaces nulos (no cíclico)
         if (he->get_next() == nullptr) {
             if (showerr) {
-                std::cout << "Halfedge {" + he->get_name() + "} don't point to any next HalfEdge structure"
+                std::cerr << "Halfedge {" + he->get_name() + "} don't point to any next HalfEdge structure"
                           << std::endl;
                 return 0;
             }
@@ -146,7 +146,7 @@ int Face<T>::chain_length(bool showerr) const {
 
         // Verifica que la cara del par (si existe) no sea igual a la misma cara (par conectados cíclicos)
         if (he->get_pair() != nullptr && he->get_pair()->get_face() == this) {
-            std::cout << "Halfedge's {" + he->get_name() + "} pair {" + he->get_pair()->get_name() +
+            std::cerr << "Halfedge's {" + he->get_name() + "} pair {" + he->get_pair()->get_name() +
                          "} can't point to the same face" << std::endl;
             return 0;
         }
@@ -156,7 +156,7 @@ int Face<T>::chain_length(bool showerr) const {
         // Verifica que sea conexo
         if (length > MAX_RECURSION_DEPTH) {
             if (showerr) {
-                std::cout << "Face " + this->get_name() << " reached maximum recursion depth" << std::endl;
+                std::cerr << "Face " + this->get_name() << " reached maximum recursion depth" << std::endl;
             }
             return -1;
         }
