@@ -192,7 +192,7 @@ void H_Edge<T>::set_pair(H_Edge<T> *he) {
         throw std::invalid_argument("Pair HalfEdge pointer cannot be null");
     }
     if (this == he) {
-        std::cerr << "HalfEdge pointer " << he << " is invalid";
+        std::cerr << "HalfEdge pointer cant be the same is invalid";
         throw std::invalid_argument("Pair HalfEdge pointer cant be the same");
     }
     this->pair = he;

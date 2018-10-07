@@ -399,12 +399,15 @@ void test_infinite_loop() {
      *   a     b     c
      */
     Face<double> f = Face<double>("F1");
+
     Point<double> p1 = Point<double>(0, 0);
     Point<double> p2 = Point<double>(1, 0);
     Point<double> p3 = Point<double>(2, 0);
+
     H_Edge<double> b = H_Edge<double>(&p2, &f, "b");
     H_Edge<double> c = H_Edge<double>(&p3, &f, "c");
     H_Edge<double> a = H_Edge<double>(&p1, &f, "a");
+
     a.set_next(&b);
     b.set_next(&c);
     c.set_next(&b); // Acá hay un loop, salta de a>b>c>b>c...
@@ -421,6 +424,90 @@ void test_infinite_loop() {
     assert(!f.in_face(&a));
     assert(!f.in_face(&b));
     assert(!f.in_face(&c));
+
+}
+
+/**
+ * Testea que las caras estén conectadas de forma correcta.
+ */
+void test_connected_faces() {
+
+    print_title("Test-connected-faces");
+
+    /**
+     * Crea la siguiente figura de 4 caras
+     *
+     *        6
+     *      / C \
+     *     4  -- 5
+     *   / A\ D / B\
+     *  1 --  2 --  3
+     *
+     */
+    Face<double> a = Face<double>("A");
+    Face<double> b = Face<double>("B");
+    Face<double> c = Face<double>("C");
+    Face<double> d = Face<double>("D");
+
+    Point<double> p1 = Point<double>(0, 0);
+    Point<double> p2 = Point<double>(1, 0);
+    Point<double> p3 = Point<double>(2, 0);
+    Point<double> p4 = Point<double>(0.5, 1);
+    Point<double> p5 = Point<double>(1.5, 1);
+    Point<double> p6 = Point<double>(1, 2);
+
+    H_Edge<double> he12 = H_Edge<double>(&p2, &a, "12");
+    H_Edge<double> he24 = H_Edge<double>(&p4, &a, "12");
+    H_Edge<double> he41 = H_Edge<double>(&p1, &a, "12");
+    H_Edge<double> he23 = H_Edge<double>(&p3, &b, "23");
+    H_Edge<double> he35 = H_Edge<double>(&p5, &b, "35");
+    H_Edge<double> he52 = H_Edge<double>(&p2, &b, "52");
+    H_Edge<double> he45 = H_Edge<double>(&p5, &c, "45");
+    H_Edge<double> he56 = H_Edge<double>(&p6, &c, "56");
+    H_Edge<double> he64 = H_Edge<double>(&p4, &c, "64");
+    H_Edge<double> he25 = H_Edge<double>(&p5, &d, "25");
+    H_Edge<double> he54 = H_Edge<double>(&p4, &d, "54");
+    H_Edge<double> he42 = H_Edge<double>(&p2, &d, "42");
+
+    // Establece primer Edge
+    a.set_hedge(&he12);
+    b.set_hedge(&he23);
+    c.set_hedge(&he45);
+    d.set_hedge(&he25);
+
+    // Crea relaciones siguientes
+    he12.set_next(&he24); // A
+    he24.set_next(&he41);
+    he41.set_next(&he12);
+    he23.set_next(&he35); // B
+    he35.set_next(&he52);
+    he52.set_next(&he23);
+    he45.set_next(&he56); // C
+    he56.set_next(&he64);
+    he64.set_next(&he45);
+    he54.set_next(&he42); // D
+    he42.set_next(&he25);
+    he25.set_next(&he54);
+
+    // Establece pares
+    he24.set_pair(&he42);
+    he25.set_pair(&he52);
+    he54.set_pair(&he45);
+
+    /**
+     * Imprime topología
+     */
+    a.print_hedges();
+    b.print_hedges();
+    c.print_hedges();
+    d.print_hedges();
+
+    /**
+     * Verifica topología
+     */
+    assert(a.is_ccw() && b.is_ccw() && c.is_ccw() && d.is_ccw());
+    assert(a.is_valid());
+
 }
 
 /**
@@ -438,6 +525,7 @@ int main() {
     test_deletion_simple();
     test_deletion_complex();
     test_infinite_loop();
+    test_connected_faces();
 
     // Retorna
     return 0;
