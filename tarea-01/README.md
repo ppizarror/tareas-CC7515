@@ -184,7 +184,7 @@ H_Edge<double> he42 = H_Edge<double>(&p2, &f2, "42");
 Notar que el ejemplo anterior permite representar la siguiente figura:
 
 <center>
-    <img src="informe/he.PNG" alt="figura-he" width="300"/>
+    <img src="https://i.imgur.com/xHo3sKd.png" alt="figura-he" width="300"/>
 </center>
 
 Luego, las relaciones de topología entre cada par de HalfEdge se realiza a continuación:
