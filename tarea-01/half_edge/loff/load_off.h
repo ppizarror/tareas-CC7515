@@ -43,6 +43,9 @@ private:
     // Elimina carácteres inválidos en un string
     void cstr(std::string *str);
 
+    // Busca un elemento en el mapa
+    H_Edge<T> *find_map(std::map<int, std::map<int, H_Edge<T> *>> *map, int i, int j);
+
 public:
 
     // Constructor
@@ -153,6 +156,7 @@ offObject<T> LoadOff<T>::load(const std::string &filename, std::string obj_name)
     int face_np; // Número de puntos de una cara
     int *v; // Arreglo de índices de puntos
     H_Edge<T> *he; // Arreglo de HalfEdges
+    H_Edge<T> *hpair; // Puntero al HalfEdge par encontrado en el mapa
     Face<T> *face;
 
     /**
@@ -161,12 +165,18 @@ offObject<T> LoadOff<T>::load(const std::string &filename, std::string obj_name)
      */
     std::map<int, std::map<int, H_Edge<T> *>> hemap;
 
+    /**
+     * Crea las caras
+     */
+    for (int n = 0; n < off.num_faces; n++) {
+        off.faces.push_back(Face<T>("F" + std::to_string(n + 1)));
+    }
+
     for (int n = 0; n < off.num_faces; n++) {
         std::getline(in, readLine);
         this->cstr(&readLine);
 
-        // Genera una cara
-        off.faces.push_back(Face<T>("F" + std::to_string(n + 1)));
+        // Obtiene la cara
         face = &off.faces[n];
 
         // Obtiene el número de elementos de la cara
@@ -182,15 +192,13 @@ offObject<T> LoadOff<T>::load(const std::string &filename, std::string obj_name)
         }
 
         // Crea los HalfEdge
-        he = new H_Edge<T>[face_np + 1];
+        he = new H_Edge<T>[face_np];
         for (int i = 1; i < face_np; i++) {
             he[i] = H_Edge<T>(&off.vertex[v[i]], face, std::to_string(v[i - 1]) + "-" + std::to_string(v[i]));
-            hemap[v[i - 1]][v[i]] = &he[i];
         }
         he[0] = H_Edge<T>(&off.vertex[v[0]], face, std::to_string(v[face_np - 1]) + "-" + std::to_string(v[0]));
-        hemap[v[face_np - 1]][v[0]] = &he[0];
 
-        // Define relaciones
+        // Define relaciones de vecindad
         for (int i = 0; i < face_np - 1; i++) {
             he[i].set_next(&he[i + 1]);
         }
@@ -198,6 +206,20 @@ offObject<T> LoadOff<T>::load(const std::string &filename, std::string obj_name)
 
         // Guarda el HalfEdge en la cara
         face->set_hedge(&he[1]);
+
+        // Define pares
+        for (int i = 1; i < face_np; i++) {
+            hemap[v[i - 1]][v[i]] = &he[i]; // Se guarda par (i,j)
+            hpair = this->find_map(&hemap, v[i], v[i - 1]);
+            if (hpair != nullptr) { // Si (j,i) ya se definió se escribe el par
+                he[i].set_pair(hpair);
+            }
+        }
+        hemap[v[face_np - 1]][v[0]] = &he[0]; // Se guarda par (i,j)
+        hpair = this->find_map(&hemap, v[0], v[face_np - 1]);
+        if (hpair != nullptr) { // Si (j,i) ya se definió se escribe el par
+            he[0].set_pair(hpair);
+        }
 
         // Limpia variables
         delete[] v;
@@ -209,6 +231,24 @@ offObject<T> LoadOff<T>::load(const std::string &filename, std::string obj_name)
      */
     return off;
 
+}
+
+template<class T>
+/**
+ * Guarda un elemento en el mapa de HalfEdges que une los vértices (i,j).
+ *
+ * @tparam T Template
+ * @param map Mapa
+ * @param i Vértice i
+ * @param j Vértice j
+ * @return
+ */
+H_Edge<T> *LoadOff<T>::find_map(std::map<int, std::map<int, H_Edge<T> *>> *map, int i, int j) {
+    std::map<int, std::map<int, H_Edge<T> *>> m = *map;
+    if (m.find(i) != m.end() && m[i].find(j) != m[i].end()) {
+        return m[i][j];
+    }
+    return nullptr;
 }
 
 template<class T>
@@ -326,7 +366,7 @@ void LoadOff<T>::print_points(const offObject<T> *off) {
     Face<T> face; // Puntero a cada cara
     for (int i = 0; i < off->num_faces; i++) {
         face = off->faces[i];
-        face.print_hedges();
+        face.print_points();
     }
 }
 
