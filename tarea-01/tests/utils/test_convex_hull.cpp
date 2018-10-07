@@ -21,6 +21,7 @@
 
 /**
  * Genera un número aleatorio entre dos valores flotantes.
+ *
  * @param a - Número menor
  * @param b - Número mayor
  * @return
@@ -34,6 +35,7 @@ float random_float(float a, float b) {
 
 /**
  * Genera un número aleatorio entero entre dos valores.
+ *
  * @param a - Número mayor
  * @param b - Número menor
  * @return
@@ -49,13 +51,13 @@ void test_ch_basic() {
     Point<float> plist[] = {Point<float>(5, 0), Point<float>(6, 4), Point<float>(4, 5), Point<float>(1, 5),
                             Point<float>(1, 0)}; // 5
 
-    // [GiftWrapping]
-    std::pair<Polygon<float>, int> cerraduraGW = giftWrapping(plist, 5);
-    assert(cerraduraGW.second == 5);
-
     // [Graham scan]
-    std::pair<Polygon<float>, int> cerraduraGS = grahamScan(plist, 5);
+    std::pair<Polygon<float>, int> cerraduraGS = graham_scan(plist, 5);
     assert(cerraduraGS.second == 5);
+
+    // [GiftWrapping]
+    std::pair<Polygon<float>, int> cerraduraGW = gift_wrapping(plist, 5);
+    assert(cerraduraGW.second == 5);
 
     // Verifica que ambos polígonos tengan iguales puntos
     assert(cerraduraGW.first.same_points(cerraduraGS.first));
@@ -69,11 +71,11 @@ void test_ch_triangle() {
                               Point<int>(4, 4), Point<int>(5, 5), Point<int>(0, 0), Point<int>(5, 0)}; // 8
 
     // [GiftWrapping]
-    std::pair<Polygon<int>, int> cerraduraGW = giftWrapping(triangulo, 8);
+    std::pair<Polygon<int>, int> cerraduraGW = gift_wrapping(triangulo, 8);
     assert(cerraduraGW.second == 3);
 
     // [Graham scan]
-    std::pair<Polygon<int>, int> cerraduraGS = grahamScan(triangulo, 8);
+    std::pair<Polygon<int>, int> cerraduraGS = graham_scan(triangulo, 8);
     assert(cerraduraGS.second == 3);
 
     // Verifica que ambos polígonos tengan iguales puntos
@@ -87,11 +89,11 @@ template<class T>
  */
 void _test_ch_diamond(Point<T> *rombo) {
     // [GiftWrapping]
-    std::pair<Polygon<int>, int> cerraduraGW = giftWrapping(rombo, 4);
+    std::pair<Polygon<int>, int> cerraduraGW = gift_wrapping(rombo, 4);
     assert(cerraduraGW.second == 4);
 
     // [Graham scan]
-    std::pair<Polygon<int>, int> cerraduraGS = grahamScan(rombo, 4);
+    std::pair<Polygon<int>, int> cerraduraGS = graham_scan(rombo, 4);
     assert(cerraduraGS.second == 4);
 
     // Verifica que ambos polígonos tengan iguales puntos
@@ -104,13 +106,13 @@ void _test_ch_diamond(Point<T> *rombo) {
 void test_ch_diamond() {
     Point<int> rombo[] = {Point<int>(-1, 0), Point<int>(0, 1), Point<int>(1, 0), Point<int>(0, -1)}; // 4
     _test_ch_diamond(rombo);
-    swapPunto(rombo, 0, 1);
+    swap_Point(rombo, 0, 1);
     _test_ch_diamond(rombo);
-    swapPunto(rombo, 1, 2);
+    swap_Point(rombo, 1, 2);
     _test_ch_diamond(rombo);
-    swapPunto(rombo, 2, 3);
+    swap_Point(rombo, 2, 3);
     _test_ch_diamond(rombo);
-    swapPunto(rombo, 3, 0);
+    swap_Point(rombo, 3, 0);
     _test_ch_diamond(rombo);
 }
 
@@ -122,11 +124,11 @@ void test_ch_dupl() {
                           Point<int>(1, 0)}; // 6
 
     // [GiftWrapping]
-    std::pair<Polygon<int>, int> cerraduraGW = giftWrapping(plist, 6);
+    std::pair<Polygon<int>, int> cerraduraGW = gift_wrapping(plist, 6);
     assert(cerraduraGW.second == 3);
 
     // [Graham scan]
-    std::pair<Polygon<int>, int> cerraduraGS = grahamScan(plist, 6);
+    std::pair<Polygon<int>, int> cerraduraGS = graham_scan(plist, 6);
     assert(cerraduraGS.second == 3);
 
     // Verifica que ambos polígonos tengan iguales puntos
@@ -150,12 +152,12 @@ void test_ch_square_small() {
     cuadrado[8] = Point<float>(1, 0);
 
     std::cout << "\n[GiftWrapping] Cerradura cuadrado perfecto 1x1 con 10 puntos" << std::endl;
-    std::pair<Polygon<float>, int> cerraduraGW = giftWrapping(cuadrado, 10);
+    std::pair<Polygon<float>, int> cerraduraGW = gift_wrapping(cuadrado, 10);
     cerraduraGW.first.print();
     assert(cerraduraGW.second == 4);
 
     std::cout << "\n[Graham Scan] Cerradura cuadrado perfecto 1x1 con 10 puntos" << std::endl;
-    std::pair<Polygon<float>, int> cerraduraGS = grahamScan(cuadrado, 10);
+    std::pair<Polygon<float>, int> cerraduraGS = graham_scan(cuadrado, 10);
     cerraduraGS.first.print();
     assert(cerraduraGS.second == 4);
 
@@ -183,12 +185,12 @@ void test_ch_square_med() {
     cuadrado[400] = Point<float>(1, 0);
 
     std::cout << "\n[GiftWrapping] Cerradura cuadrado perfecto 1x1 con 1000 puntos" << std::endl;
-    std::pair<Polygon<float>, int> cerraduraGW = giftWrapping(cuadrado, 1000);
+    std::pair<Polygon<float>, int> cerraduraGW = gift_wrapping(cuadrado, 1000);
     cerraduraGW.first.print();
     assert(cerraduraGW.second == 4);
 
     std::cout << "\n[Graham Scan] Cerradura cuadrado perfecto 1x1 con 1000 puntos" << std::endl;
-    std::pair<Polygon<float>, int> cerraduraGS = grahamScan(cuadrado, 1000);
+    std::pair<Polygon<float>, int> cerraduraGS = graham_scan(cuadrado, 1000);
     cerraduraGS.first.print();
     assert(cerraduraGS.second == 4);
 
@@ -217,13 +219,13 @@ void test_ch_rect() {
 
     // Calcula la cerradura
     std::cout << "\n[GiftWrapping] Cerradura rectangulo 10x1 con 10000 puntos" << std::endl;
-    std::pair<Polygon<float>, int> cerraduraGW = giftWrapping(rectangulo, 10000);
+    std::pair<Polygon<float>, int> cerraduraGW = gift_wrapping(rectangulo, 10000);
     cerraduraGW.first.print();
     assert(cerraduraGW.second == 4);
 
     // Calcula la cerradura
     std::cout << "\n[Graham Scan] Cerradura rectangulo 10x1 con 10000 puntos" << std::endl;
-    std::pair<Polygon<float>, int> cerraduraGS = giftWrapping(rectangulo, 10000);
+    std::pair<Polygon<float>, int> cerraduraGS = gift_wrapping(rectangulo, 10000);
     cerraduraGS.first.print();
     std::cout << "" << std::endl;
     assert(cerraduraGS.second == 4);
@@ -265,13 +267,13 @@ void __tesh_ch_random_figure(double sz, int r) {
 
     // Calcula la cerradura con Gift Wrapping
     tinit = static_cast<int>(clock());
-    std::pair<Polygon<float>, int> cerraduraGW = giftWrapping(figura, n);
-    int t1 = medirTiempo(tinit);
+    std::pair<Polygon<float>, int> cerraduraGW = gift_wrapping(figura, n);
+    int t1 = compute_time_between(tinit);
 
     // Calcula cerradura con Graham Scan
     tinit = static_cast<int>(clock());
-    std::pair<Polygon<float>, int> cerraduraGS = grahamScan(figura, n);
-    int t2 = medirTiempo(tinit);
+    std::pair<Polygon<float>, int> cerraduraGS = graham_scan(figura, n);
+    int t2 = compute_time_between(tinit);
 
     // Imprime tiempos
     std::cout << r << "\t" << t1 << "\t" << t2 << std::endl;
@@ -315,7 +317,7 @@ void __test_ch_point_in_hull(double sz, int s) {
     }
 
     // Calcula la cerradura para añadir los puntos
-    std::pair<Point<float> *, int> cerradura = __grahamScan(figura, n);
+    std::pair<Point<float> *, int> cerradura = __graham_scan(figura, n);
 
     // Añade los puntos de la cerradura a la figura
     int randomPosc = 0, randomPosFig = 0;
@@ -327,13 +329,13 @@ void __test_ch_point_in_hull(double sz, int s) {
 
     // Calcula la cerradura con Gift Wrapping
     tinit = static_cast<int>(clock());
-    std::pair<Polygon<float>, int> cerraduraGW = giftWrapping(figura, n);
-    int t1 = medirTiempo(tinit);
+    std::pair<Polygon<float>, int> cerraduraGW = gift_wrapping(figura, n);
+    int t1 = compute_time_between(tinit);
 
     // Calcula cerradura con Graham Scan
     tinit = static_cast<int>(clock());
-    std::pair<Polygon<float>, int> cerraduraGS = grahamScan(figura, n);
-    int t2 = medirTiempo(tinit);
+    std::pair<Polygon<float>, int> cerraduraGS = graham_scan(figura, n);
+    int t2 = compute_time_between(tinit);
 
     // Imprime tiempos
     std::cout << s << "\t" << t1 << "\t" << t2 << std::endl;
@@ -416,13 +418,13 @@ void __test_ch_point_in_square_hull(double sz, int s) {
 
     // Calcula la cerradura con Gift Wrapping
     tinit = static_cast<int>(clock());
-    std::pair<Polygon<float>, int> cerraduraGW = giftWrapping(figura, n);
-    int t1 = medirTiempo(tinit);
+    std::pair<Polygon<float>, int> cerraduraGW = gift_wrapping(figura, n);
+    int t1 = compute_time_between(tinit);
 
     // Calcula cerradura con Graham Scan
     tinit = static_cast<int>(clock());
-    std::pair<Polygon<float>, int> cerraduraGS = grahamScan(figura, n);
-    int t2 = medirTiempo(tinit);
+    std::pair<Polygon<float>, int> cerraduraGS = graham_scan(figura, n);
+    int t2 = compute_time_between(tinit);
 
     // Imprime tiempos
     std::cout << s << "\t" << t1 << "\t" << t2 << std::endl;
@@ -465,6 +467,7 @@ int main() {
 
     // Carga los tests
     test_ch_basic(); // Test sencillo con puros puntos en la cerradura
+    return 0;
     test_ch_dupl(); // Testea varios puntos duplicados
     test_ch_triangle(); // Testea puntos colineales en la hipotenusa
     test_ch_diamond(); // Test que comprueba distintas posiciones para los pivotes
