@@ -87,6 +87,7 @@ public:
 
     // Comprueba que el polígono tiene los mismos puntos que otro
     bool same_points(const Polygon<T> &poly);
+
 };
 
 template<class T>
@@ -185,15 +186,12 @@ template<class T>
  */
 bool Polygon<T>::in_ccw() const {
     T sum = 0;
-
     if (this->totalp >= 3) {
         for (int i = 0; i < this->totalp; i++) {
             sum += (this->puntos[(i + 1) % (this->totalp)].get_coord_x() - this->puntos[i].get_coord_x()) *
                    (this->puntos[i].get_coord_y() + this->puntos[(i + 1) % (this->totalp)].get_coord_y());
         }
-
-        // Es CCW si la suma es menor a cero
-        if (sum < 0) {
+        if (sum < 0) { // Es CCW si la suma es menor a cero
             return true;
         }
     }
@@ -233,12 +231,8 @@ Polygon<T> &Polygon<T>::operator=(const Polygon<T> &poly) {
     this->totalp = poly.totalp;
     this->MAX_POINTS = poly.MAX_POINTS;
     delete[] this->puntos;
-
-    // Crea nueva lista de puntos
-    this->puntos = new Point<T>[this->MAX_POINTS];
-
-    // Copia los puntos
-    for (int i = 0; i < this->totalp; i++) {
+    this->puntos = new Point<T>[this->MAX_POINTS]; // Crea nueva lista de puntos
+    for (int i = 0; i < this->totalp; i++) { // Copia los puntos
         this->puntos[i] = poly.puntos[i];
     }
 }
@@ -261,9 +255,11 @@ T Polygon<T>::area() const {
         for (int i = 0; i < this->totalp; i++) {
             _sumarea += area2(p0, this->puntos[i], this->puntos[(i + 1) % (this->totalp)]);
         }
+
         return _sumarea;
     } else {
-        throw std::logic_error("No se puede calcular el area a un Polygon que no este en CCW");
+        std::cerr << "Can't perform area if polygon not in CCW" << std::endl;
+        throw std::logic_error("Can't perform area if polygon not in CCW");
     }
 }
 
@@ -281,9 +277,9 @@ bool Polygon<T>::in_poly(Point<T> &p) const {
     for (i = 0, j = this->totalp - 1; i < this->totalp; j = i++) {
         if (((this->puntos[i].get_coord_y() > p.get_coord_y()) != (this->puntos[j].get_coord_y() > p.get_coord_y())) &&
             (p.get_coord_x() < (this->puntos[j].get_coord_x() - this->puntos[i].get_coord_x()) *
-                             (p.get_coord_y() - this->puntos[i].get_coord_y()) /
-                             (this->puntos[j].get_coord_y() - this->puntos[i].get_coord_y()) +
-                             this->puntos[i].get_coord_x()))
+                               (p.get_coord_y() - this->puntos[i].get_coord_y()) /
+                               (this->puntos[j].get_coord_y() - this->puntos[i].get_coord_y()) +
+                               this->puntos[i].get_coord_x()))
             c = !c;
     }
     return c;
@@ -336,7 +332,7 @@ bool Polygon<T>::same_points(const Polygon<T> &poly) {
     // Recorre cada punto del polígono y verifica que exista en el arreglo de puntos del otro
     for (int i = 0; i < this->totalp; i++) {
         if (!poly.is_vertex(this->puntos[i])) {
-            std::cout << "El siguiente punto no pertenece a ambas cerraduras:\t" << std::endl;
+            std::cout << "Following point is in both hulls:\t" << std::endl;
             this->puntos[i].print();
             return false;
         }
