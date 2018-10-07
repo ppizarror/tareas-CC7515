@@ -2,6 +2,7 @@
  * Clase Polígono.
  * Tiene funciones para calcular el área.
  *
+ * @package elements
  * @author Pablo Pizarro
  * @date 19/04/2018
  */
@@ -10,8 +11,12 @@
 #ifndef T_CC7515_POLYGON_H
 #define T_CC7515_POLYGON_H
 #pragma clang diagnostic push
+#pragma ide diagnostic ignored "cert-err60-cpp"
+#pragma ide diagnostic ignored "modernize-use-auto"
+#pragma ide diagnostic ignored "modernize-use-equals-default"
 #pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 #pragma ide diagnostic ignored "OCUnusedStructInspection"
+#pragma ide diagnostic ignored "readability-redundant-string-init"
 
 // Importación de librerías
 #include "segment.h"
@@ -20,29 +25,37 @@
 template<class T>
 /**
  * Clase Polígono, conformada por Puntos.
+ *
  * @tparam T - Template
  */
 class Polygon {
 private:
-    Punto <T> *puntos;
+
+    // Arreglo de puntos
+    Point<T> *puntos;
+
+    // Puntos totales
     int totalp = 0;
+
+    // Puntos máximos
     int MAX_POINTS = 100;
 
     // Calcula el área entre 3 puntos
-    T area2(Punto <T> &a, Punto <T> &b, Punto <T> &c) const;
+    T area2(Point<T> &a, Point<T> &b, Point<T> &c) const;
 
 public:
+
     // Constructor, no toma parámetros
-    explicit Poligono();
+    Polygon();
 
     // Se crea con lista de puntos
-    Poligono(Punto <T> *plist, int size);
+    Polygon(Point<T> *plist, int size);
 
     // Destructor
-    ~Poligono();
+    ~Polygon();
 
     // Agrega un punto
-    void addPoint(const Punto <T> &p);
+    void addPoint(const Point<T> &p);
 
     // Retorna el polígono en forma de string
     std::string toString() const;
@@ -52,13 +65,13 @@ public:
 
     // Operación concatenación con string
     template<class U>
-    friend std::ostream &operator<<(std::ostream &out, const Poligono<U> &p);
+    friend std::ostream &operator<<(std::ostream &out, const Polygon<U> &p);
 
     // Imprime el punto en la consola
     void print() const;
 
     // Asignación
-    Poligono<T> &operator=(const Poligono<T> &poly);
+    Polygon<T> &operator=(const Polygon<T> &poly);
 
     // Calcula el área del polígono
     T area() const;
@@ -67,13 +80,13 @@ public:
     T perimetro() const;
 
     // Comprueba que un punto está dentro del polígono
-    bool inPoly(Punto <T> &p) const;
+    bool inPoly(Point<T> &p) const;
 
     // Comprueba que un punto sea vértice del polígono
-    bool isVertex(Punto <T> &p) const;
+    bool isVertex(Point<T> &p) const;
 
     // Comprueba que el polígono tiene los mismos puntos que otro
-    bool mismosPuntos(const Poligono<T> &poly);
+    bool mismosPuntos(const Polygon<T> &poly);
 };
 
 template<class T>
@@ -81,8 +94,8 @@ template<class T>
  * Constructor sin parámetros.
  * @tparam T - Template
  */
-Poligono<T>::Poligono() {
-    this->puntos = new Punto<T>[this->MAX_POINTS];
+Polygon<T>::Polygon() {
+    this->puntos = new Point<T>[this->MAX_POINTS];
 }
 
 template<class T>
@@ -92,9 +105,9 @@ template<class T>
  * @param size - Largo de la lista de puntos
  * @param plist - Lista de puntos
  */
-Poligono<T>::Poligono(Punto <T> *plist, int size) {
+Polygon<T>::Polygon(Point<T> *plist, int size) {
     this->MAX_POINTS = std::max(this->MAX_POINTS, size);
-    this->puntos = new Punto<T>[this->MAX_POINTS];
+    this->puntos = new Point<T>[this->MAX_POINTS];
 
     // Recorre cada punto y lo añade
     for (int i = 0; i < size; i++) {
@@ -107,7 +120,7 @@ template<class T>
  * Destructor.
  * @tparam T - Template
  */
-Poligono<T>::~Poligono() {
+Polygon<T>::~Polygon() {
 }
 
 template<class T>
@@ -116,13 +129,13 @@ template<class T>
  * @tparam T - Template
  * @param p - Punto
  */
-void Poligono<T>::addPoint(const Punto <T> &p) {
+void Polygon<T>::addPoint(const Point<T> &p) {
     // Si se pasa del límite se aumenta límite de la lista
     if (this->totalp >= this->MAX_POINTS) {
         this->MAX_POINTS *= 10;
 
         // Se crea una nueva lista
-        Punto <T> *ptemp = new Punto<T>[MAX_POINTS];
+        Point<T> *ptemp = new Point<T>[MAX_POINTS];
 
         // Se copian los puntos a nueva lista
         for (int i = 0; i < this->totalp; i++) {
@@ -147,7 +160,7 @@ template<class T>
  * @tparam T - Template
  * @return
  */
-std::string Poligono<T>::toString() const {
+std::string Polygon<T>::toString() const {
     std::string s = "";
     for (int i = 0; i < this->totalp; i++) {
         s += this->puntos[i].toString();
@@ -164,7 +177,7 @@ template<class T>
  * @tparam T - Template
  * @return
  */
-bool Poligono<T>::inCCW() const {
+bool Polygon<T>::inCCW() const {
     T sum = 0;
 
     if (this->totalp >= 3) {
@@ -186,7 +199,7 @@ template<class T>
  * Operador concatenación con strings.
  * @return
  */
-std::ostream &operator<<(std::ostream &out, const Poligono<T> &p) {
+std::ostream &operator<<(std::ostream &out, const Polygon<T> &p) {
     out << p.toString();
     return out;
 }
@@ -196,7 +209,7 @@ template<class T>
  * Imprime el punto en la consola.
  * @tparam T - Template
  */
-void Poligono<T>::print() const {
+void Polygon<T>::print() const {
     std::cout << this->toString() << std::endl;
 }
 
@@ -207,13 +220,13 @@ template<class T>
  * @param poly - Polígono
  * @return
  */
-Poligono<T> &Poligono<T>::operator=(const Poligono<T> &poly) {
+Polygon<T> &Polygon<T>::operator=(const Polygon<T> &poly) {
     this->totalp = poly.totalp;
     this->MAX_POINTS = poly.MAX_POINTS;
     delete[] this->puntos;
 
     // Crea nueva lista de puntos
-    this->puntos = new Punto<T>[this->MAX_POINTS];
+    this->puntos = new Point<T>[this->MAX_POINTS];
 
     // Copia los puntos
     for (int i = 0; i < this->totalp; i++) {
@@ -227,12 +240,12 @@ template<class T>
  * @tparam T - Template
  * @return
  */
-T Poligono<T>::area() const {
+T Polygon<T>::area() const {
     if (this->inCCW() or true) {
         T _sumarea = 0.0;
 
         // Se crea un punto cualquiera P en el origen para calcular el área
-        Punto <T> p0 = Punto<T>(0.0, 0.0);
+        Point<T> p0 = Point<T>(0.0, 0.0);
 
         // Se recorre cada punto para calcular el área
         for (int i = 0; i < this->totalp; i++) {
@@ -240,7 +253,7 @@ T Poligono<T>::area() const {
         }
         return _sumarea;
     } else {
-        throw std::logic_error("No se puede calcular el area a un poligono que no este en CCW");
+        throw std::logic_error("No se puede calcular el area a un Polygon que no este en CCW");
     }
 }
 
@@ -251,7 +264,7 @@ template<class T>
  * @param p - Punto
  * @return
  */
-bool Poligono<T>::inPoly(Punto <T> &p) const {
+bool Polygon<T>::inPoly(Point<T> &p) const {
     int i, j;
     bool c = false;
     for (i = 0, j = this->totalp - 1; i < this->totalp; j = i++) {
@@ -274,7 +287,7 @@ template<class T>
  * @param c - Punto C
  * @return
  */
-T Poligono<T>::area2(Punto <T> &a, Punto <T> &b, Punto <T> &c) const {
+T Polygon<T>::area2(Point<T> &a, Point<T> &b, Point<T> &c) const {
     T _area = (b.getCoordX() - a.getCoordX()) * (c.getCoordY() - a.getCoordY()) -
               (b.getCoordY() - a.getCoordY()) * (c.getCoordX() - a.getCoordX());
     return 0.5 * _area;
@@ -286,8 +299,8 @@ template<class T>
  * @tparam T Template
  * @return
  */
-T Poligono<T>::perimetro() const {
-    Segmento <T> s;
+T Polygon<T>::perimetro() const {
+    Segmento<T> s;
     T sum = 0;
 
     // Se recorren cada par de puntos creando segmentos
@@ -305,7 +318,7 @@ template<class T>
  * @param poly - Polígono a comparar
  * @return
  */
-bool Poligono<T>::mismosPuntos(const Poligono<T> &poly) {
+bool Polygon<T>::mismosPuntos(const Polygon<T> &poly) {
     // Recorre cada punto del polígono y verifica que exista en el arreglo de puntos del otro
     for (int i = 0; i < this->totalp; i++) {
         if (!poly.isVertex(this->puntos[i])) {
@@ -324,7 +337,7 @@ template<class T>
  * @param p - Punto
  * @return
  */
-bool Poligono<T>::isVertex(Punto <T> &p) const {
+bool Polygon<T>::isVertex(Point<T> &p) const {
     for (int i = 0; i < this->totalp; i++) {
         if (fabs(this->puntos[i].getCoordX() - p.getCoordX()) < 1e-5 &&
             fabs(this->puntos[i].getCoordY() - p.getCoordY()) < 1e-5)
@@ -333,5 +346,4 @@ bool Poligono<T>::isVertex(Punto <T> &p) const {
     return false;
 }
 
-#pragma clang diagnostic pop
-#endif //T1_CC5502_1_POLIGONO_H
+#endif //T_CC7515_POLYGON_H
