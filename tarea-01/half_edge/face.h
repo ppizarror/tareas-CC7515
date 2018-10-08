@@ -211,7 +211,7 @@ T Face<T>::get_area() const {
     if (!this->is_valid()) return 0;
 
     // Itera desde el primer HE, para ello recorre next hasta llegar al mismo
-    T tarea;
+    T tarea = 0;
     H_Edge<T> *he = this->edge;
     H_Edge<T> *he1, *he2;
     Point<T> p0 = *he->get_point(); // Elige un punto cualquiera
@@ -238,7 +238,7 @@ T Face<T>::get_perimeter() const {
     if (!this->is_valid()) return 0;
 
     // Itera desde el primer HE, para ello recorre next hasta llegar al mismo
-    T tperim;
+    T tperim = 0;
     H_Edge<T> *he = this->edge;
     H_Edge<T> *he1; // Almacena el siguiente
 

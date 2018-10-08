@@ -46,3 +46,6 @@ entregas/*
 
 # Archivos CLion
 .idea/
+
+# VScode
+.vs/

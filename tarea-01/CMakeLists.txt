@@ -1,5 +1,5 @@
 # Propiedades del make
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.11)
 project(tarea_01)
 set(CMAKE_CXX_STANDARD 14)
 

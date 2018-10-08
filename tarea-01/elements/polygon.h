@@ -10,7 +10,6 @@
 // Definición del bloque
 #ifndef T_CC7515_POLYGON_H
 #define T_CC7515_POLYGON_H
-#pragma clang diagnostic push
 #pragma ide diagnostic ignored "cert-err60-cpp"
 #pragma ide diagnostic ignored "modernize-use-auto"
 #pragma ide diagnostic ignored "modernize-use-equals-default"
