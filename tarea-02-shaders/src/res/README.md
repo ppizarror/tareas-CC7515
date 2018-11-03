@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Julia-Shaders</title>
+# Your Favicon Package
 
-    <!-- Favicon -->
+This package was generated with [RealFaviconGenerator](https://realfavicongenerator.net/) [v0.16](https://realfavicongenerator.net/change_log#v0.16)
+
+## Install instructions
+
+To install this package:
+
+Extract this package in <code>&lt;web site&gt;/src/res/</code>. If your site is <code>http://www.example.com</code>, you should be able to access a file named <code>http://www.example.com/src/res/favicon.ico</code>.
+
+Insert the following code in the `head` section of your pages:
+
     <link rel="apple-touch-icon" sizes="180x180" href="src/res/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="src/res/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="src/res/favicon-16x16.png">
@@ -18,8 +23,4 @@
     <meta name="msapplication-config" content="src/res/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
-</head>
-<body>
-
-</body>
-</html>
+*Optional* - Check your favicon with the [favicon checker](https://realfavicongenerator.net/favicon_checker)
