@@ -3,7 +3,7 @@
  Funciones generales para el tratamiento de la sesión del usuario.
 
  @author Pablo Pizarro R. @ppizarror.com
- @license Copyright 2018, no copiar o distribuír sin permiso directo del autor
+ @license MIT
  */
 "use strict";
 

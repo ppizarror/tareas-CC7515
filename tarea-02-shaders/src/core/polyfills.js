@@ -3,7 +3,7 @@
  Extiende funciones y comportamientos básicos a la aplicación.
 
  @author Pablo Pizarro R. @ppizarror.com
- @license Copyright 2018, no copiar o distribuír sin permiso directo del autor
+ @license MIT
  */
 "use strict";
 
