@@ -1,6 +1,6 @@
 # T1-CC7515
 
-Tarea N°1 curso Computación en GPU CC-7515, uchile. Para ejecutar cargar el proyecto en CLion y ejecutar los distintos casos de prueba.
+Tarea N°1 curso Computación en GPU CC7515, uchile. Para ejecutar cargar el proyecto en CLion y ejecutar los distintos casos de prueba.
 
 1. **TEST-HEDGE**: Testea la estructura HalEdge.
 2. **TEST-HEDGE-OFF**: Testea la estructura HalEdge cargando un archivo OFF.
