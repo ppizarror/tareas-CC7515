@@ -6,6 +6,23 @@ Visualizador shaders de conjunto fractal de Julia con Three.js, tarea N°2 curso
 
 El proyecto se puede ejecutar de manera online: [https://ppizarror.com/tareas-CC7515/tarea-02-shaders/](https://ppizarror.com/tareas-CC7515/tarea-02-shaders/).
 
+## Dependencias
+
+| Librería | Versión | Link |
+| :-- | :--: | :-- |
+| bootstrap | 4.1.3 | <a href="https://github.com/twbs/bootstrap">github.com/twbs/bootstrap</a> |
+| fontawesome | 5.2.0 | <a href="https://fontawesome.com">fontawesome.com</a> |
+| hover | 2.3.1 | <a href="https://github.com/IanLunn/Hover">github.com/IanLunn/Hover</a> |
+| jquery | 3.3.1 | <a href="https://github.com/jquery/jquery">github.com/jquery/jquery</a> |
+| jquery-confirm | 3.3.2 | <a href="https://github.com/craftpip/jquery-confirm">github.com/craftpip/jquery-confirm</a> |
+| jquery-dateFormat | 1.0.2 | <a href="https://github.com/phstc/jquery-dateFormat">github.com/phstc/jquery-dateFormat</a> |
+| jquery-scrollLock | 3.1.3 | <a href="https://github.com/MohammadYounes/jquery-scrollLock">github.com/MohammadYounes/jquery-scrollLock</a> |
+| jscookie | 2.2.0 | <a href="https://github.com/js-cookie/js-cookie">github.com/js-cookie/js-cookie</a> |
+| md5 | 2.10.0 | <a href="https://github.com/blueimp/JavaScript-MD5">github.com/blueimp/JavaScript-MD5</a> |
+| normalize | 8.0.0 | <a href="https://github.com/necolas/normalize.css">github.com/necolas/normalize.css</a> |
+| stats.js | r17 | <a href="https://github.com/mrdoob/stats.js">github.com/mrdoob/stats.js</a> |
+| three.js | r98 | <a href="https://github.com/mrdoob/three.js">github.com/mrdoob/three.js</a> |
+
 ## Autor
 
 [Pablo Pizarro R.](http://ppizarror.com) | 2018
