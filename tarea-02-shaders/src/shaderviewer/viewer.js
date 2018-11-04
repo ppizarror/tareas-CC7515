@@ -2268,6 +2268,7 @@ function ShaderViewer() {
         plot_things.geometry.addAttribute("vertex_z_r", new THREE.BufferAttribute(z_r, 1));
         plot_things.geometry.addAttribute("vertex_z_i", new THREE.BufferAttribute(z_i, 1));
         plot_things.geometry.rotateX(-Math.PI / 2);
+        plot_things.geometry.rotateY(-Math.PI / 2);
 
 
         plot_things.quad = new THREE.Mesh(
