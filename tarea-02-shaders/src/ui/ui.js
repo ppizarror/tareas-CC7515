@@ -64,6 +64,7 @@ function BuildUI() {
      * @since 0.1.0
      */
     this._drawMenu = function () {
+        self._menuContainer.append('<input type="text" />');
     };
 
     /**

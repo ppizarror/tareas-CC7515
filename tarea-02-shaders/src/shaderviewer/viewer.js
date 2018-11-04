@@ -34,7 +34,7 @@ function ShaderViewer() {
      * @type {JQuery | jQuery | HTMLElement | null}
      * @protected
      */
-    this.$mapdiv = null;
+    this.canvasParent = null;
 
 
     /**
@@ -130,20 +130,6 @@ function ShaderViewer() {
         planes: false,                   // Dibuja los planos
         shadowlight: false,              // Muestra ubicación de la sombra
         worldlimits: false,              // Límites del mundo
-
-        /**
-         * Valores iniciales de los helpers, valores se muestran además para público
-         */
-        axis_initial: false,            // Muestra los ejes en el plano
-        cameratarget_initial: false,    // Muestra el objetivo de la cámara
-        fpsmeter_intial: false,         // Muestra indicador de FPS
-        grid_initial: true,             // Muestra grilla en plano
-        gui_initial: false,             // Muestra una gui por defecto (modificable)
-        light_initial: false,           // Muestra el objeto de la luz
-        lighthelper_initial: false,     // Muestra helper de la luz
-        planes_initial: true,           // Dibuja los planos
-        shadowlight_initial: false,     // Muestra ubicación de la sombra
-        worldlimits_initial: false,     // Límites del mundo
 
         /**
          * Parámetros de los helpers
@@ -328,11 +314,12 @@ function ShaderViewer() {
      */
     this.init = function (parentElement) {
         self.id = parentElement;
+        self.canvasParent = $(parentElement);
         self._initThree();
-        this.threeResize(true);
         self._initWorldObjects();
         self._initEvents();
         self._animateFrame();
+        self.initShaderObject();
     };
 
     /**
@@ -595,7 +582,7 @@ function ShaderViewer() {
             self.objects_props.camera.angle,
             self.objects_props.camera.aspect,
             self.objects_props.camera.near,
-            self.objects_props.camera.far
+            self.objects_props.camera.far,
         );
         this._three_camera.zoom = this.objects_props.camera.zoom;
 
@@ -615,6 +602,7 @@ function ShaderViewer() {
          */
         this.maindiv = $(self.id);
         this.maindiv.append(this._renderer.domElement);
+        this.canvasParent.attr('tabindex', '1');
 
         /**
          * --------------------------------------------------------------------
@@ -930,24 +918,6 @@ function ShaderViewer() {
         this._drawHelpers();
 
         /**
-         * Crea el plano reflejado
-         */
-        let segments = Math.floor(4 / this.threejs_helpers.griddist);
-        let geometry = new THREE.PlaneBufferGeometry(2 * this.worldsize.y, 2 * this.worldsize.x, segments, segments);
-        geometry.rotateX(-Math.PI / 2);
-        let material = new THREE.MeshLambertMaterial({
-            color: this.objects_props.plane.color,
-            dithering: this.objects_props.plane.dithering,
-        });
-        material.transparent = false;
-        let plane = new THREE.Mesh(geometry, material);
-        plane.position.y = 0;
-        self.addMeshToScene(plane, self.globals.plane, true);
-
-        // noinspection JSValidateTypes
-        self.objects_props.plane.obj = plane;
-
-        /**
          * Establece el target de la cámara si es que se cambió en initObjectModel
          */
         this._setCameraTarget();
@@ -1180,7 +1150,7 @@ function ShaderViewer() {
      * @private
      */
     this._forceFocus = function () {
-        self.$mapdiv.trigger('focus'); // Atrapa focus
+        self.canvasParent.trigger('focus'); // Atrapa focus
     };
 
     /**
@@ -1194,12 +1164,13 @@ function ShaderViewer() {
         /**
          * Si el div del mapa no ha sido definido se termina la función
          */
-        if (isNullUndf(this.$mapdiv)) return;
+        if (isNullUndf(this.canvasParent)) return;
+        console.log('k');
 
         /**
          * Evento scroll renderiza (orbitControls) en canvas
          */
-        this.$mapdiv.on(self._eventID.mousewheel, function (e) {
+        this.canvasParent.on(self._eventID.mousewheel, function (e) {
             stopWheelEvent(e);
             e.preventDefault();
             self._animateFrame();
@@ -1208,17 +1179,17 @@ function ShaderViewer() {
         /**
          * Click izquierdo y derecho desactivan eventos originales en el canvas
          */
-        this.$mapdiv.on(self._eventID.mousedown, function (e) {
+        this.canvasParent.on(self._eventID.mousedown, function (e) {
             e.preventDefault();
             self._forceFocus();
             self._animateFrame();
             self._hasMouseOver = true;
             self._hasMousePressed = true;
         });
-        this.$mapdiv.on(self._eventID.contextmenu, function (e) {
+        this.canvasParent.on(self._eventID.contextmenu, function (e) {
             e.preventDefault();
         });
-        this.$mapdiv.on(self._eventID.mouseup, function (e) {
+        this.canvasParent.on(self._eventID.mouseup, function (e) {
             e.preventDefault();
             self._hasMousePressed = false;
         });
@@ -1226,17 +1197,17 @@ function ShaderViewer() {
         /**
          * Mouse sobre el canvas
          */
-        this.$mapdiv.on(self._eventID.mouseover, function () {
+        this.canvasParent.on(self._eventID.mouseover, function () {
             self._hasMouseOver = true;
         });
-        this.$mapdiv.on(self._eventID.mouseout, function () {
+        this.canvasParent.on(self._eventID.mouseout, function () {
             self._hasMouseOver = false;
         });
 
         /**
          * Presión de botones sobre el canvas al tener el foco activo
          */
-        this.$mapdiv.on(self._eventID.keydown, function (e) {
+        this.canvasParent.on(self._eventID.keydown, function (e) {
             e.preventDefault(); // Cancela todos los botones por defecto
             e.stopPropagation();
 
@@ -1281,7 +1252,7 @@ function ShaderViewer() {
                     break;
             }
         });
-        this.$mapdiv.on(self._eventID.keyup, function () {
+        this.canvasParent.on(self._eventID.keyup, function () {
             self._hasKeyPressed = false;
         });
 
@@ -1778,7 +1749,7 @@ function ShaderViewer() {
          */
         if (isNullUndf(self._helperInstances.fpsmeter)) {
             let stats = new Stats();
-            self.$mapdiv.append(stats.dom);
+            self.canvasParent.append(stats.dom);
             requestAnimationFrame(function loop() {
                 stats.update();
                 requestAnimationFrame(loop);
@@ -2242,6 +2213,108 @@ function ShaderViewer() {
     this._distOriginxyz = function (x, y, z) {
         // noinspection JSSuspiciousNameCombination
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+    };
+
+    /**
+     * Inicia el objeto de dibujo del shader.
+     *
+     * @function
+     */
+    this.initShaderObject = function () {
+        let plot_things = {};
+        plot_things.geometry = new THREE.BufferGeometry();
+
+        let z_r = new Float32Array(6);
+        let z_i = new Float32Array(6);
+        let vertices = new Float32Array(18);
+
+        // First triangle:
+        let plot_z = 0;
+        vertices[0] = -1.0;
+        vertices[1] = -1.0;
+        vertices[2] = plot_z;
+
+        vertices[3] = 1.0;
+        vertices[4] = 1.0;
+        vertices[5] = plot_z;
+
+        vertices[6] = -1.0;
+        vertices[7] = 1.0;
+        vertices[8] = plot_z;
+
+        // Second triangle.
+        vertices[9] = -1.0;
+        vertices[10] = -1.0;
+        vertices[11] = plot_z;
+
+        vertices[12] = 1.0;
+        vertices[13] = 1.0;
+        vertices[14] = plot_z;
+
+        vertices[15] = 1.0;
+        vertices[16] = -1.0;
+        vertices[17] = plot_z;
+
+        plot_things.material = new THREE.ShaderMaterial({
+            "uniforms": {"max_iterations": {"type": "i", "value": 100}},
+            "vertexShader": document.getElementById("shader_vertex").textContent,
+            "fragmentShader": document.getElementById("shader_fragment").textContent,
+            "side": THREE.DoubleSide
+        });
+
+        plot_things.geometry = new THREE.BufferGeometry();
+
+        plot_things.geometry.addAttribute("position", new THREE.BufferAttribute(vertices, 3));
+        plot_things.geometry.addAttribute("vertex_z_r", new THREE.BufferAttribute(z_r, 1));
+        plot_things.geometry.addAttribute("vertex_z_i", new THREE.BufferAttribute(z_i, 1));
+        plot_things.geometry.rotateX(-Math.PI / 2);
+
+
+        plot_things.quad = new THREE.Mesh(
+            plot_things.geometry,
+            plot_things.material
+        );
+
+        this._scene.add(plot_things.quad);
+
+        plot_things.init_mid_z_r = -0.5;
+        plot_things.init_mid_z_i = 0;
+
+        // I'm defining the range as half the length of the current view.
+        plot_things.init_range = 2;
+        // set_plot_bounds(plot_things.init_mid_z_r, plot_things.init_mid_z_i, plot_things.init_range);
+
+        z_r = plot_things.quad.geometry.attributes.vertex_z_r.array;
+        z_i = plot_things.quad.geometry.attributes.vertex_z_i.array;
+
+        let mid_z_r = plot_things.init_mid_z_r;
+        let mid_z_i = plot_things.init_mid_z_i;
+        let range = 2;
+
+        // First triangle:
+        z_r[0] = mid_z_r - range;
+        z_i[0] = mid_z_i - range;
+
+        z_r[1] = mid_z_r + range;
+        z_i[1] = mid_z_i + range;
+
+        z_r[2] = mid_z_r - range;
+        z_i[2] = mid_z_i + range;
+
+        // Second triangle:
+        z_r[3] = mid_z_r - range;
+        z_i[3] = mid_z_i - range;
+
+        z_r[4] = mid_z_r + range;
+        z_i[4] = mid_z_i + range;
+
+        z_r[5] = mid_z_r + range;
+        z_i[5] = mid_z_i - range;
+
+        plot_things.quad.geometry.attributes.vertex_z_r.needsUpdate = true;
+        plot_things.quad.geometry.attributes.vertex_z_i.needsUpdate = true;
+
+        this._animateFrame();
     };
 
 }

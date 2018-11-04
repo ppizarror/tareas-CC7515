@@ -21,6 +21,7 @@ Panel izquierdo, propiedades y controles
     font-weight: 300;
     height: 100%;
     left: 0;
+    outline: none;
     padding: 10px;
     position: absolute;
     right: 0;
@@ -37,6 +38,7 @@ Panel derecho del visualizador, contiene el canvas
     height: 100%;
     left: 20%;
     min-width: 640px;
+    outline: none;
     padding: 0;
     position: absolute;
     right: 0;
