@@ -115,6 +115,15 @@ const cfg_max_time_loading_layer = 60;
  */
 const cfg_init_loading_layer_after = 100;
 
+/**
+ * Configuración de popups, valores: bootstrap, dark, light, material, modern, supervan.
+ * @type {string}
+ * @const
+ * @global
+ * @ignore
+ */
+const cfg_popup_theme = 'material';
+
 
 /**
  * ----------------------------------------------------------------------------
