@@ -261,9 +261,9 @@ function ShaderViewer() {
          * Cámara
          */
         camera: {
-            angle: 60,                          // Ángulo de la cámara (FOV)
+            angle: 56,                          // Ángulo de la cámara (FOV)
             autorotate: false,                  // Rotar automáticamente en torno al objetivo
-            far: 3.000,                         // Plano lejano de la cámara (% diagonal larga)
+            far: 9.000,                         // Plano lejano de la cámara (% diagonal larga)
             light: {                            // Luz pegada a la cámara
                 color: 0X181818,
                 decay: 1.500,
@@ -275,11 +275,11 @@ function ShaderViewer() {
             near: 0.100,                        // Plano cercano de la cámara
             nopan: true,                        // Activa/desactiva el PAN del mouse
             posx: 0.000,                        // Posición inicial en x (% dimensión del mundo)
-            posy: -1.000,                       // Posición inicial en y (% dimensión del mundo)
-            posz: 1.000,                        // Posición inicial en z
-            rotationx: 0.000,                   // Rotación inicial con respecto al eje x (Por pi/2)
-            rotationy: -0.455,                  // Rotación inicial con respecto al eje y (Por pi/2)
-            rotationz: 0.000,                   // Rotación inicial con respecto al eje z (Por pi/2)
+            posy: -1.600,                       // Posición inicial en y (% dimensión del mundo)
+            posz: 1.500,                        // Posición inicial en z
+            rotationx: -1.600,                  // Rotación inicial con respecto al eje x (Por pi/2)
+            rotationy: -1.600,                  // Rotación inicial con respecto al eje y (Por pi/2)
+            rotationz: -0.600,                  // Rotación inicial con respecto al eje z (Por pi/2)
             target: {                           // Target de la cámara, posición inicial con respecto a la dimensión
                 x: 0.000,
                 y: 0.000,
