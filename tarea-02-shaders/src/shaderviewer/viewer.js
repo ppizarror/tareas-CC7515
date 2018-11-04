@@ -40,7 +40,6 @@ function ShaderViewer() {
     /**
      * Puntero al objeto
      * @type {ShaderViewer}
-     * @since 0.1.0
      */
     let self = this;
 
@@ -98,34 +97,6 @@ function ShaderViewer() {
         wheel: 'wheel.canvas',
     };
 
-    /**
-     * Información del visualizador
-     * @private
-     */
-    this._info = {
-        addItemObj: 0,
-        addMeshToScene: 0,
-        addThreeObjectNewInstance: 0,
-        animateFrame: 0,
-        buildGUI: 0,
-        collisionRaycast: 0,
-        createObjContour: 0,
-        createObjGeometry: 0,
-        drawHelpers: 0,
-        forceFocus: 0,
-        init3DViewer: 0,
-        initEvents: 0,
-        initViewerMenu: 0,
-        mergeThreeObject: 0,
-        render: 0,
-        resetCamera: 0,
-        setCameraTarget: 0,
-        threeResize: 0,
-        tooltipRaycast: 0,
-        update: 0,
-        updateCameraTarget: 0,
-    };
-
 
     /**
      * ------------------------------------------------------------------------
@@ -142,7 +113,6 @@ function ShaderViewer() {
 
     /**
      * Three.js helpers
-     * @since 0.30
      * @protected
      */
     this.threejs_helpers = {
@@ -229,7 +199,6 @@ function ShaderViewer() {
 
     /**
      * Nombres globales, usados para identificar determinados elementos preestablecidos
-     * @since 1.76
      * @protected
      */
     this.globals = {
@@ -240,7 +209,6 @@ function ShaderViewer() {
 
     /**
      * Propiedades de los objetos del mundo
-     * @since 0.50
      * @protected
      */
     this.objects_props = {
@@ -334,9 +302,9 @@ function ShaderViewer() {
      * Límites del mundo, modificar
      */
     this.worldsize = {
-        x: 100,
-        y: 100,
-        z: 100,
+        x: 1,
+        y: 1,
+        z: 1,
     };
 
     /**
@@ -357,7 +325,6 @@ function ShaderViewer() {
      * Inicia el visualizador
      * @function
      * @param {string} parentElement - Contenedor del visualizador
-     * @since 0.1.0
      */
     this.init = function (parentElement) {
         self.id = parentElement;
@@ -374,7 +341,6 @@ function ShaderViewer() {
      * @function
      * @protected
      * @param {boolean} type - Indica tipo de carga, si es true se añade evento, si es false se borra
-     * @since 0.10
      */
     this.threeResize = function (type) {
 
@@ -383,7 +349,6 @@ function ShaderViewer() {
          * @type {string}
          */
         let $ev = 'resize.shaderviewer' + this.id;
-        self._info.threeResize += 1;
 
         /**
          * Activa el evento
@@ -439,14 +404,8 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.72
      */
     this._animateFrame = function () {
-
-        /**
-         * Aumenta estadísticas
-         */
-        this._info.animateFrame += 1;
 
         /**
          * Actualiza los controles
@@ -465,7 +424,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.10
      */
     this._initThree = function () {
 
@@ -715,7 +673,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.88
      */
     this._setInitialCameraPosition = function () {
 
@@ -752,13 +709,11 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.93
      */
     this._setCameraTarget = function () {
         // noinspection JSSuspiciousNameCombination
         self._controls.target.set(self.objects_props.camera.target.y, self.objects_props.camera.target.z, self.objects_props.camera.target.x);
         self._controls.update();
-        self._info.setCameraTarget += 1;
     };
 
     /**
@@ -771,7 +726,6 @@ function ShaderViewer() {
      * @param {number} min - Valor mínimo de la posición
      * @param {number} max - Valor máximo de la posición
      * @returns {boolean} - Indica si la cámara se puede mover
-     * @since 0.97
      */
     this._checkCameraTargetLimits = function (axis, min, max) {
         let $pos = self.objects_props.camera.target[axis];
@@ -805,7 +759,6 @@ function ShaderViewer() {
      * @param {number} min - Valor mínimo de la posición
      * @param {number} max - Valor máximo de la posición
      * @returns {boolean} - Indica si la cámara se puede mover
-     * @since 0.97
      */
     this._checkCameraTargetLimits = function (axis, min, max) {
         let $pos = self.objects_props.camera.target[axis];
@@ -824,7 +777,6 @@ function ShaderViewer() {
      * @param {string} axis - Eje a comprobar
      * @param {number} val - valor A sumar
      * @returns {boolean} - Indica si no se colisiona (true) o no (false)
-     * @since 2.00
      */
     this._checkCameraTargetCollision = function (axis, val) {
 
@@ -845,11 +797,9 @@ function ShaderViewer() {
      * @param {number} val - Incremento de la dirección
      * @param {boolean=} flipSignPos - Cambia el sentido del incremento según la posición de la cámara
      * @param {boolean=} setTarget - Establece el target de la cámara
-     * @since 0.92
      */
     this._updateCameraTarget = function (dir, val, flipSignPos, setTarget) {
 
-        self._info.updateCameraTarget += 1;
         let $factor = 1.0;
         switch (dir) {
             case 'x':
@@ -898,7 +848,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.25
      */
     this._render = function () {
 
@@ -921,7 +870,6 @@ function ShaderViewer() {
             self._guiCameraParams.rotationy = roundNumber(self._three_camera.rotation.x, 3);
             self._guiCameraParams.rotationz = roundNumber(self._three_camera.rotation.y, 3);
         }
-        self._info.render += 1;
 
     };
 
@@ -930,14 +878,8 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.72
      */
     this._animateFrame = function () {
-
-        /**
-         * Aumenta estadísticas
-         */
-        this._info.animateFrame += 1;
 
         /**
          * Actualiza los controles
@@ -956,7 +898,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 1.73
      */
     this._animationThread = function () {
         if (!self._animateThread) return;
@@ -969,7 +910,6 @@ function ShaderViewer() {
      *
      * @function
      * @protected
-     * @since 1.73
      */
     this.initAnimate = function () {
         self._animateThread = true;
@@ -981,7 +921,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.50
      */
     this._initWorldObjects = function () {
 
@@ -1025,7 +964,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 1.62
      */
     this._saveInitialStatus = function () {
         self.objects_props.camera.initialTarget.x = self.objects_props.camera.target.x;
@@ -1039,7 +977,6 @@ function ShaderViewer() {
      * @function
      * @private
      * @param {number} direction - Dirección de avance (1, -1)
-     * @since 1.00
      */
     this._moveParallel = function (direction) {
 
@@ -1070,7 +1007,6 @@ function ShaderViewer() {
      * @function
      * @private
      * @param {number} direction - Dirección de avance (1, -1)
-     * @since 1.00
      */
     this._moveOrtho = function (direction) {
 
@@ -1102,7 +1038,6 @@ function ShaderViewer() {
      * @function
      * @private
      * @param {number} direction - Dirección de avance
-     * @since 2.00
      */
     this._moveVertical = function (direction) {
 
@@ -1119,7 +1054,6 @@ function ShaderViewer() {
      * @function
      * @private
      * @param {number} direction - Dirección de avance
-     * @since 1.02
      */
     this._rotateTarget = function (direction) {
 
@@ -1164,7 +1098,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 1.00
      */
     this._moveForward = function () {
         this._moveParallel(-1);
@@ -1175,7 +1108,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 1.00
      */
     this._moveBackward = function () {
         this._moveParallel(1);
@@ -1186,7 +1118,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 1.00
      */
     this._moveLeft = function () {
         this._moveOrtho(-1);
@@ -1197,7 +1128,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 1.00
      */
     this._moveRight = function () {
         this._moveOrtho(1);
@@ -1208,7 +1138,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 2.00
      */
     this._moveUp = function () {
         this._moveVertical(1);
@@ -1219,7 +1148,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 2.00
      */
     this._moveDown = function () {
         this._moveVertical(-1);
@@ -1230,7 +1158,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 1.03
      */
     this._rotateLeft = function () {
         this._rotateTarget(1);
@@ -1241,7 +1168,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 1.03
      */
     this._rotateRight = function () {
         this._rotateTarget(-1);
@@ -1252,10 +1178,8 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 1.07
      */
     this._forceFocus = function () {
-        self._info.forceFocus += 1;
         self.$mapdiv.trigger('focus'); // Atrapa focus
     };
 
@@ -1264,7 +1188,6 @@ function ShaderViewer() {
      *
      * @function
      * @protected
-     * @since 0.92
      */
     this._initEvents = function () {
 
@@ -1272,12 +1195,6 @@ function ShaderViewer() {
          * Si el div del mapa no ha sido definido se termina la función
          */
         if (isNullUndf(this.$mapdiv)) return;
-
-        /**
-         * Si ya se establecieron los eventos retorna
-         */
-        if (this._info.initEvents !== 0) return;
-        this._info.initEvents += 1;
 
         /**
          * Evento scroll renderiza (orbitControls) en canvas
@@ -1381,7 +1298,6 @@ function ShaderViewer() {
      *
      * @function
      * @protected
-     * @since 1.73
      */
     this.stopAnimate = function () {
         self._animateThread = false;
@@ -1393,12 +1309,10 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 1.05
      */
     this._resetCamera = function () {
         self._setInitialCameraPosition();
         self._animateFrame();
-        self._info.resetCamera += 1;
     };
 
     /**
@@ -1406,7 +1320,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.95
      */
     this._toggleHelper = function () {
         self._drawHelpers();
@@ -1420,7 +1333,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.95
      */
     this._toggleAxis = function () {
         self.threejs_helpers.axis = !self.threejs_helpers.axis;
@@ -1433,7 +1345,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.95
      */
     this._toggleGrid = function () {
         self.threejs_helpers.grid = !self.threejs_helpers.grid;
@@ -1446,7 +1357,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.95
      */
     this._toggleWorldLimits = function () {
         self.threejs_helpers.worldlimits = !self.threejs_helpers.worldlimits;
@@ -1459,7 +1369,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.95
      */
     this._toggleCameraTarget = function () {
         self.threejs_helpers.cameratarget = !self.threejs_helpers.cameratarget;
@@ -1472,7 +1381,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.95
      */
     this._togglePlanes = function () {
         self.threejs_helpers.planes = !self.threejs_helpers.planes;
@@ -1485,7 +1393,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.95
      */
     this._toggleLightSystemHelper = function () {
         self.threejs_helpers.lighthelper = !self.threejs_helpers.lighthelper;
@@ -1498,7 +1405,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.95
      */
     this._toggleShadowHelper = function () {
         self.threejs_helpers.shadowlight = !self.threejs_helpers.shadowlight;
@@ -1511,7 +1417,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.95
      */
     this._toggleLightHelper = function () {
         self.threejs_helpers.light = !self.threejs_helpers.light;
@@ -1523,7 +1428,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.95
      */
     this._toggleGUI = function () {
         self.threejs_helpers.gui = !self.threejs_helpers.gui;
@@ -1539,7 +1443,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.70
      */
     this._buildGUI = function () {
 
@@ -1547,7 +1450,6 @@ function ShaderViewer() {
          * Crea una GUI
          */
         this._gui = new dat.GUI({autoPlace: false});
-        this._info.buildGUI += 1;
 
         /**
          * --------------------------------------------------------------------
@@ -1848,7 +1750,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.76
      */
     this._destroyGUI = function () {
         if (notNullUndf(self._gui)) {
@@ -1900,7 +1801,6 @@ function ShaderViewer() {
      *
      * @function
      * @private
-     * @since 0.30
      */
     this._drawHelpers = function () {
 
@@ -1908,7 +1808,6 @@ function ShaderViewer() {
          * Variable local helper
          */
         let helper;
-        this._info.drawHelpers += 1;
 
         /**
          * --------------------------------------------------------------------
@@ -2286,7 +2185,6 @@ function ShaderViewer() {
      * @param {Object3D} mesh - Mesh
      * @param {string} name - Nombre del objeto
      * @param {boolean=} collaidable - Indica si el objeto es colisionable o no
-     * @since 1.82
      */
     this.addMeshToScene = function (mesh, name, collaidable) {
 
@@ -2327,7 +2225,6 @@ function ShaderViewer() {
      * @param {number} y - Coordenada en y
      * @param {number} z - Coordenada en z
      * @return {Vector3}
-     * @since 0.40
      */
     this._newThreePoint = function (x, y, z) {
         return new THREE.Vector3(y, z, x);
