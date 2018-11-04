@@ -48,7 +48,8 @@ function BuildUI() {
      * @since 0.1.0
      */
     this.init = function (leftPanel, rightPanel) {
-
+        this._menuContainer = $(leftPanel);
+        this._canvasContainer = $(rightPanel);
     };
 
     /**

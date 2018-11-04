@@ -35,6 +35,7 @@
     <link rel="stylesheet" type="text/css" href="lib/hover/hover.min.css" media="screen">
     <link rel="stylesheet" type="text/css" href="lib/jquery-confirm/jquery-confirm.min.css" media="screen">
     <link rel="stylesheet" type="text/css" href="lib/normalize/normalize.min.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="lib/spin/spin.css" media="screen">
 
     <script src="lib/jquery/jquery-3.3.1.min.js"></script>
     <script src="lib/jquery-confirm/jquery-confirm.min.js"></script>
@@ -45,9 +46,11 @@
     <script src="lib/three.js/three.min.js"></script>
     <script src="lib/three.js/OrbitControls.min.js"></script>
     <script src="lib/stats.js/stats.min.js"></script>
+    <script src="lib/spin/spin.js"></script>
 
     <!-- Carga estilos -->
     <link rel="stylesheet" type="text/css" href="src/stylesheets/root.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="src/stylesheets/loading.css" media="screen">
     <link rel="stylesheet" type="text/css" href="src/stylesheets/viewer.css" media="screen">
 
     <!-- Carga la aplicación -->
@@ -65,15 +68,19 @@
     <script src="src/core/date.js"></script>
     <script src="src/core/logic.js"></script>
     <script src="src/core/session.js"></script>
-
     <script src="src/core/console.js"></script>
-    <script src="src/ui/viewer.js"></script>
+    <script src="src/core/dom.js"></script>
+
+    <script src="src/shaderviewer/viewer.js"></script>
+
+    <script src="src/ui/loading.js"></script>
     <script src="src/ui/ui.js"></script>
+
     <script src="src/app.js"></script>
 </head>
 
 <body>
-<div id="viewer-left-panel" class="animated slideInLeft">a</div>
+<div id="viewer-left-panel" class="animated slideInLeft"></div>
 <div id="viewer-right-panel">b</div>
 </body>
 </html>

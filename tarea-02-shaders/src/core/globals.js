@@ -11,3 +11,10 @@
  * Cookies de la sesión
  */
 let sessionCookie;
+
+// noinspection ES6ConvertVarToLetConst
+/**
+ * Spinner
+ * Variable que contiene el Spin.js
+ */
+var Spinner;

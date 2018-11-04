@@ -97,6 +97,24 @@ const cfg_verbose = true;
  */
 const cfg_total_console_messages_until_wipe = 1000;
 
+/**
+ * Tiempo máximo de una capa de carga, pasado ese tiempo se oculta y lanza notificación de error
+ * @type {number}
+ * @const
+ * @global
+ * @ignore
+ */
+const cfg_max_time_loading_layer = 60;
+
+/**
+ * Tiempo en milisegundos que debe esperar la capa de carga para mostrarse
+ * @type {number}
+ * @const
+ * @global
+ * @ignore
+ */
+const cfg_init_loading_layer_after = 100;
+
 
 /**
  * ----------------------------------------------------------------------------
