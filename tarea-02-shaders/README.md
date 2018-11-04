@@ -10,7 +10,9 @@ El proyecto se puede ejecutar de manera online: [https://ppizarror.com/tareas-CC
 
 | Librería | Versión | Link |
 | :-- | :--: | :-- |
+| animate.css | 3.7.0 | <a href="https://github.com/daneden/animate.css">github.com/daneden/animate.css</a> |
 | bootstrap | 4.1.3 | <a href="https://github.com/twbs/bootstrap">github.com/twbs/bootstrap</a> |
+| dat.gui | 0.7.2 | <a href="https://github.com/dataarts/dat.gui/releases">github.com/dataarts/dat.gui/releases</a> |
 | fontawesome | 5.2.0 | <a href="https://fontawesome.com">fontawesome.com</a> |
 | hover | 2.3.1 | <a href="https://github.com/IanLunn/Hover">github.com/IanLunn/Hover</a> |
 | jquery | 3.3.1 | <a href="https://github.com/jquery/jquery">github.com/jquery/jquery</a> |
