@@ -16,11 +16,20 @@
  */
 function load_shader(vertex, fragment, callback) {
 
+    /**
+     * Almacena las respuestas de cada caso
+     * @type {{fragment: string, vertex: string}}
+     */
+    let data = {
+        fragment: '',
+        vertex: '',
+    };
+
     // noinspection JSUnresolvedFunction
     /**
-     * Se crea la consulta
+     * Se crea la consulta para el vertex shader
      */
-    let $getMessage = $.ajax({
+    let $loadVertex = $.ajax({
         crossOrigin: cfg_ajax_cors,
         timeout: cfg_href_ajax_timeout,
         type: 'get',
@@ -30,16 +39,44 @@ function load_shader(vertex, fragment, callback) {
     /**
      * Respuesta correcta desde el servidor
      */
-    $getMessage.done(function (response) {
-        console.log(response);
+    $loadVertex.done(function (response) {
+        data.vertex = response;
+
+        // noinspection JSUnresolvedFunction
+        /**
+         * Se crea la consulta para el fragment shader
+         */
+        let $loadFragment = $.ajax({
+            crossOrigin: cfg_ajax_cors,
+            timeout: cfg_href_ajax_timeout,
+            type: 'get',
+            url: fragment,
+        });
+
+        /**
+         * Respuesta correcta desde el servidor
+         */
+        $loadFragment.done(function (response) {
+            data.fragment = response;
+            if (isFunction(callback)) {
+                callback(data);
+            }
+        });
+
+        /**
+         * Respuesta fallida desde el servidor
+         */
+        $loadFragment.fail(function () {
+            app_dialog.error(lang.error_loading_shader, lang.error_loading_shader_info.format(fragment));
+        });
+
     });
 
-    // noinspection JSCheckFunctionSignatures
     /**
      * Respuesta fallida desde el servidor
      */
-    $getMessage.fail(function (response, textStatus, jqXHR) {
-        app_dialog.error('sad', 'uwu');
+    $loadVertex.fail(function () {
+        app_dialog.error(lang.error_loading_shader, lang.error_loading_shader_info.format(vertex));
     });
 
 }

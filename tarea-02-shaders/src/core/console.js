@@ -103,6 +103,7 @@ function AppConsole() {
         }
     };
 
+    // noinspection JSUnusedGlobalSymbols
     /**
      * Escribe un objeto en la consola.
      *
@@ -140,6 +141,7 @@ function AppConsole() {
         }
     };
 
+    // noinspection JSUnusedGlobalSymbols
     /**
      * Escribe un contenido en la consola sin aplicar formato dentro de la línea.
      *
@@ -152,6 +154,7 @@ function AppConsole() {
         console.error(obj);
     };
 
+    // noinspection JSUnusedGlobalSymbols
     /**
      * Escribe un error en consola.
      *
@@ -203,6 +206,7 @@ function AppConsole() {
         }
     };
 
+    // noinspection JSUnusedGlobalSymbols
     /**
      * Escribe un contenido en la consola sin aplicar formato dentro de la línea.
      *

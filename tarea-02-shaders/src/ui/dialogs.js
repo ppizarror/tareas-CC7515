@@ -3,7 +3,7 @@
  Funciones varias para administrar diálogos.
 
  @author Pablo Pizarro R. @ppizarror.com
- @license Copyright 2018, no copiar o distribuír sin permiso directo del autor
+ @license MIT
  */
 "use strict";
 
@@ -174,6 +174,7 @@ function AppDialog() {
         this._ewsioType(title, content, this.options.type.INFO, this.options.icons.INFO, this.options.buttons.INFO, options);
     };
 
+    // noinspection JSUnusedGlobalSymbols
     /**
      * Diálogo de advertencia.
      *
@@ -200,6 +201,7 @@ function AppDialog() {
         this._ewsioType(title, content, this.options.type.SUCCESS, this.options.icons.SUCCESS, this.options.buttons.SUCCESS, options);
     };
 
+    // noinspection JSUnusedGlobalSymbols
     /**
      * Diálogo tipo 'otros'.
      *

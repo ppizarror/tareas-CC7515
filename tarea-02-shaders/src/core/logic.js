@@ -42,3 +42,15 @@ function notNullUndf(obj) {
 function isString(s) {
     return typeof s === 'string' || s instanceof String;
 }
+
+/**
+ * Retorna true/false si el objeto es una función.
+ *
+ * @function
+ * @param {object} s - Objeto a verificar
+ * @returns {boolean}
+ * @since 0.1.5
+ */
+function isFunction(s) {
+    return typeof s === 'function' || s instanceof Function;
+}

@@ -13,15 +13,6 @@
  */
 
 /**
- * Host de la aplicación
- * @type {string}
- * @global
- * @const
- * @ignore
- */
-const cfg_href_host = window.location.protocol + '//' + window.location.host + '/';
-
-/**
  * Activa comunicación CORS (Cross-domain)
  * @type {boolean}
  * @const

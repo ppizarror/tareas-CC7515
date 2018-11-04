@@ -3,7 +3,7 @@
  Funciones asociadas a la administración de los objetos en el DOM de la aplicación, funciones de caracter general.
 
  @author Pablo Pizarro R. @ppizarror.com
- @license Copyright 2018, no copiar o distribuír sin permiso directo del autor
+ @license MIT
  */
 "use strict";
 
