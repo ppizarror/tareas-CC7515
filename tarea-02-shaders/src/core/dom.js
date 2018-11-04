@@ -62,3 +62,28 @@ function getElementWidth(elem) {
     } finally {
     }
 }
+
+/**
+ * Desactiva el scroll.
+ *
+ * @function
+ * @param {object} e - Evento scrollwheel
+ */
+function stopWheelEvent(e) {
+
+    /**
+     * IE7, IE8, Chrome, Safari
+     */
+    if (!e) e = window.event;
+
+    /**
+     * Chrome, Safari, Firefox
+     */
+    if (e.preventDefault) e.preventDefault();
+
+    /**
+     * IE7, IE8
+     */
+    e.returnValue = false;
+
+}

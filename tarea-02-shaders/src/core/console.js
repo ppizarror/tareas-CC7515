@@ -13,7 +13,7 @@
  * @class
  * @private
  * @constructor
- * @since 1.9.52
+ * @since 0.1.2
  */
 function AppConsole() {
     /* eslint no-console:"off" */

@@ -37,7 +37,7 @@ Panel derecho del visualizador, contiene el canvas
     height: 100%;
     left: 20%;
     min-width: 640px;
-    padding: 10px;
+    padding: 0;
     position: absolute;
     right: 0;
     text-align: center;
@@ -45,7 +45,7 @@ Panel derecho del visualizador, contiene el canvas
     width: 80%;
 }
 
-@media screen and (max-width: 576px) {
+@media screen and (max-width: 800px) {
     #viewer-left-panel {
         font-size: 0.9rem;
         padding: 5px;
@@ -54,7 +54,21 @@ Panel derecho del visualizador, contiene el canvas
 
     #viewer-right-panel {
         left: 175px;
-        padding: 5px;
         width: calc(100% - 175px);
     }
+}
+
+#viewer-right-panel canvas {
+    width: 100%;
+}
+
+/**
+Panel del GUI
+ */
+#viewer-gui {
+    float: right;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10;
 }

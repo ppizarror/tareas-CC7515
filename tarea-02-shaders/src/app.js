@@ -41,7 +41,8 @@ $(function () {
      * Inicia el visualizador
      * ------------------------------------------------------------------------
      */
-    new BuildUI('#viewer-left-panel', '#viewer-right-panel');
+    let ui = new BuildUI();
+    ui.init('#viewer-left-panel', '#viewer-right-panel');
     // loadingHandler(true);
 
 });

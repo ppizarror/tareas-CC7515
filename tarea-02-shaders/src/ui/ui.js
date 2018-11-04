@@ -22,15 +22,14 @@ function BuildUI() {
      * @private
      * @since 0.1.0
      */
-    this._canvasContainer = null;
+    this._menuContainer = null;
 
     /**
-     * Contenedor del menú
-     * @type {null | JQuery<HTMLElement> | HTMLElement}
+     * Puntero a objeto shaderViewer
+     * @type {null | ShaderViewer}
      * @private
-     * @since 0.1.0
      */
-    this._menuContainer = null;
+    this._shaderViewer = null;
 
     /**
      * Puntero al objeto
@@ -48,8 +47,14 @@ function BuildUI() {
      * @since 0.1.0
      */
     this.init = function (leftPanel, rightPanel) {
-        this._menuContainer = $(leftPanel);
-        this._canvasContainer = $(rightPanel);
+
+        // Guarda las referencias
+        self._menuContainer = $(leftPanel);
+
+        // Inicia los elementos
+        this._drawMenu();
+        this._drawCanvas(rightPanel);
+
     };
 
     /**
@@ -59,15 +64,17 @@ function BuildUI() {
      * @since 0.1.0
      */
     this._drawMenu = function () {
-
     };
 
     /**
      * Dibuja el canvas e inicia el viewer
+     * @param {string} container - Contenedor del visualizador
      * @private
      * @since 0.1.0
      */
-    this._drawCanvas = function () {
+    this._drawCanvas = function (container) {
+        self._shaderViewer = new ShaderViewer();
+        this._shaderViewer.init(container);
     }
 
 }
