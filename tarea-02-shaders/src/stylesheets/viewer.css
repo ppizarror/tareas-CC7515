@@ -1,0 +1,60 @@
+@charset "UTF-8";
+/*
+VIEWER
+Estilo del visualizador
+
+Autor: Pablo Pizarro R. @ppizarror.com
+Copyright 2018 MIT.
+*/
+
+/**
+Panel izquierdo, propiedades y controles
+ */
+#viewer-left-panel {
+    background: #4d4d4d;
+    bottom: 0;
+    box-shadow: inset -7px 0 20px 2px rgba(0, 0, 0, 0.15), inset 2px -8px 20px 2px rgba(99, 99, 99, 0.09);
+    color: white;
+    display: block;
+    float: left;
+    font-size: 1rem;
+    font-weight: 300;
+    height: 100%;
+    left: 0;
+    padding: 10px;
+    position: absolute;
+    right: 0;
+    width: 20%;
+}
+
+/**
+Panel derecho del visualizador, contiene el canvas
+ */
+#viewer-right-panel {
+    bottom: 0;
+    display: block;
+    float: right;
+    height: 100%;
+    left: 20%;
+    min-width: 640px;
+    padding: 10px;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+    width: 80%;
+}
+
+@media screen and (max-width: 576px) {
+    #viewer-left-panel {
+        font-size: 0.9rem;
+        padding: 5px;
+        width: 175px;
+    }
+
+    #viewer-right-panel {
+        left: 175px;
+        padding: 5px;
+        width: calc(100% - 175px);
+    }
+}
