@@ -76,7 +76,7 @@ function ShaderViewer() {
             zr: 0,
             range: 2,
         },
-        iters: 100,             // Número de iteraciones del shader
+        iters: 1000,            // Número de iteraciones del shader
         material: null,         // Material del shader
         mesh: null,             // Contiene la geometría + material
         plotz: 0.0,             // Altura del objeto
@@ -104,6 +104,8 @@ function ShaderViewer() {
         max_zi: 0,              // Máximo valor absoluto de zi (imaginario)
         max_zr: 0,              // Máximo valor absoluto de zr (real)
         mesh: null,             // Contiene los mesh de los bordes
+        mid_zi: 0,              // Punto medio coordenada imaginaria
+        mid_zr: 0,              // Punto medio coordenada real
         range: 2,               // Define el rango inicial
         zi: 0,                  // Coordenada imaginaria
         zoomfactor: 0.5,        // Factor del zoom
@@ -146,6 +148,8 @@ function ShaderViewer() {
      * @private
      */
     this._windowMouseMoveEvent = 'mousemove.rectzoom';
+
+    this._mouseKeepPressed = false;
 
     /**
      * Contiene identificadores de los eventos
@@ -2049,6 +2053,11 @@ function ShaderViewer() {
         self._bound.max_zr = this._worldsize.x * this._bound.zoomfactor;
         self._bound.max_zi = this._worldsize.y * this._bound.zoomfactor;
         self._bound.range = this._shaderObject.init.range;
+
+        /**
+         * Ajusta el zoom
+         */
+        self._updateBoundZoom(0, 0);
         /**
          * Dibuja de manera inicial
          */
@@ -2099,9 +2108,10 @@ function ShaderViewer() {
         attrib_z_i[5] = z_i - range;
 
         /**
-         * Ajusta el zoom
+         * Guarda el punto medio
          */
-        self._updateBoundZoom(0, 0);
+        self._bound.mid_zi = z_i;
+        self._bound.mid_zr = z_r;
 
         /**
          * Anima un nuevo cuadro
@@ -2243,6 +2253,12 @@ function ShaderViewer() {
     this._zoomIn = function () {
 
         /**
+         * Calcula el nuevo punto medio
+         */
+        let mid_zr = self._bound.mid_zr + this._bound.zr * this._bound.range;
+        let mid_zi = self._bound.mid_zi + this._bound.zi * this._bound.range;
+
+        /**
          * Aumenta el zoom del rango
          */
         this._bound.range *= this._bound.zoomfactor;
@@ -2250,7 +2266,7 @@ function ShaderViewer() {
         /**
          * Redibuja
          */
-        this._setPlotBounds(self._bound.zr, self._bound.zi, this._bound.range);
+        this._setPlotBounds(mid_zr, mid_zi, this._bound.range);
 
     };
 
@@ -2269,10 +2285,21 @@ function ShaderViewer() {
         this._bound.range /= this._bound.zoomfactor;
         this._bound.range = Math.min(this._shaderObject.init.range, this._bound.range);
 
+        if (this._bound.range === this._shaderObject.init.range) {
+            self._setPlotBounds(self._shaderObject.init.zi, self._shaderObject.init.zr, self._shaderObject.init.range);
+            return;
+        }
+
+        /**
+         * Calcula el nuevo punto medio
+         */
+        let mid_zr = self._bound.mid_zr - this._bound.zr * this._bound.range;
+        let mid_zi = self._bound.mid_zi - this._bound.zi * this._bound.range;
+
         /**
          * Redibuja
          */
-        this._setPlotBounds(self._bound.zr, self._bound.zi, this._bound.range);
+        this._setPlotBounds(mid_zr, mid_zi, this._bound.range);
 
     };
 
@@ -2294,7 +2321,7 @@ function ShaderViewer() {
         /**
          * Escribe los datos
          */
-        let $round = 6;
+        let $round = 12;
         this._infoID.minzr.text(roundNumber(z_r[0], $round));
         this._infoID.maxzr.text(roundNumber(z_r[1], $round));
         this._infoID.minir.text(roundNumber(z_i[0], $round));
@@ -2335,7 +2362,6 @@ function ShaderViewer() {
         this._infoID.minir = $('#' + $imin);
         this._infoID.maxir = $('#' + $imax);
         this._infoID.ln = $('#' + $length);
-
 
     };
 
