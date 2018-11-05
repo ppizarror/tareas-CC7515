@@ -87,10 +87,15 @@ function ShaderViewer() {
      * @private
      */
     this._bound = {
-        mesh: null,     // Contiene el mesh de la figura generada
-        range: 0,       // Define el rango inicial
-        zi: 0,          // Coordenada imaginaria
-        zr: 0,          // Coordenada real
+        linecolor: 0xFFFFFF,    // Color del borde
+        linez: 0.005,           // Altura de la línea
+        max_zi: 0,              // Máximo valor absoluto de zi (imaginario)
+        max_zr: 0,              // Máximo valor absoluto de zr (real)
+        mesh: null,             // Contiene los mesh de los bordes
+        range: 0,               // Define el rango inicial
+        zi: 0,                  // Coordenada imaginaria
+        zoomfactor: 0.5,        // Factor del zoom
+        zr: 0,                  // Coordenada real
     };
 
 
@@ -2051,7 +2056,35 @@ function ShaderViewer() {
         /**
          * Genera el mesh del recuadro de zoom
          */
-        self._bound
+        let material = new THREE.LineBasicMaterial({color: self._bound.linecolor});
+        let geometry; // Geometrías de las líneas
+
+        geometry = new THREE.Geometry();
+        geometry.vertices.push(
+            this._newThreePoint(-this._bound.zoomfactor * this._worldsize.x,
+                -this._bound.zoomfactor * this._worldsize.y, this._bound.linez),
+            this._newThreePoint(this._bound.zoomfactor * this._worldsize.x,
+                -this._bound.zoomfactor * this._worldsize.y, this._bound.linez),
+            this._newThreePoint(this._bound.zoomfactor * this._worldsize.x,
+                this._bound.zoomfactor * this._worldsize.y, this._bound.linez),
+            this._newThreePoint(-this._bound.zoomfactor * this._worldsize.x,
+                this._bound.zoomfactor * this._worldsize.y, this._bound.linez),
+            this._newThreePoint(-this._bound.zoomfactor * this._worldsize.x,
+                -this._bound.zoomfactor * this._worldsize.y, this._bound.linez)
+        );
+        self._bound.mesh = new THREE.Line(geometry, material);
+        self._addMeshToScene(self._bound.mesh, this._globals.helper, false);
+
+        /**
+         * Calcula los límites
+         */
+        self._bound.max_zr = this._worldsize.x * this._bound.zoomfactor;
+        self._bound.max_zi = this._worldsize.y * this._bound.zoomfactor;
+
+        /**
+         * Ajusta el zoom
+         */
+        self._updateBoundZoom(0, 0);
 
         /**
          * Anima un nuevo cuadro
@@ -2140,6 +2173,10 @@ function ShaderViewer() {
             zr = intersects[shaderIntersect].point.z;
             zi = intersects[shaderIntersect].point.x;
 
+            /**
+             * Ajusta el recuadro del zoom
+             */
+            this._updateBoundZoom(zr, zi);
 
         }
 
@@ -2154,6 +2191,27 @@ function ShaderViewer() {
      */
     this._updateBoundZoom = function (zr, zi) {
 
-    }
+        /**
+         * Ajusta los máximos
+         */
+        if (zr < 0) {
+            zr = Math.max(zr, -self._bound.max_zr);
+        } else {
+            zr = Math.min(zr, self._bound.max_zr);
+        }
+        if (zi < 0) {
+            zi = Math.max(zi, -self._bound.max_zi);
+        } else {
+            zi = Math.min(zi, self._bound.max_zi);
+        }
+
+        /**
+         * Mueve al recuadro
+         */
+        this._bound.mesh.position.z = zr;
+        this._bound.mesh.position.x = zi;
+        this._animateFrame();
+
+    };
 
 }
