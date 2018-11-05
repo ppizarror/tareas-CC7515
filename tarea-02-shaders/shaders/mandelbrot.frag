@@ -5,13 +5,13 @@ uniform int max_iterations;
 
 // Define el rango de colores
 #define r_min 0.0
-#define r_max 0.5
+#define r_max 1.0
 
-#define g_min 0.5
-#define g_max 0.0
+#define g_min 0.0
+#define g_max 1.0
 
-#define b_min 1.0
-#define b_max 0.35
+#define b_min 0.0
+#define b_max 1.0
 
 // Inicio del shader
 void main() {

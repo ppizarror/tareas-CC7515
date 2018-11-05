@@ -85,6 +85,7 @@ function load_shader(vertex, fragment, callback) {
          */
         $loadFragment.fail(function () {
             app_dialog.error(lang.error_loading_shader, lang.error_loading_shader_info.format(fragment));
+            loadingHandler(false);
         });
 
     });
@@ -94,6 +95,7 @@ function load_shader(vertex, fragment, callback) {
      */
     $loadVertex.fail(function () {
         app_dialog.error(lang.error_loading_shader, lang.error_loading_shader_info.format(vertex));
+        loadingHandler(false);
     });
 
 }

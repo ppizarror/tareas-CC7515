@@ -59,6 +59,7 @@ function ShaderViewer() {
         maxzr: null,            // Mayor valor del plano real
         minir: null,            // Menor valor del plano imaginario
         minzr: null,            // Menor valor del plano real
+        zoomlevel: null,        // Nivel de zoom
     };
 
     /**
@@ -1197,7 +1198,7 @@ function ShaderViewer() {
         this._canvasParent.on('mouseup.canvas', function (e) {
             e.preventDefault();
             self._hasMousePressed = false;
-            setTimeout(function () {self._mouseMoveDrag = false;}, 100);
+            setTimeout(function () {self._mouseMoveDrag = false;}, 50);
         });
 
 
@@ -2018,17 +2019,22 @@ function ShaderViewer() {
         /**
          * Crea el material
          */
-        self._shaderObject.material = new THREE.ShaderMaterial({
-            'fragmentShader': self._shaderObject.datashader.f,
-            'side': THREE.DoubleSide,
-            'uniforms': {
-                'max_iterations': {
-                    'type': 'i',
-                    'value': self._shaderObject.iters,
-                }
-            },
-            'vertexShader': self._shaderObject.datashader.v,
-        });
+        try {
+            self._shaderObject.material = new THREE.ShaderMaterial({
+                'fragmentShader': self._shaderObject.datashader.f,
+                'side': THREE.DoubleSide,
+                'uniforms': {
+                    'max_iterations': {
+                        'type': 'i',
+                        'value': self._shaderObject.iters,
+                    }
+                },
+                'vertexShader': self._shaderObject.datashader.v,
+            });
+        } catch ($e) {
+            app_dialog.error(lang.error_shader_compile, lang.error_shader_compile_info);
+        } finally {
+        }
 
         /**
          * Crea la geometría
@@ -2365,6 +2371,7 @@ function ShaderViewer() {
         this._infoID.minir.text(roundNumber(z_i[0], $round));
         this._infoID.maxir.text(roundNumber(z_i[1], $round));
         this._infoID.ln.text(roundNumber(self._bound.range, $round));
+        this._infoID.zoomlevel.text(roundNumber(self._shaderObject.init.range / self._bound.range, 0));
 
     };
 
@@ -2390,7 +2397,9 @@ function ShaderViewer() {
         let $imax = generateID();
         let $imin = generateID();
         let $length = generateID();
-        window.append('Re(z): <span id="{0}"></span>, <span id="{1}"></span><br>Im(z): <span id="{2}"></span>, <span id="{3}"></span><br>Largo: <span id="{4}"></span>'.format($rmin, $rmax, $imin, $imax, $length));
+        let $zoomlevel = generateID();
+
+        window.append('Re(z): <span id="{0}"></span>, <span id="{1}"></span><br>Im(z): <span id="{2}"></span>, <span id="{3}"></span><br>{5}: <span id="{4}"></span><br>{7}: <span id="{6}"></span>'.format($rmin, $rmax, $imin, $imax, $length, lang.shader_data_length, $zoomlevel, lang.shader_zoom_count));
 
         /**
          * Guarda los campos
@@ -2400,6 +2409,7 @@ function ShaderViewer() {
         this._infoID.minir = $('#' + $imin);
         this._infoID.maxir = $('#' + $imax);
         this._infoID.ln = $('#' + $length);
+        this._infoID.zoomlevel = $('#' + $zoomlevel);
 
     };
 
