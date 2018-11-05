@@ -48,12 +48,26 @@ function BuildUI() {
      */
     this.init = function (leftPanel, rightPanel) {
 
-        // Guarda las referencias
+        /**
+         * Inicia el panel de carga
+         */
+        loadingHandler(true);
+
+        /**
+         * Guarda las referencias
+         */
         self._menuContainer = $(leftPanel);
 
-        // Inicia los elementos
-        this._drawMenu();
+        /**
+         * Inicia los elementos
+         */
         this._drawCanvas(rightPanel);
+        this._drawMenu();
+
+        /**
+         * Dibuja el shader elegido
+         */
+        setTimeout(this._shaderViewer.loadSelectedShader, 500);
 
     };
 
@@ -64,7 +78,45 @@ function BuildUI() {
      * @since 0.1.0
      */
     this._drawMenu = function () {
-        self._menuContainer.append('<input type="text" />');
+
+        /**
+         * Dibuja el selector de shaders
+         */
+        let c = this._drawMenuInput();
+        let $selectorid = generateID();
+
+        c.title.text(lang.menu_shader);
+        c.content.append('<select id="{0}" class="common-selector"></select>'.format($selectorid));
+        let $shaders = Object.keys(shader_lib);
+        let $selector = $('#' + $selectorid);
+        for (let i = 0; i < $shaders.length; i += 1) {
+            $selector.append('<option value="{0}">{1}</option>'.format($shaders[i], shader_lib[$shaders[i]].name));
+        }
+
+        // Define el selector
+        self._shaderViewer.setShaderSelector($selector);
+
+        // El cambio genera un redibujo del shader actual
+        $selector.on('change', function () {
+            self._shaderViewer.loadSelectedShader();
+        });
+
+    };
+
+    /**
+     * Crea un input en el menú lateral
+     * @function
+     * @private
+     * @since 0.1.6
+     */
+    this._drawMenuInput = function () {
+        let $titleid = generateID();
+        let $contentid = generateID();
+        self._menuContainer.append('<div class="viewer-menu-input-container"><div class="viewer-menu-input-title" id="{0}"></div><div class="viewer-menu-input-content" id="{1}"></div></div>'.format($titleid, $contentid));
+        return {
+            content: $('#' + $contentid),
+            title: $('#' + $titleid),
+        };
     };
 
     /**

@@ -43,6 +43,38 @@ function ShaderViewer() {
      */
     let self = this;
 
+    /**
+     * Selector del shader
+     * @type {null | JQuery<HTMLElement> | HTMLElement}
+     * @private
+     */
+    this._shaderSelector = null;
+
+    /**
+     * Variables del shader
+     * @private
+     */
+    this._shaderObject = {
+        datashader: {           // Contiene los datos cargados del shader
+            f: '',
+            v: '',
+        },
+        geometry: null,         // Geometría
+        init: {                 // Valores iniciales del shader
+            zi: 0,
+            zr: 0,
+            range: 0,
+        },
+        iters: 100,             // Número de iteraciones del shader
+        material: null,         // Material del shader
+        plotz: 0.0,             // Altura del objeto
+        quad: null,             // Contiene la geometría + material
+        vertex: {               // Contiene los vértices
+            zi: 0,
+            zr: 0,
+        },
+    };
+
 
     /**
      * ------------------------------------------------------------------------
@@ -258,7 +290,7 @@ function ShaderViewer() {
             },
             maxdistance: 2.500,                 // Distancia máxima (% diagonal larga)
             maxpolarangle: 0.904,               // Máximo ángulo que puede alcanzar la cámara (Por pi/2)
-            near: 0.100,                        // Plano cercano de la cámara
+            near: 0.001,                        // Plano cercano de la cámara
             nopan: true,                        // Activa/desactiva el PAN del mouse
             posx: 0.000,                        // Posición inicial en x (% dimensión del mundo)
             posy: -1.600,                       // Posición inicial en y (% dimensión del mundo)
@@ -275,9 +307,9 @@ function ShaderViewer() {
             targetMoveCameraFlipByPos: true,    // Invierte el sentido según la posición de la cámara
             targetSpeed: {                      // Velocidad de cambio del target como % de cada eje
                 angular: 0.05,                  // Velocidad angular [rad]
-                x: 0.010,
-                y: 0.010,
-                z: 0.005,
+                x: 0.050,
+                y: 0.050,
+                z: 0.050,
             },
             zoom: 1.000,                        // Factor de zoom
         },
@@ -288,9 +320,9 @@ function ShaderViewer() {
      * Límites del mundo, modificar
      */
     this.worldsize = {
-        x: 1,
-        y: 1,
-        z: 1,
+        x: 1.000,
+        y: 1.000,
+        z: 1.000,
     };
 
     /**
@@ -319,7 +351,6 @@ function ShaderViewer() {
         self._initWorldObjects();
         self._initEvents();
         self._animateFrame();
-        self.initShaderObject();
     };
 
     /**
@@ -1165,7 +1196,6 @@ function ShaderViewer() {
          * Si el div del mapa no ha sido definido se termina la función
          */
         if (isNullUndf(this.canvasParent)) return;
-        console.log('k');
 
         /**
          * Evento scroll renderiza (orbitControls) en canvas
@@ -2216,83 +2246,196 @@ function ShaderViewer() {
     };
 
     /**
+     * Ejecuta el shader seleccionado desde el menú.
+     * @function
+     * @since 0.1.6
+     */
+    this.loadSelectedShader = function () {
+
+        /**
+         * Inicia capa de carga
+         */
+        loadingHandler(true);
+
+        /**
+         * Obtiene los archivos del shader
+         */
+        let $shader = self._shaderSelector.val();
+        $shader = shader_lib[$shader];
+        app_console.info(lang.loading_shader.format($shader.name));
+
+        /**
+         * Carga el shader
+         */
+        load_shader($shader.files.vert, $shader.files.frag, self._loadSelectedShaderHandler);
+
+    };
+
+    /**
+     * Función que recibe los datos cargados de los shaders y ejecuta la función.
+     * @param data
+     * @private
+     */
+    this._loadSelectedShaderHandler = function (data) {
+
+        /**
+         * Guarda los datos al shader
+         */
+        self._shaderObject.datashader.f = data.fragment;
+        self._shaderObject.datashader.v = data.vertex;
+
+        /**
+         * Inicia el shader
+         */
+        self._initShaderObject();
+
+        /**
+         * Desactiva capa de carga
+         */
+        loadingHandler(false);
+
+    };
+
+    /**
+     * Define el selector del shader.
+     *
+     * @function
+     * @param {JQuery<HTMLElement>, HTMLElement} selector - Selector del shader
+     * @since 0.1.6
+     */
+    this.setShaderSelector = function (selector) {
+        self._shaderSelector = selector;
+    };
+
+    /**
      * Inicia el objeto de dibujo del shader.
      *
      * @function
+     * @since 0.1.6
      */
-    this.initShaderObject = function () {
-        let plot_things = {};
-        plot_things.geometry = new THREE.BufferGeometry();
+    this._initShaderObject = function () {
 
-        let z_r = new Float32Array(6);
-        let z_i = new Float32Array(6);
+        /**
+         * Si el objeto ya existía se elimina
+         */
+        if (notNullUndf(self._shaderObject.quad)) {
+            this._scene.remove(self._shaderObject.quad);
+        }
+
+        /**
+         * Crea la geometría
+         */
+        self._shaderObject.geometry = new THREE.BufferGeometry();
+
+        /**
+         * Inicia los valores iniciales del shader complejo
+         */
+        self._shaderObject.vertex.zi = new Float32Array(6);
+        self._shaderObject.vertex.zr = new Float32Array(6);
+
+        /**
+         * Dibuja la figura
+         */
         let vertices = new Float32Array(18);
-
-        // First triangle:
-        let plot_z = 0;
         vertices[0] = -1.0;
         vertices[1] = -1.0;
-        vertices[2] = plot_z;
+        vertices[2] = self._shaderObject.plotz;
 
         vertices[3] = 1.0;
         vertices[4] = 1.0;
-        vertices[5] = plot_z;
+        vertices[5] = self._shaderObject.plotz;
 
         vertices[6] = -1.0;
         vertices[7] = 1.0;
-        vertices[8] = plot_z;
+        vertices[8] = self._shaderObject.plotz;
 
         // Second triangle.
         vertices[9] = -1.0;
         vertices[10] = -1.0;
-        vertices[11] = plot_z;
+        vertices[11] = self._shaderObject.plotz;
 
         vertices[12] = 1.0;
         vertices[13] = 1.0;
-        vertices[14] = plot_z;
+        vertices[14] = self._shaderObject.plotz;
 
         vertices[15] = 1.0;
         vertices[16] = -1.0;
-        vertices[17] = plot_z;
+        vertices[17] = self._shaderObject.plotz;
 
-        plot_things.material = new THREE.ShaderMaterial({
-            "uniforms": {"max_iterations": {"type": "i", "value": 100}},
-            "vertexShader": document.getElementById("shader_vertex").textContent,
-            "fragmentShader": document.getElementById("shader_fragment").textContent,
-            "side": THREE.DoubleSide
+        /**
+         * Crea el material
+         */
+        self._shaderObject.material = new THREE.ShaderMaterial({
+            'fragmentShader': self._shaderObject.datashader.f,
+            'side': THREE.DoubleSide,
+            'uniforms': {
+                'max_iterations': {
+                    'type': 'i',
+                    'value': self._shaderObject.iters,
+                }
+            },
+            'vertexShader': self._shaderObject.datashader.v,
         });
 
-        plot_things.geometry = new THREE.BufferGeometry();
+        /**
+         * Crea la geometría
+         * @type {BufferGeometry}
+         */
+        self._shaderObject.geometry = new THREE.BufferGeometry();
+        self._shaderObject.geometry.addAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        self._shaderObject.geometry.addAttribute('vertex_z_r', new THREE.BufferAttribute(self._shaderObject.vertex.zr, 1));
+        self._shaderObject.geometry.addAttribute('vertex_z_i', new THREE.BufferAttribute(self._shaderObject.vertex.zi, 1));
 
-        plot_things.geometry.addAttribute("position", new THREE.BufferAttribute(vertices, 3));
-        plot_things.geometry.addAttribute("vertex_z_r", new THREE.BufferAttribute(z_r, 1));
-        plot_things.geometry.addAttribute("vertex_z_i", new THREE.BufferAttribute(z_i, 1));
-        plot_things.geometry.rotateX(-Math.PI / 2);
-        plot_things.geometry.rotateY(-Math.PI / 2);
+        // Rota la geometría para dejarla coplanar
+        self._shaderObject.geometry.rotateX(-Math.PI / 2);
+        self._shaderObject.geometry.rotateY(-Math.PI / 2);
 
-
-        plot_things.quad = new THREE.Mesh(
-            plot_things.geometry,
-            plot_things.material
+        /**
+         * Crea el mesh
+         * @type {Mesh}
+         */
+        self._shaderObject.quad = new THREE.Mesh(
+            self._shaderObject.geometry,
+            self._shaderObject.material
         );
+        this._scene.add(self._shaderObject.quad);
 
-        this._scene.add(plot_things.quad);
+        /**
+         * Define valores iniciales del shader
+         * @type {number}
+         */
+        self._shaderObject.init.range = 2;
+        self._shaderObject.init.zi = -0.5;
+        self._shaderObject.init.zr = 0;
 
-        plot_things.init_mid_z_r = -0.5;
-        plot_things.init_mid_z_i = 0;
+        /**
+         * Dibuja de manera inicial
+         */
+        self._setPlotBounds(self._shaderObject.init.zi, self._shaderObject.init.zr, self._shaderObject.init.range);
 
-        // I'm defining the range as half the length of the current view.
-        plot_things.init_range = 2;
-        // set_plot_bounds(plot_things.init_mid_z_r, plot_things.init_mid_z_i, plot_things.init_range);
+    };
 
-        z_r = plot_things.quad.geometry.attributes.vertex_z_r.array;
-        z_i = plot_things.quad.geometry.attributes.vertex_z_i.array;
+    /**
+     * Define los bordes del shader y ejecuta un nuevo cuadro.
+     *
+     * @function
+     * @private
+     * @param {number} mid_z_i - Valor medio de Zi
+     * @param {number} mid_z_r - Valor medio de zr
+     * @param {number} range - Rango del gráfico
+     * @since 0.1.6
+     */
+    this._setPlotBounds = function (mid_z_r, mid_z_i, range) {
 
-        let mid_z_r = plot_things.init_mid_z_r;
-        let mid_z_i = plot_things.init_mid_z_i;
-        let range = 2;
+        /**
+         * Obtiene los atributos del shader para modificarlos
+         */
+        let z_r = self._shaderObject.quad.geometry.attributes.vertex_z_r.array;
+        let z_i = self._shaderObject.quad.geometry.attributes.vertex_z_i.array;
 
-        // First triangle:
+        /**
+         * Primer triángulo
+         */
         z_r[0] = mid_z_r - range;
         z_i[0] = mid_z_i - range;
 
@@ -2302,7 +2445,9 @@ function ShaderViewer() {
         z_r[2] = mid_z_r - range;
         z_i[2] = mid_z_i + range;
 
-        // Second triangle:
+        /**
+         * Segundo triángulo
+         */
         z_r[3] = mid_z_r - range;
         z_i[3] = mid_z_i - range;
 
@@ -2312,10 +2457,13 @@ function ShaderViewer() {
         z_r[5] = mid_z_r + range;
         z_i[5] = mid_z_i - range;
 
-        plot_things.quad.geometry.attributes.vertex_z_r.needsUpdate = true;
-        plot_things.quad.geometry.attributes.vertex_z_i.needsUpdate = true;
-
+        /**
+         * Anima un nuevo cuadro
+         */
+        self._shaderObject.quad.geometry.attributes.vertex_z_r.needsUpdate = true;
+        self._shaderObject.quad.geometry.attributes.vertex_z_i.needsUpdate = true;
         this._animateFrame();
+
     };
 
 }

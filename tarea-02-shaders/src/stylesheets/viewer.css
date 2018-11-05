@@ -74,3 +74,36 @@ Panel del GUI
     top: 0;
     z-index: 10;
 }
+
+/**
+Menú, input
+ */
+.viewer-menu-input-container {
+    display: block;
+    padding-bottom: 10px;
+    position: relative;
+}
+
+.viewer-menu-input-title {
+    cursor: default;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding-bottom: 5px;
+    text-overflow: ellipsis;
+    word-break: break-all;
+}
+
+.viewer-menu-input-content {
+}
+
+.viewer-menu-input-container:after {
+    background-color: #868686;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 1px;
+    left: 2.5%;
+    opacity: 0.7;
+    position: absolute;
+    width: 95%;
+}

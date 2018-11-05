@@ -8,11 +8,28 @@
 "use strict";
 
 /**
+ * Contiene la información de los shaders disponibles
+ * @global
+ * @const
+ * @since 0.1.6
+ */
+let shader_lib = {
+    "mandelbrot": {
+        "files": {
+            "frag": "shaders/mandelbrot.frag",
+            "vert": "shaders/mandelbrot.vert",
+        },
+        "name": "Mandelbrot",
+    }
+};
+
+/**
  * Carga un shader desde los archivos y luego llama a callback.
  *
- * @param {string} vertex - Archivo vertex shader.
- * @param {string} fragment - Archivo fragment shader.
- * @param {function=} callback - Función a llamar para pasar [vertex,shader].
+ * @param {string} vertex - Archivo vertex shader
+ * @param {string} fragment - Archivo fragment shader
+ * @param {function=} callback - Función a llamar para pasar [vertex,shader]
+ * @since 0.1.3
  */
 function load_shader(vertex, fragment, callback) {
 

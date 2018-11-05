@@ -25,6 +25,8 @@ lang_db.es = {
     "error_cookie_load": "Error crítico al cargar las cookies de sesión",
     "error_loading_shader": "Error al cargar shader",
     "error_loading_shader_info": "Ocurrió un error fatal al cargar el archivo del shader <i>{0}</i>.",
+    "menu_shader": "Selector shader",
+    "loading_shader": "Cargando el shader <{0}>",
     "viewer_3d_error_draw_null": "Viewer3D: Se ha intentado dibujar un objeto nulo",
     "viewer_3d_error_zobj": "Viewer3D: Ocurrió un error al obtener el parámetro z del objeto {0}",
     "viewer_3d_export_GLTF": "Exportar",
