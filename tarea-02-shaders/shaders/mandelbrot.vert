@@ -1,7 +1,6 @@
 attribute float vertex_z_r;
 attribute float vertex_z_i;
 
-// varyings get passed to the fragment shader.
 varying float c_r;
 varying float c_i;
 

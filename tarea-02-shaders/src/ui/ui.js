@@ -85,6 +85,7 @@ function BuildUI() {
         let c;
         c = this._drawMenuInput();
         c.title.text(lang.menu_title);
+        c.title.addClass('viewer-menu-main-title');
         // noinspection HtmlUnknownTarget
         c.content.append('<div class="viewer-menu-title-image"><img src="src/res/android-chrome-512x512.png" alt="" /></div>');
 

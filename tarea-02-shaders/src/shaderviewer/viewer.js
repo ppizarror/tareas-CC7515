@@ -244,7 +244,7 @@ function ShaderViewer() {
                 intensity: 0.600,
             },
             maxdistance: 2.500,                 // Distancia máxima (% diagonal larga)
-            maxpolarangle: 0.904,               // Máximo ángulo que puede alcanzar la cámara (Por pi/2)
+            maxpolarangle: 1.000,               // Máximo ángulo que puede alcanzar la cámara (Por pi/2)
             near: 0.001,                        // Plano cercano de la cámara
             nopan: true,                        // Activa/desactiva el PAN del mouse
             posx: 0.000,                        // Posición inicial en x (% dimensión del mundo)
