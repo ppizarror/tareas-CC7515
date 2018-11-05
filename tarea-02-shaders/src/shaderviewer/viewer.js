@@ -76,7 +76,7 @@ function ShaderViewer() {
             zr: 0,
             range: 2,
         },
-        iters: 1000,            // Número de iteraciones del shader
+        iters: 100,             // Número de iteraciones del shader
         material: null,         // Material del shader
         mesh: null,             // Contiene la geometría + material
         plotz: 0.0,             // Altura del objeto
@@ -143,12 +143,25 @@ function ShaderViewer() {
     this._hasMousePressed = false;
 
     /**
+     * El mouse se presiona y mueve
+     * @type {boolean}
+     * @private
+     */
+    this._mouseMoveDrag = false;
+
+    /**
      * ID del evento de mousemove en la ventana
      * @type {string}
      * @private
      */
     this._windowMouseMoveEvent = 'mousemove.rectzoom';
 
+    // noinspection JSUnusedGlobalSymbols
+    /**
+     * Indica que el mouse está presionado
+     * @type {boolean}
+     * @private
+     */
     this._mouseKeepPressed = false;
 
     /**
@@ -1159,10 +1172,6 @@ function ShaderViewer() {
             self._hasMouseOver = true;
             self._hasMousePressed = true;
         });
-        this._canvasParent.on(self._eventID.mouseup, function (e) {
-            e.preventDefault();
-            self._hasMousePressed = false;
-        });
 
         /**
          * Mouse entra sobre el canvas
@@ -1173,6 +1182,24 @@ function ShaderViewer() {
         this._canvasParent.on(self._eventID.mouseout, function () {
             self._hasMouseOver = false;
         });
+
+        /**
+         * Presionar el mouse
+         */
+        this._canvasParent.on('mousedown.canvas', function (e) {
+            e.preventDefault();
+            self._hasMousePressed = true;
+        });
+
+        /**
+         * Se suelta el click
+         */
+        this._canvasParent.on('mouseup.canvas', function (e) {
+            e.preventDefault();
+            self._hasMousePressed = false;
+            setTimeout(function () {self._mouseMoveDrag = false;}, 100);
+        });
+
 
         /**
          * Click izquierdo sobre el canvas, hace zoom (+)
@@ -1199,6 +1226,7 @@ function ShaderViewer() {
              * Si se hace esto se pierde la posibilidad de seleccionar texto en toda la aplicación
              */
             // e.preventDefault();
+            self._mouseMoveDrag = self._hasMousePressed && true;
             self._drawZoomRegion(e);
 
         });
@@ -2136,7 +2164,7 @@ function ShaderViewer() {
         /**
          * Si el mouse no está encima entonces retorna
          */
-        if (!self._hasMouseOver) return;
+        if (!self._hasMouseOver || self._hasMousePressed) return;
 
         /**
          * Obtiene dimensiones generales
@@ -2253,6 +2281,11 @@ function ShaderViewer() {
     this._zoomIn = function () {
 
         /**
+         * Si se tiene el mouse presionado retorna
+         */
+        if (self._mouseMoveDrag) return;
+
+        /**
          * Calcula el nuevo punto medio
          */
         let mid_zr = self._bound.mid_zr + this._bound.zr * this._bound.range;
@@ -2278,6 +2311,11 @@ function ShaderViewer() {
      * @since 0.2.2
      */
     this._zoomOut = function () {
+
+        /**
+         * Si se tiene el mouse presionado retorna
+         */
+        if (self._mouseMoveDrag) return;
 
         /**
          * Aumenta el zoom del rango
