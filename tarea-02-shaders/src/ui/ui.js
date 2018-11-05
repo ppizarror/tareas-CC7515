@@ -67,7 +67,7 @@ function BuildUI() {
         /**
          * Dibuja el shader elegido
          */
-        setTimeout(this._shaderViewer.loadSelectedShader, 500);
+        setTimeout(this._shaderViewer.loadSelectedShader, 1000);
 
     };
 
@@ -80,13 +80,22 @@ function BuildUI() {
     this._drawMenu = function () {
 
         /**
+         * Crea título
+         */
+        let c;
+        c = this._drawMenuInput();
+        c.title.text(lang.menu_title);
+        // noinspection HtmlUnknownTarget
+        c.content.append('<div class="viewer-menu-title-image"><img src="src/res/android-chrome-512x512.png" alt="" /></div>');
+
+        /**
          * Dibuja el selector de shaders
          */
-        let c = this._drawMenuInput();
+        c = this._drawMenuInput();
         let $selectorid = generateID();
 
         c.title.text(lang.menu_shader);
-        c.content.append('<select id="{0}" class="common-selector"></select>'.format($selectorid));
+        c.content.append('<select id="{0}" class="common-selector noselect"></select>'.format($selectorid));
         let $shaders = Object.keys(shader_lib);
         let $selector = $('#' + $selectorid);
         for (let i = 0; i < $shaders.length; i += 1) {

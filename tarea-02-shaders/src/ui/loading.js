@@ -68,7 +68,7 @@ function FullPageLoadingSpinner() {
      *
      * @function
      * @public
-     * @since 3.0.23
+     * @since 0.1.4
      */
     this.start = function () {
 
@@ -97,7 +97,7 @@ function FullPageLoadingSpinner() {
      *
      * @function
      * @public
-     * @since 3.0.23
+     * @since 0.1.4
      */
     this.stop = function () {
 

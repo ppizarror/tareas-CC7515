@@ -157,10 +157,7 @@ function ShaderViewer() {
         fpsmeter: false,                 // Indicador de FPS
         grid: true,                      // Muestra grilla en plano
         gui: true,                       // Muestra una gui por defecto (modificable)
-        light: false,                    // Muestra el objeto de la luz
-        lighthelper: false,              // Muestra helper de la luz
         planes: false,                   // Dibuja los planos
-        shadowlight: false,              // Muestra ubicación de la sombra
         worldlimits: false,              // Límites del mundo
 
         /**
@@ -172,13 +169,10 @@ function ShaderViewer() {
         griddist: 0.03,                 // % Cubierto por líneas
         guistartclosed: true,           // La gui si se autoinicia aparece cerrada
         guicloseafterpopup: false,      // La gui se cierra al abrir un popup
-        lightsize: 0.05,                // Tamaño de la luz en comparación al tamaño del mundo (menor)
         planecolorx: 0X0000FF,          // Color plano x
         planecolory: 0XFF0000,          // Color plano y
         planecolorz: 0X00FF00,          // Color plano z
         planeopacity: 0.5,              // Opacidad del plano
-        walkcameracolor: 0xFF00FF,      // Color del walkingcamera
-        walkcamerasize: 0.02,           // Tamaño del punto de la posición del walkcamera (% tamaño mundo)
         worldlimitscolor: 0X444444,     // Colores límite del mundo
 
     };
@@ -189,7 +183,7 @@ function ShaderViewer() {
      * @type {object | string}
      * @protected
      */
-    this.guiID = 'viewer-gui';
+    this._guiID = 'viewer-gui';
 
     /**
      * Contiene funciones de actualización de los helpers, se extiende en @drawHelpers
@@ -207,11 +201,7 @@ function ShaderViewer() {
         cameratarget: null,
         fpsmeter: null,
         grid: null,
-        light: null,
-        lighthelper: null,
         planes: null,
-        shadowlight: null,
-        walkcamerapos: null,
         worldlimits: null,
     };
 
@@ -238,41 +228,6 @@ function ShaderViewer() {
             color: 0x222222,        // Color del plano
             dithering: false,       // Aplica dithering al material
             obj: null,              // Almacena el objeto
-        },
-
-        /**
-         * Luz ambiental
-         */
-        ambientlight: {
-            color: 0X202020,
-            intensity: 0.500,
-        },
-
-        /**
-         * Luz puntual
-         */
-        light: {
-            angle: 1.600,
-            color: 0XFFFFFF,
-            decay: 1.600,
-            distance: 0.793,
-            intensity: 1.500,
-            penumbra: 0.580,
-            planeshadow: false,
-            pos: {  // Porcentaje del tamaño de cada eje
-                x: 0.000,
-                y: 0.000,
-                z: 1.000,
-            },
-        },
-
-        /**
-         * Niebla
-         */
-        fog: {
-            color: 0x131313,                    // Color de la niebla
-            density: 0.00024,                   // Densidad, cuán rápido crece
-            enabled: true,                      // Indica si está activa o no la niebla
         },
 
         /**
@@ -319,7 +274,7 @@ function ShaderViewer() {
     /**
      * Límites del mundo, modificar
      */
-    this.worldsize = {
+    this._worldsize = {
         x: 1.000,
         y: 1.000,
         z: 1.000,
@@ -450,9 +405,9 @@ function ShaderViewer() {
          * Calcula límites del mapa
          * --------------------------------------------------------------------
          */
-        this.worldsize.diagl = Math.sqrt(Math.pow(2 * this.worldsize.x, 2) + Math.pow(2 * this.worldsize.y, 2) + Math.pow(this.worldsize.z, 2));
-        this.worldsize.diagx = Math.sqrt(Math.pow(2 * this.worldsize.x, 2) + Math.pow(this.worldsize.z, 2));
-        this.worldsize.diagy = Math.sqrt(Math.pow(2 * this.worldsize.y, 2) + Math.pow(this.worldsize.z, 2));
+        this._worldsize.diagl = Math.sqrt(Math.pow(2 * this._worldsize.x, 2) + Math.pow(2 * this._worldsize.y, 2) + Math.pow(this._worldsize.z, 2));
+        this._worldsize.diagx = Math.sqrt(Math.pow(2 * this._worldsize.x, 2) + Math.pow(this._worldsize.z, 2));
+        this._worldsize.diagy = Math.sqrt(Math.pow(2 * this._worldsize.y, 2) + Math.pow(this._worldsize.z, 2));
 
         /**
          * --------------------------------------------------------------------
@@ -461,14 +416,14 @@ function ShaderViewer() {
          */
 
         // Restricciones de la cámara
-        this.objects_props.camera.far *= this.worldsize.diagl;
-        this.objects_props.camera.maxdistance *= this.worldsize.diagl;
+        this.objects_props.camera.far *= this._worldsize.diagl;
+        this.objects_props.camera.maxdistance *= this._worldsize.diagl;
         this.objects_props.camera.maxpolarangle *= Math.PI / 2;
 
         // Posición inicial de la cámara
-        this.objects_props.camera.posx *= this.worldsize.x;
-        this.objects_props.camera.posy *= this.worldsize.y;
-        this.objects_props.camera.posz *= this.worldsize.z;
+        this.objects_props.camera.posx *= this._worldsize.x;
+        this.objects_props.camera.posy *= this._worldsize.y;
+        this.objects_props.camera.posz *= this._worldsize.z;
 
         // Rotaciones iniciales
         this.objects_props.camera.rotationx *= Math.PI / 2;
@@ -476,14 +431,14 @@ function ShaderViewer() {
         this.objects_props.camera.rotationz *= Math.PI / 2;
 
         // Target de la cámara
-        this.objects_props.camera.target.x *= this.worldsize.x;
-        this.objects_props.camera.target.y *= this.worldsize.y;
-        this.objects_props.camera.target.z *= this.worldsize.z;
+        this.objects_props.camera.target.x *= this._worldsize.x;
+        this.objects_props.camera.target.y *= this._worldsize.y;
+        this.objects_props.camera.target.z *= this._worldsize.z;
 
         // Velocidad de movimiento del target en actualización de controles
-        this.objects_props.camera.targetSpeed.x *= this.worldsize.x;
-        this.objects_props.camera.targetSpeed.y *= this.worldsize.y;
-        this.objects_props.camera.targetSpeed.z *= this.worldsize.z;
+        this.objects_props.camera.targetSpeed.x *= this._worldsize.x;
+        this.objects_props.camera.targetSpeed.y *= this._worldsize.y;
+        this.objects_props.camera.targetSpeed.z *= this._worldsize.z;
         this.objects_props.camera.targetSpeed.xy = this._dist2(this.objects_props.camera.targetSpeed.x, this.objects_props.camera.targetSpeed.y);
 
         // Suma el target a la cámara para mantener distancias
@@ -503,11 +458,7 @@ function ShaderViewer() {
          * Setea propiedades de las luces
          * --------------------------------------------------------------------
          */
-        this.objects_props.light.pos.x *= this.worldsize.x;
-        this.objects_props.light.pos.y *= this.worldsize.y;
-        this.objects_props.light.pos.z *= this.worldsize.z;
-        this.objects_props.light.distance *= this.worldsize.diagl;
-        this.objects_props.camera.light.distance *= this.worldsize.diagl;
+        this.objects_props.camera.light.distance *= this._worldsize.diagl;
 
         /**
          * --------------------------------------------------------------------
@@ -549,49 +500,6 @@ function ShaderViewer() {
          */
         this._scene = new THREE.Scene();
         this._scene.name = 'VIEWER-3D-SCENE';
-
-        /**
-         * --------------------------------------------------------------------
-         * Setea la iluminación puntual
-         * --------------------------------------------------------------------
-         */
-        this._light = new THREE.SpotLight();
-
-        // Cambia las propiedades
-        this._light.castShadow = true;
-        this._light.color.setHex(self.objects_props.light.color);
-        this._light.decay = self.objects_props.light.decay;
-        this._light.distance = this.worldsize.diagl;
-        this._light.intensity = self.objects_props.light.intensity;
-        this._light.penumbra = self.objects_props.light.penumbra;
-        this._light.angle = self.objects_props.light.angle;
-        // noinspection JSSuspiciousNameCombination
-        this._light.position.x = this.objects_props.light.pos.y;
-        this._light.position.y = this.objects_props.light.pos.z;
-        this._light.position.z = this.objects_props.light.pos.x;
-        this._light.shadow.mapSize.height = 512;
-        this._light.shadow.mapSize.width = 512;
-        this._scene.add(this._light);
-
-        /**
-         * --------------------------------------------------------------------
-         * Setea la niebla
-         * --------------------------------------------------------------------
-         */
-        this._fog = new THREE.FogExp2(this.objects_props.fog.color, this.objects_props.fog.density);
-        if (this.objects_props.fog.enabled) {
-            this._scene.fog = this._fog;
-        }
-
-        /**
-         * --------------------------------------------------------------------
-         * Iluminación ambiental
-         * --------------------------------------------------------------------
-         */
-        this._ambientlight = new THREE.AmbientLight();
-        this._ambientlight.color.setHex(this.objects_props.ambientlight.color);
-        this._ambientlight.intensity = this.objects_props.ambientlight.intensity;
-        this._scene.add(this._ambientlight);
 
         /**
          * --------------------------------------------------------------------
@@ -828,7 +736,7 @@ function ShaderViewer() {
                 val *= $factor;
 
                 // Actualiza el target y la cámara
-                if (self._checkCameraTargetCollision(dir, val) && self._checkCameraTargetLimits(dir, -self.worldsize.x, self.worldsize.x) && self.objects_props.camera.targetMoveCamera) {
+                if (self._checkCameraTargetCollision(dir, val) && self._checkCameraTargetLimits(dir, -self._worldsize.x, self._worldsize.x) && self.objects_props.camera.targetMoveCamera) {
                     self._three_camera.position.z += val;
                 }
                 break;
@@ -839,7 +747,7 @@ function ShaderViewer() {
                 val *= $factor;
 
                 // Actualiza el target y la cámara
-                if (self._checkCameraTargetCollision(dir, val) && self._checkCameraTargetLimits(dir, -self.worldsize.y, self.worldsize.y) && self.objects_props.camera.targetMoveCamera) {
+                if (self._checkCameraTargetCollision(dir, val) && self._checkCameraTargetLimits(dir, -self._worldsize.y, self._worldsize.y) && self.objects_props.camera.targetMoveCamera) {
                     self._three_camera.position.x += val;
                 }
                 break;
@@ -851,7 +759,7 @@ function ShaderViewer() {
                 val *= $factor;
 
                 // Actualiza el target y la cámara
-                if (self._checkCameraTargetCollision(dir, val) && self._checkCameraTargetLimits(dir, 0.00001, self.worldsize.z) && self.objects_props.camera.targetMoveCamera) {
+                if (self._checkCameraTargetCollision(dir, val) && self._checkCameraTargetLimits(dir, 0.00001, self._worldsize.z) && self.objects_props.camera.targetMoveCamera) {
                     self._three_camera.position.y += val;
                 }
                 break;
@@ -1083,8 +991,8 @@ function ShaderViewer() {
         /**
          *  Verifica límites
          */
-        self._checkCameraTargetLimits('x', -self.worldsize.x, self.worldsize.x);
-        self._checkCameraTargetLimits('y', -self.worldsize.y, self.worldsize.y);
+        self._checkCameraTargetLimits('x', -self._worldsize.x, self._worldsize.x);
+        self._checkCameraTargetLimits('y', -self._worldsize.y, self._worldsize.y);
 
         /**
          * Actualiza la cámara y renderiza
@@ -1388,42 +1296,6 @@ function ShaderViewer() {
         self._toggleHelper();
     };
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * Oculta/Muestra el lighthelper.
-     *
-     * @function
-     * @private
-     */
-    this._toggleLightSystemHelper = function () {
-        self.threejs_helpers.lighthelper = !self.threejs_helpers.lighthelper;
-        self._toggleHelper();
-    };
-
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * Oculta/Muestra el helper de las sombras.
-     *
-     * @function
-     * @private
-     */
-    this._toggleShadowHelper = function () {
-        self.threejs_helpers.shadowlight = !self.threejs_helpers.shadowlight;
-        self._toggleHelper();
-    };
-
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * Oculta/Muestra la luz.
-     *
-     * @function
-     * @private
-     */
-    this._toggleLightHelper = function () {
-        self.threejs_helpers.light = !self.threejs_helpers.light;
-        self._toggleHelper();
-    };
-
     /**
      * Oculta/Muestra la GUI.
      *
@@ -1451,219 +1323,6 @@ function ShaderViewer() {
          * Crea una GUI
          */
         this._gui = new dat.GUI({autoPlace: false});
-
-        /**
-         * --------------------------------------------------------------------
-         * Carpeta luz ambiental
-         * --------------------------------------------------------------------
-         */
-        this._ambientLightParam = {
-            color: self._ambientlight.color.getHex(),
-            intensity: self._ambientlight.intensity
-        };
-        let ambientlightfolder = this._gui.addFolder(lang.viewer_3d_gui_ambientlight);
-        ambientlightfolder.addColor(this._ambientLightParam, 'color').onChange(function (val) {
-            self._ambientlight.color.setHex(val);
-            self._render();
-        });
-        ambientlightfolder.add(this._ambientLightParam, 'intensity', 0, 5).onChange(function (val) {
-            self._ambientlight.intensity = val;
-            self._render();
-        });
-
-        /**
-         * --------------------------------------------------------------------
-         * Carpeta luz de la cámara
-         * --------------------------------------------------------------------
-         */
-        this._cameraLightParam = {
-            color: self._cameralight.color.getHex(),
-            intensity: self._cameralight.intensity,
-            distance: self._cameralight.distance,
-            decay: self._cameralight.decay
-        };
-        let cameralightfolder = this._gui.addFolder(lang.viewer_3d_gui_cameralight);
-        cameralightfolder.addColor(this._cameraLightParam, 'color').onChange(function (val) {
-            self._cameralight.color.setHex(val);
-            self._render();
-        });
-        cameralightfolder.add(this._cameraLightParam, 'intensity', 0, 5).onChange(function (val) {
-            self._cameralight.intensity = val;
-            self._render();
-        });
-        cameralightfolder.add(this._cameraLightParam, 'distance', 0, 3 * self.worldsize.diagl).onChange(function (val) {
-            self._cameralight.distance = val;
-            self._render();
-        });
-        cameralightfolder.add(this._cameraLightParam, 'decay', 1, 2).onChange(function (val) {
-            self._cameralight.decay = val;
-            self._render();
-        });
-
-        /**
-         * --------------------------------------------------------------------
-         * Carpeta luz puntual
-         * --------------------------------------------------------------------
-         */
-        this._guiLightParam = {
-            color: self._light.color.getHex(),
-            intensity: self._light.intensity,
-            distance: self._light.distance,
-            angle: self._light.angle,
-            penumbra: self._light.penumbra,
-            decay: self._light.decay,
-            posx: self._light.position.z,
-            posy: self._light.position.x,
-            posz: self._light.position.y,
-            planeshadow: self.objects_props.light.planeshadow,
-            radius: self._distOriginxyz(self._light.position.x, self._light.position.y, self._light.position.z),
-            rotatexy: (Math.atan2(this._light.position.z, this._light.position.x) * 180 / Math.PI + 360) % 360,
-            rotatexz: 0.0,
-            rotateyz: 0.0,
-            mapsizeh: self._light.shadow.mapSize.height,
-            mapsizew: self._light.shadow.mapSize.width
-        };
-        let lightfolder = this._gui.addFolder(lang.viewer_3d_gui_light);
-        lightfolder.addColor(this._guiLightParam, 'color').onChange(function (val) {
-            self._light.color.setHex(val);
-            self._render();
-        });
-        lightfolder.add(this._guiLightParam, 'intensity', 0, 10).onChange(function (val) {
-            self._light.intensity = val;
-            self._render();
-        });
-        lightfolder.add(this._guiLightParam, 'distance', 0.01, 3 * self.worldsize.diagl).onChange(function (val) {
-            self._light.distance = val;
-            self._render();
-        });
-        lightfolder.add(this._guiLightParam, 'angle', 0.01, Math.PI / 2).onChange(function (val) {
-            self._light.angle = val;
-            self._render();
-        });
-        lightfolder.add(this._guiLightParam, 'penumbra', 0, 1).onChange(function (val) {
-            self._light.penumbra = val;
-            self._render();
-        });
-        lightfolder.add(this._guiLightParam, 'decay', 1, 2).onChange(function (val) {
-            self._light.decay = val;
-            self._render();
-        });
-        lightfolder.add(this._guiLightParam, 'posx', -self.worldsize.diagl, self.worldsize.diagl).onChange(function (val) {
-            self._light.position.z = val;
-            self._render();
-            // noinspection JSSuspiciousNameCombination
-            self._guiLightParam.rotatexy = (180 * Math.atan2(self._light.position.x, self._light.position.z) / Math.PI + 360) % 360;
-        }).listen();
-        lightfolder.add(this._guiLightParam, 'posy', -self.worldsize.diagl, self.worldsize.diagl).onChange(function (val) {
-            self._light.position.x = val;
-            self._render();
-        }).listen();
-        lightfolder.add(this._guiLightParam, 'posz', 0, self.worldsize.diagl).onChange(function (val) {
-            self._light.position.y = val;
-            self._render();
-        }).listen();
-        lightfolder.add(this._guiLightParam, 'radius', 0.01, self.worldsize.diagl).onChange(function (r) {
-
-            // Radio actual
-            let $ract = self._distOriginxyz(self._light.position.x, self._light.position.y, self._light.position.z);
-
-            // Calcula los ángulos actuales
-            let angxy, angxyz;
-            // noinspection JSSuspiciousNameCombination
-            angxy = Math.atan2(self._light.position.x, self._light.position.z);
-            angxyz = Math.asin(self._light.position.y / $ract);
-
-            // Calcula distancia proyección radio plano xy radio nuevo
-            let $e = r * Math.cos(angxyz);
-
-            // Calcula las nuevas posiciones
-            let $x, $y, $z;
-            $x = $e * Math.cos(angxy);
-            $y = $e * Math.sin(angxy);
-            $z = $e * Math.tan(angxyz);
-
-            // noinspection JSSuspiciousNameCombination
-            self._light.position.x = $y; // Actualiza las posiciones
-            self._light.position.y = $z;
-            self._light.position.z = $x;
-            self._render();
-
-            // Actualiza entradas en el menú
-            self._guiLightParam.posx = self._light.position.x;
-            self._guiLightParam.posy = self._light.position.z;
-            self._guiLightParam.posz = self._light.position.y;
-
-        }).listen();
-        lightfolder.add(this._guiLightParam, 'rotatexy', 0, 360).onChange(function (val) {
-
-            // Calcula el ángulo en radianes
-            val = (val) * Math.PI / 180;
-
-            // Posiciones actuales
-            let posx, posy;
-            posx = self._light.position.x;
-            posy = self._light.position.z;
-
-            // noinspection JSSuspiciousNameCombination
-            let r = Math.sqrt(Math.pow(posx, 2) + Math.pow(posy, 2)); // Radio de giro
-
-            // Actualiza la posición
-            self._light.position.z = r * Math.cos(val);
-            self._light.position.x = r * Math.sin(val);
-            self._render();
-
-            // Actualiza entradas en el menú
-            self._guiLightParam.posx = self._light.position.z;
-            self._guiLightParam.posy = self._light.position.x;
-
-        }).listen();
-
-        /**
-         * --------------------------------------------------------------------
-         * Carpeta niebla
-         * --------------------------------------------------------------------
-         */
-        let fogfolder = this._gui.addFolder(lang.viewer_3d_gui_fog);
-        this._guiFogParams = {
-            color: self._fog.color.getHex(),
-            density: self._fog.density,
-            enabled: self.objects_props.fog.enabled,
-        };
-        fogfolder.addColor(this._guiFogParams, 'color').onChange(function (val) {
-            self._fog.color.setHex(val);
-            self._render();
-        });
-        fogfolder.add(this._guiFogParams, 'density', 0.00001, 0.00025 * 10).onChange(function (val) {
-            self._fog.density = val;
-            self._render();
-        });
-        fogfolder.add(this._guiFogParams, 'enabled').onChange(function (val) {
-            if (val) {
-                self._scene.fog = self._fog;
-            } else {
-                self._scene.fog = null;
-            }
-            self._animateFrame();
-        });
-
-        /**
-         * --------------------------------------------------------------------
-         * Carpeta sombra
-         * --------------------------------------------------------------------
-         */
-        let shadowfolder = this._gui.addFolder(lang.viewer_3d_gui_shadow);
-        shadowfolder.add(this._guiLightParam, 'mapsizew', 512, 2 * 1024).onChange(function (val) {
-            self._light.shadow.mapSize.width = val;
-            self._render();
-        });
-        shadowfolder.add(this._guiLightParam, 'mapsizeh', 512, 2 * 1024).onChange(function (val) {
-            self._light.shadow.mapSize.height = val;
-            self._render();
-        });
-        shadowfolder.add(this._guiLightParam, 'planeshadow').onChange(function (val) {
-            self.objects_props.plane.obj.receiveShadow = val;
-            self._animateFrame();
-        });
 
         /**
          * --------------------------------------------------------------------
@@ -1699,7 +1358,7 @@ function ShaderViewer() {
             self._three_camera.updateProjectionMatrix();
             self._animateFrame();
         });
-        camerafolder.add(this._guiCameraParams, 'maxdistance', 100, 5 * self.worldsize.diagl).onChange(function (val) {
+        camerafolder.add(this._guiCameraParams, 'maxdistance', 100, 5 * self._worldsize.diagl).onChange(function (val) {
             self._controls.maxDistance = val;
             self._animateFrame();
         });
@@ -1707,15 +1366,15 @@ function ShaderViewer() {
             self._controls.maxPolarAngle = val;
             self._animateFrame();
         });
-        camerafolder.add(this._guiCameraParams, 'posx', 1, 2 * self.worldsize.diagl).onChange(function (val) {
+        camerafolder.add(this._guiCameraParams, 'posx', 1, 2 * self._worldsize.diagl).onChange(function (val) {
             self._three_camera.position.z = val;
             self._animateFrame();
         }).listen();
-        camerafolder.add(this._guiCameraParams, 'posy', 1, 2 * self.worldsize.diagl).onChange(function (val) {
+        camerafolder.add(this._guiCameraParams, 'posy', 1, 2 * self._worldsize.diagl).onChange(function (val) {
             self._three_camera.position.x = val;
             self._animateFrame();
         }).listen();
-        camerafolder.add(this._guiCameraParams, 'posz', 1, 2 * self.worldsize.diagl).onChange(function (val) {
+        camerafolder.add(this._guiCameraParams, 'posz', 1, 2 * self._worldsize.diagl).onChange(function (val) {
             self._three_camera.position.y = val;
             self._animateFrame();
         }).listen();
@@ -1735,7 +1394,7 @@ function ShaderViewer() {
         /**
          * Añade la GUI al div
          */
-        $('#' + this.guiID).append(this._gui.domElement);
+        $('#' + this._guiID).append(this._gui.domElement);
 
         /**
          * Inicia la GUI cerrada
@@ -1756,7 +1415,7 @@ function ShaderViewer() {
         if (notNullUndf(self._gui)) {
             self._gui.destroy();
             self._gui = null;
-            $('#' + self.guiID).empty();
+            $('#' + self._guiID).empty();
         }
     };
 
@@ -1817,7 +1476,7 @@ function ShaderViewer() {
          */
         if (this.threejs_helpers.axis) {
             if (isNullUndf(this._helperInstances.axis)) {
-                let $helpersize = Math.min(self.worldsize.x, self.worldsize.y, self.worldsize.z) * self.threejs_helpers.axissize;
+                let $helpersize = Math.min(self._worldsize.x, self._worldsize.y, self._worldsize.z) * self.threejs_helpers.axissize;
                 helper = new THREE.AxesHelper($helpersize);
                 self.addMeshToScene(helper, this.globals.helper, false);
                 // noinspection JSValidateTypes
@@ -1866,10 +1525,10 @@ function ShaderViewer() {
                 // Plano x
                 geometry = new THREE.Geometry();
                 geometry.vertices.push(
-                    this._newThreePoint(this.worldsize.x, 0, 0),
-                    this._newThreePoint(-this.worldsize.x, 0, 0),
-                    this._newThreePoint(-this.worldsize.x, 0, this.worldsize.z),
-                    this._newThreePoint(this.worldsize.x, 0, this.worldsize.z)
+                    this._newThreePoint(this._worldsize.x, 0, 0),
+                    this._newThreePoint(-this._worldsize.x, 0, 0),
+                    this._newThreePoint(-this._worldsize.x, 0, this._worldsize.z),
+                    this._newThreePoint(this._worldsize.x, 0, this._worldsize.z)
                 );
                 geometry.faces.push(new THREE.Face3(0, 1, 2));
                 geometry.faces.push(new THREE.Face3(0, 2, 3));
@@ -1881,10 +1540,10 @@ function ShaderViewer() {
                 // Plano y
                 geometry = new THREE.Geometry();
                 geometry.vertices.push(
-                    this._newThreePoint(0, -this.worldsize.y, 0),
-                    this._newThreePoint(0, this.worldsize.y, 0),
-                    this._newThreePoint(0, this.worldsize.y, this.worldsize.z),
-                    this._newThreePoint(0, -this.worldsize.y, this.worldsize.z)
+                    this._newThreePoint(0, -this._worldsize.y, 0),
+                    this._newThreePoint(0, this._worldsize.y, 0),
+                    this._newThreePoint(0, this._worldsize.y, this._worldsize.z),
+                    this._newThreePoint(0, -this._worldsize.y, this._worldsize.z)
                 );
                 geometry.faces.push(new THREE.Face3(0, 1, 2));
                 geometry.faces.push(new THREE.Face3(0, 2, 3));
@@ -1896,10 +1555,10 @@ function ShaderViewer() {
                 // Plano z
                 geometry = new THREE.Geometry();
                 geometry.vertices.push(
-                    this._newThreePoint(this.worldsize.x, this.worldsize.y, 0),
-                    this._newThreePoint(-this.worldsize.x, this.worldsize.y, 0),
-                    this._newThreePoint(-this.worldsize.x, -this.worldsize.y, 0),
-                    this._newThreePoint(this.worldsize.x, -this.worldsize.y, 0)
+                    this._newThreePoint(this._worldsize.x, this._worldsize.y, 0),
+                    this._newThreePoint(-this._worldsize.x, this._worldsize.y, 0),
+                    this._newThreePoint(-this._worldsize.x, -this._worldsize.y, 0),
+                    this._newThreePoint(this._worldsize.x, -this._worldsize.y, 0)
                 );
                 geometry.faces.push(new THREE.Face3(0, 1, 2));
                 geometry.faces.push(new THREE.Face3(0, 2, 3));
@@ -1928,7 +1587,7 @@ function ShaderViewer() {
          */
         if (this.threejs_helpers.grid) {
             if (isNullUndf(this._helperInstances.grid)) {
-                let $mapsize = 2 * Math.max(this.worldsize.x, this.worldsize.y);
+                let $mapsize = 2 * Math.max(this._worldsize.x, this._worldsize.y);
                 let $griddist = Math.floor(2 / this.threejs_helpers.griddist);
                 helper = new THREE.GridHelper($mapsize, $griddist);
                 helper.position.y = 0;
@@ -1947,92 +1606,6 @@ function ShaderViewer() {
 
         /**
          * --------------------------------------------------------------------
-         * Dibuja helper de la luz
-         * --------------------------------------------------------------------
-         */
-        if (this.threejs_helpers.lighthelper) {
-            if (isNullUndf(this._helperInstances.lighthelper)) {
-                helper = new THREE.SpotLightHelper(this._light);
-                self.addMeshToScene(helper, this.globals.helper, false);
-                this._helpersUpdate.push(helper);
-                // noinspection JSValidateTypes
-                this._helperInstances.lighthelper = { // Añade la instancia
-                    update: this._helpersUpdate.length - 1,
-                    obj: helper
-                }
-            }
-        } else { // Se elimina el helper si es que se instanció
-            if (notNullUndf(this._helperInstances.lighthelper)) {
-                this._helpersUpdate.splice(this._helperInstances.lighthelper.update, 1);
-                this._scene.remove(this._helperInstances.lighthelper.obj);
-            }
-            this._helperInstances.lighthelper = null;
-        }
-
-        /**
-         * --------------------------------------------------------------------
-         * Dibuja la luz
-         * --------------------------------------------------------------------
-         */
-        if (this.threejs_helpers.light) {
-            if (isNullUndf(this._helperInstances.light)) {
-                let $lightsize = Math.min(self.worldsize.x, self.worldsize.y, self.worldsize.z) * self.threejs_helpers.lightsize;
-                let sphereGeometry = new THREE.SphereGeometry($lightsize / 2, 16, 8);
-                let wireframeMaterial = new THREE.MeshBasicMaterial(
-                    {
-                        color: self._light.color.getHex(),
-                        transparent: true,
-                        wireframe: true,
-                    });
-                let mesh = new THREE.Mesh(sphereGeometry, wireframeMaterial);
-                let $update = function () {
-                    mesh.position.x = self._light.position.x;
-                    mesh.position.y = self._light.position.y;
-                    mesh.position.z = self._light.position.z;
-                    mesh.material.color = self._light.color;
-                };
-                $update();
-                self.addMeshToScene(mesh, this.globals.helper, false);
-                this._helpersUpdate.push({
-                    update: $update
-                });
-
-                // noinspection JSValidateTypes
-                this._helperInstances.light = { // Añade la instancia
-                    update: this._helpersUpdate.length - 1,
-                    obj: mesh
-                }
-            }
-        } else { // Se elimina el helper si es que se instanció
-            if (notNullUndf(this._helperInstances.light)) {
-                this._helpersUpdate.splice(this._helperInstances.light.update, 1);
-                this._scene.remove(this._helperInstances.light.obj);
-            }
-            this._helperInstances.light = null;
-        }
-
-        /**
-         * --------------------------------------------------------------------
-         * Dibuja sombra de cámara
-         * --------------------------------------------------------------------
-         */
-        if (this.threejs_helpers.shadowlight) {
-            if (isNullUndf(this._helperInstances.shadowlight)) {
-                helper = new THREE.CameraHelper(this._light.shadow.camera);
-                self.addMeshToScene(helper, this.globals.helper, false);
-                this._helpersUpdate.push(helper);
-                // noinspection JSValidateTypes
-                this._helperInstances.shadowlight = helper; // Añade la instancia
-            }
-        } else { // Se elimina el helper si es que se instanció
-            if (notNullUndf(this._helperInstances.shadowlight)) {
-                this._scene.remove(this._helperInstances.shadowlight);
-            }
-            this._helperInstances.shadowlight = null;
-        }
-
-        /**
-         * --------------------------------------------------------------------
          * Dibuja límites del mapa
          * --------------------------------------------------------------------
          */
@@ -2047,34 +1620,34 @@ function ShaderViewer() {
                 let geometry = new THREE.Geometry();
                 geometry.vertices.push(
                     // Plano +x
-                    this._newThreePoint(this.worldsize.x, -this.worldsize.y, 0),
-                    this._newThreePoint(this.worldsize.x, this.worldsize.y, 0),
-                    this._newThreePoint(this.worldsize.x, this.worldsize.y, this.worldsize.z),
-                    this._newThreePoint(this.worldsize.x, -this.worldsize.y, this.worldsize.z),
+                    this._newThreePoint(this._worldsize.x, -this._worldsize.y, 0),
+                    this._newThreePoint(this._worldsize.x, this._worldsize.y, 0),
+                    this._newThreePoint(this._worldsize.x, this._worldsize.y, this._worldsize.z),
+                    this._newThreePoint(this._worldsize.x, -this._worldsize.y, this._worldsize.z),
 
                     // Plano +y
-                    this._newThreePoint(this.worldsize.x, this.worldsize.y, 0),
-                    this._newThreePoint(-this.worldsize.x, this.worldsize.y, 0),
-                    this._newThreePoint(-this.worldsize.x, this.worldsize.y, this.worldsize.z),
-                    this._newThreePoint(this.worldsize.x, this.worldsize.y, this.worldsize.z),
+                    this._newThreePoint(this._worldsize.x, this._worldsize.y, 0),
+                    this._newThreePoint(-this._worldsize.x, this._worldsize.y, 0),
+                    this._newThreePoint(-this._worldsize.x, this._worldsize.y, this._worldsize.z),
+                    this._newThreePoint(this._worldsize.x, this._worldsize.y, this._worldsize.z),
 
                     // Plano -x
-                    this._newThreePoint(-this.worldsize.x, -this.worldsize.y, 0),
-                    this._newThreePoint(-this.worldsize.x, this.worldsize.y, 0),
-                    this._newThreePoint(-this.worldsize.x, this.worldsize.y, this.worldsize.z),
-                    this._newThreePoint(-this.worldsize.x, -this.worldsize.y, this.worldsize.z),
+                    this._newThreePoint(-this._worldsize.x, -this._worldsize.y, 0),
+                    this._newThreePoint(-this._worldsize.x, this._worldsize.y, 0),
+                    this._newThreePoint(-this._worldsize.x, this._worldsize.y, this._worldsize.z),
+                    this._newThreePoint(-this._worldsize.x, -this._worldsize.y, this._worldsize.z),
 
                     // Plano -y
-                    this._newThreePoint(this.worldsize.x, -this.worldsize.y, 0),
-                    this._newThreePoint(-this.worldsize.x, -this.worldsize.y, 0),
-                    this._newThreePoint(-this.worldsize.x, -this.worldsize.y, this.worldsize.z),
-                    this._newThreePoint(this.worldsize.x, -this.worldsize.y, this.worldsize.z),
+                    this._newThreePoint(this._worldsize.x, -this._worldsize.y, 0),
+                    this._newThreePoint(-this._worldsize.x, -this._worldsize.y, 0),
+                    this._newThreePoint(-this._worldsize.x, -this._worldsize.y, this._worldsize.z),
+                    this._newThreePoint(this._worldsize.x, -this._worldsize.y, this._worldsize.z),
 
                     // Plano z
-                    this._newThreePoint(this.worldsize.x, -this.worldsize.y, this.worldsize.z),
-                    this._newThreePoint(this.worldsize.x, this.worldsize.y, this.worldsize.z),
-                    this._newThreePoint(-this.worldsize.x, this.worldsize.y, this.worldsize.z),
-                    this._newThreePoint(-this.worldsize.x, -this.worldsize.y, this.worldsize.z)
+                    this._newThreePoint(this._worldsize.x, -this._worldsize.y, this._worldsize.z),
+                    this._newThreePoint(this._worldsize.x, this._worldsize.y, this._worldsize.z),
+                    this._newThreePoint(-this._worldsize.x, this._worldsize.y, this._worldsize.z),
+                    this._newThreePoint(-this._worldsize.x, -this._worldsize.y, this._worldsize.z)
                 );
                 for (let j = 0; j <= 4; j += 1) {
                     geometry.faces.push(new THREE.Face3(4 * j, 4 * j + 1, 4 * j + 2));
@@ -2100,7 +1673,7 @@ function ShaderViewer() {
          */
         if (this.threejs_helpers.cameratarget) {
             if (isNullUndf(this._helperInstances.cameratarget)) {
-                let $targetsize = Math.min(self.worldsize.x, self.worldsize.y, self.worldsize.z) * self.threejs_helpers.cameratargetsize / 2;
+                let $targetsize = Math.min(self._worldsize.x, self._worldsize.y, self._worldsize.z) * self.threejs_helpers.cameratargetsize / 2;
                 let sphereGeometry = new THREE.SphereGeometry($targetsize, 16, 8);
                 let wireframeMaterial = new THREE.MeshBasicMaterial(
                     {
@@ -2133,47 +1706,6 @@ function ShaderViewer() {
                 this._scene.remove(this._helperInstances.cameratarget.obj);
             }
             this._helperInstances.cameratarget = null;
-        }
-
-        /**
-         * --------------------------------------------------------------------
-         * Dibuja la posición del walkingcamera
-         * --------------------------------------------------------------------
-         */
-        if (this.threejs_helpers.walkcamerapos) {
-            if (isNullUndf(this._helperInstances.walkcamerapos)) {
-                let $walkersize = Math.min(self.worldsize.x, self.worldsize.y, self.worldsize.z) * self.threejs_helpers.walkcamerasize / 2;
-                let sphereGeometry = new THREE.SphereGeometry($walkersize, 16, 8);
-                let wireframeMaterial = new THREE.MeshBasicMaterial(
-                    {
-                        color: self.threejs_helpers.walkcameracolor,
-                        transparent: true,
-                        wireframe: true,
-                    });
-                let mesh = new THREE.Mesh(sphereGeometry, wireframeMaterial);
-                let $update = function () {
-                    mesh.position.x = self._three_camera.position.x;
-                    mesh.position.y = self._three_camera.position.y;
-                    mesh.position.z = self._three_camera.position.z;
-                };
-                $update();
-                self.addMeshToScene(mesh, this.globals.helper, false);
-                this._helpersUpdate.push({
-                    update: $update,
-                });
-
-                // noinspection JSValidateTypes
-                this._helperInstances.walkcamerapos = { // Añade la instancia
-                    obj: mesh,
-                    update: this._helpersUpdate.length - 1,
-                }
-            }
-        } else { // Se elimina el helper si es que se instanció
-            if (notNullUndf(this._helperInstances.walkcamerapos)) {
-                this._helpersUpdate.splice(this._helperInstances.walkcamerapos.update, 1);
-                this._scene.remove(this._helperInstances.walkcamerapos.obj);
-            }
-            this._helperInstances.walkcamerapos = null;
         }
 
     };
@@ -2229,20 +1761,6 @@ function ShaderViewer() {
      */
     this._newThreePoint = function (x, y, z) {
         return new THREE.Vector3(y, z, x);
-    };
-
-    /**
-     * Retorna la distancia de tres puntos al origen.
-     *
-     * @function
-     * @private
-     * @param {number} x - Coordenada x
-     * @param {number} y - Coordenada y
-     * @param {number} z - Coordenada z
-     */
-    this._distOriginxyz = function (x, y, z) {
-        // noinspection JSSuspiciousNameCombination
-        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
     };
 
     /**

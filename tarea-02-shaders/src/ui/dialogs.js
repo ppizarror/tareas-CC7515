@@ -13,7 +13,7 @@
  * @class
  * @constructor
  * @private
- * @since 3.2.20
+ * @since 0.1.6
  */
 function AppDialog() {
 
