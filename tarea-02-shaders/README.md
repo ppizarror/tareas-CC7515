@@ -25,6 +25,12 @@ El proyecto se puede ejecutar de manera online: [https://ppizarror.com/tareas-CC
 | stats.js | r17 | <a href="https://github.com/mrdoob/stats.js">github.com/mrdoob/stats.js</a> |
 | three.js | r98 | <a href="https://github.com/mrdoob/three.js">github.com/mrdoob/three.js</a> |
 
+## Referencias
+
+- [https://www.opengl.org/documentation/books.html#oglsl](OpenGL Shading Language book)
+- [https://pappubahry.com/misc/webgl/mandelbrot/](Shaders in three.js: plotting the Mandelbrot set)
+- [http://nuclear.mutantstargoat.com/articles/sdr_fract/](Fast and easy high resolution fractals with a pixel shader)
+
 ## Autor
 
 [Pablo Pizarro R.](http://ppizarror.com) | 2018

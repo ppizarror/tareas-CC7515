@@ -262,8 +262,8 @@ function ShaderViewer() {
             targetMoveCameraFlipByPos: true,    // Invierte el sentido según la posición de la cámara
             targetSpeed: {                      // Velocidad de cambio del target como % de cada eje
                 angular: 0.05,                  // Velocidad angular [rad]
-                x: 0.050,
-                y: 0.050,
+                x: 0.010,
+                y: 0.010,
                 z: 0.050,
             },
             zoom: 1.000,                        // Factor de zoom
