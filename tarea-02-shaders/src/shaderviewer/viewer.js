@@ -50,6 +50,18 @@ function ShaderViewer() {
     this._shaderSelector = null;
 
     /**
+     * Contiene los identificadores de los valores del campo complejo
+     * @private
+     */
+    this._infoID = {
+        ln: null,               // Largo de la ventana
+        maxir: null,            // Mayor valor del plano imaginario
+        maxzr: null,            // Mayor valor del plano real
+        minir: null,            // Menor valor del plano imaginario
+        minzr: null,            // Menor valor del plano real
+    };
+
+    /**
      * Datos del visualizador
      * @private
      */
@@ -62,7 +74,7 @@ function ShaderViewer() {
         init: {                 // Valores iniciales del shader
             zi: 0,
             zr: 0,
-            range: 0,
+            range: 2,
         },
         iters: 100,             // Número de iteraciones del shader
         material: null,         // Material del shader
@@ -92,7 +104,7 @@ function ShaderViewer() {
         max_zi: 0,              // Máximo valor absoluto de zi (imaginario)
         max_zr: 0,              // Máximo valor absoluto de zr (real)
         mesh: null,             // Contiene los mesh de los bordes
-        range: 0,               // Define el rango inicial
+        range: 2,               // Define el rango inicial
         zi: 0,                  // Coordenada imaginaria
         zoomfactor: 0.5,        // Factor del zoom
         zr: 0,                  // Coordenada real
@@ -140,6 +152,7 @@ function ShaderViewer() {
      * @private
      */
     this._eventID = {
+        click: 'click.canvas',
         contextmenu: 'contextmenu.canvas',
         keydown: 'keydown.canvas',
         keyup: 'keyup.canvas',
@@ -307,7 +320,6 @@ function ShaderViewer() {
      * @private
      */
     this._mouse = {
-        inside: false,  // Indica que está dentro del canvas
         x: 0,           // Posición dentro del canvas en x
         y: 0,           // Posición dentro del canvas en y
     };
@@ -1143,9 +1155,6 @@ function ShaderViewer() {
             self._hasMouseOver = true;
             self._hasMousePressed = true;
         });
-        this._canvasParent.on(self._eventID.contextmenu, function (e) {
-            e.preventDefault();
-        });
         this._canvasParent.on(self._eventID.mouseup, function (e) {
             e.preventDefault();
             self._hasMousePressed = false;
@@ -1159,6 +1168,22 @@ function ShaderViewer() {
         });
         this._canvasParent.on(self._eventID.mouseout, function () {
             self._hasMouseOver = false;
+        });
+
+        /**
+         * Click izquierdo sobre el canvas, hace zoom (+)
+         */
+        this._canvasParent.on(self._eventID.click, function (e) {
+            e.preventDefault();
+            self._zoomIn();
+        });
+
+        /**
+         * Click derecho sobre el canvas, hace zoom (-)
+         */
+        this._canvasParent.on(self._eventID.contextmenu, function (e) {
+            e.preventDefault();
+            self._zoomOut();
         });
 
         /**
@@ -1997,63 +2022,6 @@ function ShaderViewer() {
         self._addMeshToScene(self._shaderObject.mesh, self._globals.shader, true);
 
         /**
-         * Define valores iniciales del shader
-         * @type {number}
-         */
-        self._shaderObject.init.range = 2;
-        self._shaderObject.init.zi = -0.5;
-        self._shaderObject.init.zr = 0;
-
-        /**
-         * Dibuja de manera inicial
-         */
-        self._setPlotBounds(self._shaderObject.init.zi, self._shaderObject.init.zr, self._shaderObject.init.range);
-
-    };
-
-    /**
-     * Define los bordes del shader y ejecuta un nuevo cuadro.
-     *
-     * @function
-     * @private
-     * @param {number} mid_z_i - Valor medio de Zi
-     * @param {number} mid_z_r - Valor medio de zr
-     * @param {number} range - Rango del gráfico
-     * @since 0.1.6
-     */
-    this._setPlotBounds = function (mid_z_r, mid_z_i, range) {
-
-        /**
-         * Obtiene los atributos del shader para modificarlos
-         */
-        let z_r = self._shaderObject.mesh.geometry.attributes.vertex_z_r.array;
-        let z_i = self._shaderObject.mesh.geometry.attributes.vertex_z_i.array;
-
-        /**
-         * Primer triángulo
-         */
-        z_r[0] = mid_z_r - range;
-        z_i[0] = mid_z_i - range;
-
-        z_r[1] = mid_z_r + range;
-        z_i[1] = mid_z_i + range;
-
-        z_r[2] = mid_z_r - range;
-        z_i[2] = mid_z_i + range;
-
-        /**
-         * Segundo triángulo
-         */
-        z_r[3] = mid_z_r - range;
-        z_i[3] = mid_z_i - range;
-
-        z_r[4] = mid_z_r + range;
-        z_i[4] = mid_z_i + range;
-
-        z_r[5] = mid_z_r + range;
-        z_i[5] = mid_z_i - range;
-
-        /**
          * Genera el mesh del recuadro de zoom
          */
         let material = new THREE.LineBasicMaterial({color: self._bound.linecolor});
@@ -2080,6 +2048,55 @@ function ShaderViewer() {
          */
         self._bound.max_zr = this._worldsize.x * this._bound.zoomfactor;
         self._bound.max_zi = this._worldsize.y * this._bound.zoomfactor;
+        self._bound.range = this._shaderObject.init.range;
+        /**
+         * Dibuja de manera inicial
+         */
+        self._setPlotBounds(self._shaderObject.init.zi, self._shaderObject.init.zr, self._shaderObject.init.range);
+
+    };
+
+    /**
+     * Define los bordes del shader y ejecuta un nuevo cuadro.
+     *
+     * @function
+     * @private
+     * @param {number} z_i - Valor medio de Zi
+     * @param {number} z_r - Valor medio de zr
+     * @param {number} range - Rango del gráfico
+     * @since 0.1.6
+     */
+    this._setPlotBounds = function (z_r, z_i, range) {
+
+        /**
+         * Obtiene los atributos del shader para modificarlos
+         */
+        let attrib_z_r = self._shaderObject.mesh.geometry.attributes.vertex_z_r.array;
+        let attrib_z_i = self._shaderObject.mesh.geometry.attributes.vertex_z_i.array;
+
+        /**
+         * Primer triángulo
+         */
+        attrib_z_r[0] = z_r - range;
+        attrib_z_i[0] = z_i - range;
+
+        attrib_z_r[1] = z_r + range;
+        attrib_z_i[1] = z_i + range;
+
+        attrib_z_r[2] = z_r - range;
+        attrib_z_i[2] = z_i + range;
+
+        /**
+         * Segundo triángulo
+         */
+        attrib_z_r[3] = z_r - range;
+        attrib_z_i[3] = z_i - range;
+
+        attrib_z_r[4] = z_r + range;
+        attrib_z_i[4] = z_i + range;
+
+        attrib_z_r[5] = z_r + range;
+        attrib_z_i[5] = z_i - range;
 
         /**
          * Ajusta el zoom
@@ -2091,6 +2108,7 @@ function ShaderViewer() {
          */
         self._shaderObject.mesh.geometry.attributes.vertex_z_r.needsUpdate = true;
         self._shaderObject.mesh.geometry.attributes.vertex_z_i.needsUpdate = true;
+        this._printCoords();
         this._animateFrame();
 
     };
@@ -2124,14 +2142,8 @@ function ShaderViewer() {
         let $y = e.clientY - $offset.top + app_dom.window.scrollTop();
 
         /**
-         * Indica si el mouse está dentro del canvas
-         */
-        let $show = ($x >= 0 && $x <= $ww) && ($y >= 0 && $y <= $wh);
-
-        /**
          * Actualiza el mouse
          */
-        self._mouse.inside = $show;
         self._mouse.x = (($x / $ww) * 2) - 1;
         self._mouse.y = (-($y / $wh) * 2) + 1;
 
@@ -2144,9 +2156,7 @@ function ShaderViewer() {
         /**
          * Se calculan resultados
          */
-        if (isNullUndf(intersects) || intersects.length === 0) {
-            $show = false;
-        } else { // Se intersectó
+        if (!isNullUndf(intersects) || intersects.length === 0) {
 
             /**
              * Se busca el primer punto del plano del shader, resultados ordenados por distancia
@@ -2185,9 +2195,11 @@ function ShaderViewer() {
     /**
      * Ajusta el recuadro de zoom.
      *
+     * @function
      * @param {number} zr - Coordenada real
      * @param {number} zi - Coordenada imaginaria
      * @private
+     * @since 0.2.1
      */
     this._updateBoundZoom = function (zr, zi) {
 
@@ -2210,7 +2222,120 @@ function ShaderViewer() {
          */
         this._bound.mesh.position.z = zr;
         this._bound.mesh.position.x = zi;
+
+        /**
+         * Actualiza los límites
+         */
+        this._bound.zi = zi;
+        this._bound.zr = zr;
+
         this._animateFrame();
+
+    };
+
+    /**
+     * Hace un zoom (+), ajusta el recuadro y redibuja.
+     *
+     * @function
+     * @private
+     * @since 0.2.2
+     */
+    this._zoomIn = function () {
+
+        /**
+         * Aumenta el zoom del rango
+         */
+        this._bound.range *= this._bound.zoomfactor;
+
+        /**
+         * Redibuja
+         */
+        this._setPlotBounds(self._bound.zr, self._bound.zi, this._bound.range);
+
+    };
+
+    /**
+     * Hace un zoom (-), ajusta el recuadro y redibuja.
+     *
+     * @function
+     * @private
+     * @since 0.2.2
+     */
+    this._zoomOut = function () {
+
+        /**
+         * Aumenta el zoom del rango
+         */
+        this._bound.range /= this._bound.zoomfactor;
+        this._bound.range = Math.min(this._shaderObject.init.range, this._bound.range);
+
+        /**
+         * Redibuja
+         */
+        this._setPlotBounds(self._bound.zr, self._bound.zi, this._bound.range);
+
+    };
+
+    /**
+     * Escribe los datos del plano complejo en el menú.
+     *
+     * @function
+     * @private
+     * @since 0.2.2
+     */
+    this._printCoords = function () {
+
+        /**
+         * Obtiene los atributos
+         */
+        let z_r = this._shaderObject.mesh.geometry.attributes.vertex_z_r.array;
+        let z_i = this._shaderObject.mesh.geometry.attributes.vertex_z_i.array;
+
+        /**
+         * Escribe los datos
+         */
+        let $round = 6;
+        this._infoID.minzr.text(roundNumber(z_r[0], $round));
+        this._infoID.maxzr.text(roundNumber(z_r[1], $round));
+        this._infoID.minir.text(roundNumber(z_i[0], $round));
+        this._infoID.maxir.text(roundNumber(z_i[1], $round));
+        this._infoID.ln.text(roundNumber(self._bound.range, $round));
+
+    };
+
+    /**
+     * Define la ventana de información del shader en el plano complejo.
+     *
+     * @function
+     * @param {JQuery<HTMLElement> | HTMLElement} window - Ventana de información
+     * @since 0.2.2
+     */
+    this.setComplexInfoWindow = function (window) {
+
+        /**
+         * Limpia la ventana
+         */
+        window.empty();
+
+        /**
+         * Escribe los campos
+         */
+        let $rmax = generateID();
+        let $rmin = generateID();
+        let $imax = generateID();
+        let $imin = generateID();
+        let $length = generateID();
+        window.append('Re(z): <span id="{0}"></span>, <span id="{1}"></span><br>Im(z): <span id="{2}"></span>, <span id="{3}"></span><br>Largo: <span id="{4}"></span>'.format($rmin, $rmax, $imin, $imax, $length));
+
+        /**
+         * Guarda los campos
+         */
+        this._infoID.minzr = $('#' + $rmin);
+        this._infoID.maxzr = $('#' + $rmax);
+        this._infoID.minir = $('#' + $imin);
+        this._infoID.maxir = $('#' + $imax);
+        this._infoID.ln = $('#' + $length);
+
 
     };
 

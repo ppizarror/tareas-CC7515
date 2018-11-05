@@ -111,6 +111,15 @@ function BuildUI() {
             self._shaderViewer.loadSelectedShader();
         });
 
+        /**
+         * Dibuja recuadro información del plano
+         */
+        c = this._drawMenuInput();
+        c.title.text(lang.shader_complex_title);
+        let $complexinfo = generateID();
+        c.content.append('<div class="viewer-menu-complex-info" id="{0}"></div>'.format($complexinfo));
+        self._shaderViewer.setComplexInfoWindow($('#' + $complexinfo));
+
     };
 
     /**

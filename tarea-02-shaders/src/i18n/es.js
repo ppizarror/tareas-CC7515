@@ -28,6 +28,7 @@ lang_db.es = {
     "loading_shader": "Cargando el shader <{0}>",
     "menu_shader": "Shaders",
     "menu_title": "Julia-Shaders",
+    "shader_complex_title": "Plano complejo",
     "viewer_3d_error_draw_null": "ShaderViewer: Se ha intentado dibujar un objeto nulo",
     "viewer_3d_error_zobj": "ShaderViewer: Ocurrió un error al obtener el parámetro z del objeto {0}",
     "viewer_3d_gui_ambientlight": "Luz ambiental",
