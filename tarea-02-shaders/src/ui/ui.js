@@ -96,7 +96,7 @@ function BuildUI() {
         let $selectorid = generateID();
 
         c.title.text(lang.menu_shader);
-        c.content.append('<select id="{0}" class="common-selector noselect"></select>'.format($selectorid));
+        c.content.append('<select id="{0}" class="common-selector noselect form-control"></select>'.format($selectorid));
         let $shaders = Object.keys(shader_lib);
         let $selector = $('#' + $selectorid);
         for (let i = 0; i < $shaders.length; i += 1) {
@@ -121,7 +121,7 @@ function BuildUI() {
         self._shaderViewer.setComplexInfoWindow($('#' + $complexinfo));
 
         /**
-         * Crea varyings
+         * Crea colores
          */
         c = this._drawMenuInput();
         c.title.text(lang.shader_data_color);
@@ -180,6 +180,25 @@ function BuildUI() {
             // noinspection JSCheckFunctionSignatures
             self._shaderViewer.updateShaderColor('b_max', parseFloat($('#' + $b_max).val()));
         });
+
+        /**
+         * Crea input número iteraciones
+         */
+        c = this._drawMenuInput();
+        let $iters = generateID();
+        c.title.text(lang.shader_iters);
+        c.content.append('<input type="number" class="form-control" id="{0}" min="1" max="65536" value="{1}" />'.format($iters, self._shaderViewer.getMaxIterations()));
+        $('#' + $iters).on('change', function () {
+            self._shaderViewer.updateItersNumber($('#' + $iters).val());
+        });
+
+        /**
+         * Crea acerca de
+         */
+        c = this._drawMenuInput();
+        c.title.text(lang.about_title);
+        c.content.append(lang.about_title_content.format(aboutinfo.v.version, aboutinfo.v.date));
+        c.content.addClass('viewer-menu-about');
 
     };
 

@@ -2469,6 +2469,31 @@ function ShaderViewer() {
      */
     this.getShaderColor = function (color) {
         return this._shaderObject.color[color];
-    }
+    };
+
+    /**
+     * Modifica el número de iteraciones del shader.
+     *
+     * @function
+     * @param {number} value - Número
+     */
+    this.updateItersNumber = function (value) {
+        // noinspection JSCheckFunctionSignatures
+        value = parseInt(value);
+        value = Math.max(0, Math.min(value, 65536));
+        this._shaderObject.material.max_iterations.value = value;
+        this._shaderObject.iters = value;
+        this._animateFrame();
+    };
+
+    /**
+     * Retorna el valor del número de iteraciones.
+     *
+     * @function
+     * @returns {number}
+     */
+    this.getMaxIterations = function () {
+        return this._shaderObject.iters;
+    };
 
 }

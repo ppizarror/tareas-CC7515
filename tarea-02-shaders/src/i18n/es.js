@@ -7,6 +7,8 @@
  */
 
 lang_db.es = {
+    "about_title": "Acerca de",
+    "about_title_content": "Tarea 2 curso CC-7515 Computación en GPU, Visualizador shaders conjunto de Julia.<br><br><i class='fab fa-github'></i> <a href='https://github.com/ppizarror/tareas-CC7515/tree/master/tarea-02-shaders'>Ver en github</a><br>Versión {0} ({1})",
     "answer_cancel": "Cancelar",
     "answer_establish": "Establecer",
     "answer_no": "No",
@@ -28,12 +30,13 @@ lang_db.es = {
     "error_shader_compile": "Error al compilar el shader",
     "error_shader_compile_info": "Ocurrió un error fatal al compilar el shader, revise el output de la consola para más detalles",
     "loading_shader": "Cargando el shader <{0}>",
-    "menu_shader": "Shaders",
+    "menu_shader": "Shader",
     "menu_title": "Julia-Shaders",
     "shader_complex_title": "Plano complejo",
     "shader_data_length": "Largo",
     "shader_data_color": "Color del shader",
     "shader_zoom_count": "Nivel zoom",
+    "shader_iters": "N° iteraciones",
     "viewer_3d_error_draw_null": "ShaderViewer: Se ha intentado dibujar un objeto nulo",
     "viewer_3d_error_zobj": "ShaderViewer: Ocurrió un error al obtener el parámetro z del objeto {0}",
     "viewer_3d_gui_ambientlight": "Luz ambiental",
