@@ -9,7 +9,15 @@ Julia polinomial orden 2. Cumple ecuación z_n = z_n-1^2 + C.
 @since 0.3.0
 */
 
-// Esto para hacer valer mandelbrot
+// Activa precisión alta
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+precision mediump int;
+
+// Pasa las coordenadas de cada punto (x,y) -> C
 varying float c_r;
 varying float c_i;
 

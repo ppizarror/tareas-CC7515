@@ -9,6 +9,15 @@ Ejecuta mandelbrot, C = c_r + i*c_i se pasa por cada (x,y) del plano complejo.
 @since 0.1.0
 */
 
+// Activa precisión alta
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+precision mediump int;
+
+// Pasa C de cada (x,y)
 varying float c_r;
 varying float c_i;
 

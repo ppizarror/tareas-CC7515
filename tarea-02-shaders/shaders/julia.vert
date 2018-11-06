@@ -10,6 +10,14 @@ Shader común para todas las instancias de los shader julia.
 @since 0.3.0
 */
 
+// Activa precisión alta
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+precision mediump int;
+
 attribute float vertex_z_r;
 attribute float vertex_z_i;
 

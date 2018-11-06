@@ -94,7 +94,7 @@ function ShaderViewer() {
             zr: 0,
             range: 2,
         },
-        iters: 100,             // Número de iteraciones del shader
+        iters: 1000,            // Número de iteraciones del shader
         julia: {                // Valores iniciales C julia
             im: 0.0,
             re: 0.0,
@@ -533,7 +533,7 @@ function ShaderViewer() {
             preserveDrawingBuffer: false,
 
             // El búffer de dibujo tiene un stencil de 8 bits
-            stencil: true,
+            stencil: false,
 
         });
 

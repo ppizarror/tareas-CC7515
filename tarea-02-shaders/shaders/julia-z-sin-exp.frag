@@ -9,7 +9,15 @@ Julia función avanzada. Cumple ecuación z_n = z*sin(z_n-1)/exp(z) + C.
 @since 0.3.5
 */
 
-// Esto para hacer valer mandelbrot
+// Activa precisión alta
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+precision mediump int;
+
+// Pasa las coordenadas de cada punto (x,y) -> C
 varying float c_r;
 varying float c_i;
 
