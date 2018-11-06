@@ -32,7 +32,7 @@ Panel izquierdo, propiedades y controles
 }
 
 #viewer-left-panel::-webkit-scrollbar-track {
-    background-color: #404040;
+    background-color: #303030;
     border: 1px solid #000;
     padding: 2px 0;
 }

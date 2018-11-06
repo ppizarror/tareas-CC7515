@@ -49,11 +49,6 @@ function BuildUI() {
     this.init = function (leftPanel, rightPanel) {
 
         /**
-         * Inicia el panel de carga
-         */
-        loadingHandler(true);
-
-        /**
          * Guarda las referencias
          */
         self._menuContainer = $(leftPanel);

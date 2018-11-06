@@ -77,12 +77,12 @@ function ShaderViewer() {
      */
     this._shaderObject = {
         color: {                // Colores
-            r_min: 0.30,
+            r_min: 0.00,
             r_max: 1.00,
             g_min: 0.00,
-            g_max: 0.50,
+            g_max: 1.00,
             b_min: 0.00,
-            b_max: 0.00,
+            b_max: 1.00,
         },
         datashader: {           // Contiene los datos cargados del shader
             f: '',
@@ -130,7 +130,7 @@ function ShaderViewer() {
         mid_zr: 0,              // Punto medio coordenada real
         range: 2,               // Define el rango inicial
         zi: 0,                  // Coordenada imaginaria
-        zoomfactor: 0.5,        // Factor del zoom
+        zoomfactor: 0.50,       // Factor del zoom
         zr: 0,                  // Coordenada real
     };
 
@@ -511,20 +511,23 @@ function ShaderViewer() {
          */
         this._renderer = new THREE.WebGLRenderer({
 
-            // Activa las transparencias, obligatorio
-            alpha: true,
+            // Activa las transparencias
+            alpha: false,
 
-            // Antialias, deshabilitado en dispositivo móvil para mejorar rendimiento
+            // Antialias
             antialias: true,
 
             // Tiene un búffer de profundidad de 16 bits
             depth: true,
 
+            // Búffer de profundidad logarítmico, usado cuando hay mucha diferencia en la escena
+            logarithmicDepthBuffer: false,
+
             // Preferencia de WebGL, puede ser "high-performance", "low-power" ó "default"
             powerPreference: "high-performance",
 
-            // Búffer de profundidad logarítmico, usado cuando hay mucha diferencia en la escena
-            logarithmicDepthBuffer: false,
+            // Precisión
+            precision: 'highp',
 
             // Los colores ya tienen incorporado las transparencias
             premultipliedAlpha: true,
@@ -604,6 +607,9 @@ function ShaderViewer() {
 
         // El pan sólo está disponible en móvil, en escritorio usar teclado
         this._controls.enablePan = true;
+
+        // Desactiva las fechas
+        this._controls.enableKey = false;
 
         // Autorotar (?) esta característica funciona sólo con requestAnimateFrame()
         this._controls.autoRotate = this.objects_props.camera.autorotate;
@@ -2150,8 +2156,8 @@ function ShaderViewer() {
         /**
          * Calcula los límites
          */
-        self._bound.max_zr = this._worldsize.x * this._bound.zoomfactor;
-        self._bound.max_zi = this._worldsize.y * this._bound.zoomfactor;
+        self._bound.max_zr = this._worldsize.x * (1 - this._bound.zoomfactor);
+        self._bound.max_zi = this._worldsize.y * (1 - this._bound.zoomfactor);
         self._bound.range = this._shaderObject.init.range;
 
         /**

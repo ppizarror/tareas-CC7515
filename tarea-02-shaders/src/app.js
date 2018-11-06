@@ -41,8 +41,8 @@ $(function () {
      * Inicia el visualizador
      * ------------------------------------------------------------------------
      */
+    loadingHandler(true); // Inicia panel de carga
     let ui = new BuildUI();
     ui.init('#viewer-left-panel', '#viewer-right-panel');
-    // loadingHandler(true);
 
 });
