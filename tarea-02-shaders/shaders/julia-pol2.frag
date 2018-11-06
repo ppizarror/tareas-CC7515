@@ -3,6 +3,9 @@ JULIA-POL2
 FRAGMENT SHADER
 
 Julia polinomial orden 2. Cumple ecuación z_n = z_n-1^2 + C.
+
+@author Pablo Pizarro R. @ppizarror.com
+@license MIT
 @since 0.3.0
 */
 

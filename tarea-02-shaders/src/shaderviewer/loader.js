@@ -19,16 +19,20 @@ let shader_lib = {
             "frag": "shaders/julia-pol2.frag",
             "vert": "shaders/julia.vert",
         },
-        "name": "Julia polinomial 2",
         "julia": {
             "re": 0.279,
             "im": 0.000
         },
+        "name": "Julia polinomial 2",
     },
     "julia-pol3": {
         "files": {
             "frag": "shaders/julia-pol3.frag",
             "vert": "shaders/julia.vert",
+        },
+        "julia": {
+            "re": 0.400,
+            "im": 0.000
         },
         "name": "Julia polinomial 3",
     },

@@ -1,8 +1,12 @@
 /*
-JULIA-POL2
+JULIA
 VERTEX SHADER
 
-Julia polinomial orden 2. Cumple ecuación z_n = z_n-1^2 + C.
+Julia polinomial, pasa coordenadas del plano cartesiano.
+Shader común para todas las instancias de los shader julia.
+
+@author Pablo Pizarro R. @ppizarror.com
+@license MIT
 @since 0.3.0
 */
 

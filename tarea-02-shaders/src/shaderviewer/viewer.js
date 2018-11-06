@@ -1936,6 +1936,16 @@ function ShaderViewer() {
         app_console.info(lang.loading_shader.format($shader.name));
 
         /**
+         * Modifica los parámetros de la constante de julia (si existe)
+         */
+        if (notNullUndf($shader['julia'])) {
+            self._juliaInputs.re.val($shader['julia'].re);
+            self._shaderObject.julia.re = $shader['julia'].re;
+            self._juliaInputs.im.val($shader['julia'].im);
+            self._shaderObject.julia.im = $shader['julia'].im;
+        }
+
+        /**
          * Carga el shader
          */
         load_shader($shader.files.vert, $shader.files.frag, self._loadSelectedShaderHandler);
@@ -2571,8 +2581,9 @@ function ShaderViewer() {
      * @param {JQuery<HTMLElement>} im - Input real
      * @since 0.3.0
      */
-    this.setJuliaInputs = function(){
-
+    this.setJuliaInputs = function (re, im) {
+        this._juliaInputs.re = re;
+        this._juliaInputs.im = im;
     };
 
 }

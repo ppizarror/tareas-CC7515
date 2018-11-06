@@ -3,6 +3,9 @@ MANDELBROT
 FRAGMENT SHADER
 
 Ejecuta mandelbrot, C = c_r + i*c_i se pasa por cada (x,y) del plano complejo.
+
+@author Pablo Pizarro R. @ppizarror.com
+@license MIT
 @since 0.1.0
 */
 
