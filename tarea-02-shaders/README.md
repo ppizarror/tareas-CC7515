@@ -28,9 +28,10 @@ El proyecto se puede ejecutar de manera online: [https://ppizarror.com/tareas-CC
 
 ## Referencias
 
-- [https://www.opengl.org/documentation/books.html#oglsl](OpenGL Shading Language book)
-- [https://pappubahry.com/misc/webgl/mandelbrot/](Shaders in three.js: plotting the Mandelbrot set)
-- [http://nuclear.mutantstargoat.com/articles/sdr_fract/](Fast and easy high resolution fractals with a pixel shader)
+- [OpenGL Shading Language book](https://www.opengl.org/documentation/books.html#oglsl)
+- [Shaders in three.js: plotting the Mandelbrot set](https://pappubahry.com/misc/webgl/mandelbrot)
+- [Fast and easy high resolution fractals with a pixel shader](http://nuclear.mutantstargoat.com/articles/sdr_fract)
+- [Conjunto de Julia](https://es.wikipedia.org/wiki/Conjunto_de_Julia)
 
 ## Autor
 
