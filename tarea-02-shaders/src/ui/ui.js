@@ -225,7 +225,7 @@ function BuildUI() {
          */
         c = this._drawMenuInput();
         c.title.text(lang.about_title);
-        c.content.append(lang.about_title_content.format(aboutinfo.v.version, aboutinfo.v.date));
+        c.content.append(lang.about_title_content.format(aboutinfo.v.version, aboutinfo.v.date, aboutinfo.author.tag, aboutinfo.author.website));
         c.content.addClass('viewer-menu-about');
 
     };

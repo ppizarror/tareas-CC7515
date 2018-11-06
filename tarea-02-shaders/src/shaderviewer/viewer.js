@@ -230,7 +230,7 @@ function ShaderViewer() {
         cameratarget: false,             // Muestra el objetivo de la cámara
         fpsmeter: false,                 // Indicador de FPS
         grid: true,                      // Muestra grilla en plano
-        gui: true,                       // Muestra una gui por defecto (modificable)
+        gui: false,                      // Muestra una gui por defecto (modificable)
         planes: false,                   // Dibuja los planos
         worldlimits: false,              // Límites del mundo
 

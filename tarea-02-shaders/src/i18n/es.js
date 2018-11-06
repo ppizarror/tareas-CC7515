@@ -1,3 +1,4 @@
+// noinspection HtmlUnknownTarget
 /**
  LANG-ES
  Idioma español.
@@ -8,7 +9,7 @@
 
 lang_db.es = {
     "about_title": "Acerca de",
-    "about_title_content": "Tarea 2 curso CC-7515 Computación en GPU, Visualizador shaders conjunto de Julia.<br><br><i class='fab fa-github'></i> <a href='https://github.com/ppizarror/tareas-CC7515/tree/master/tarea-02-shaders'>Ver en github</a><br>Versión {0} ({1})",
+    "about_title_content": "Tarea 2 curso CC-7515 Computación en GPU, Visualizador shaders conjunto de Julia.<br><br>Autor: <a href='{3}'>{2}</a><br><br>Versión {0} ({1})<br><i class='fab fa-github'></i> <a href='https://github.com/ppizarror/tareas-CC7515/tree/master/tarea-02-shaders'>Ver en github</a>",
     "answer_cancel": "Cancelar",
     "answer_establish": "Establecer",
     "answer_no": "No",
