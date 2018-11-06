@@ -113,6 +113,17 @@ let shader_lib = {
         },
         "name": "Julia f(z) = sin(z) + C",
     },
+    "julia-z-sin-exp": {
+        "files": {
+            "frag": "shaders/julia-z-sin-exp.frag",
+            "vert": "shaders/julia.vert",
+        },
+        "julia": {
+            "re": -0.039,
+            "im": 0.492,
+        },
+        "name": "Julia f(z) = z*sin(z)/exp(z) + C",
+    },
     "mandelbrot": {
         "files": {
             "frag": "shaders/mandelbrot.frag",

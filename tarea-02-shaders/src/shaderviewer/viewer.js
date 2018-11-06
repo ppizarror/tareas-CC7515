@@ -77,12 +77,12 @@ function ShaderViewer() {
      */
     this._shaderObject = {
         color: {                // Colores
-            b_max: 0.00,
-            b_min: 0.00,
-            g_max: 1.00,
-            g_min: 0.00,
+            r_min: 0.30,
             r_max: 1.00,
-            r_min: 0.10,
+            g_min: 0.00,
+            g_max: 0.50,
+            b_min: 0.00,
+            b_max: 0.00,
         },
         datashader: {           // Contiene los datos cargados del shader
             f: '',

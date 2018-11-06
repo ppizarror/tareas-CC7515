@@ -51,7 +51,6 @@ void main() {
 		u = w_r;
 		v = w_i;
 
-        // Calcula el incremento
 		w_r = exp(u)*u*cos(v) - exp(u)*v*sin(v) + j_re;
 		w_i = exp(u)*u*sin(v) + exp(u)*v*cos(v) + j_im;
 
@@ -62,10 +61,11 @@ void main() {
 			r = t*r_max + (1.0 - t)*r_min;
 
 			// Computa el verde
-			t = float(i + 1) / float(max_iterations + 1);
+			// t = float(i + 1) / float(max_iterations + 1);
 			g = t*g_max + (1.0 - t)*g_min;
 
-			t = log(log(float(i + 1))) / log(log(float(max_iterations + 1)));
+            // Computa el azul
+			// t = log(log(float(i + 1))) / log(log(float(max_iterations + 1)));
 			b = t*b_max + (1.0 - t)*b_min;
 
 			break;

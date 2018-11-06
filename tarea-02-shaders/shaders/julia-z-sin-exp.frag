@@ -1,12 +1,12 @@
 /*
-JULIA-EXP-Z3
+JULIA-Z-SIN-EXP
 FRAGMENT SHADER
 
-Julia exponencial. Cumple ecuación z_n = exp(z_n-1^3) + C.
+Julia función avanzada. Cumple ecuación z_n = z*sin(z_n-1)/exp(z) + C.
 
 @author Pablo Pizarro R. @ppizarror.com
 @license MIT
-@since 0.3.0
+@since 0.3.5
 */
 
 // Esto para hacer valer mandelbrot
@@ -27,6 +27,30 @@ uniform float b_max;
 // Constante c = j_re + i*j_im
 uniform float j_re;
 uniform float j_im;
+
+/// COSH Function (Hyperbolic Cosine)
+float cosh(float val)
+{
+    float tmp = exp(val);
+    float cosH = (tmp + 1.0 / tmp) / 2.0;
+    return cosH;
+}
+
+// TANH Function (Hyperbolic Tangent)
+float tanh(float val)
+{
+    float tmp = exp(val);
+    float tanH = (tmp - 1.0 / tmp) / (tmp + 1.0 / tmp);
+    return tanH;
+}
+
+// SINH Function (Hyperbolic Sine)
+float sinh(float val)
+{
+    float tmp = exp(val);
+    float sinH = (tmp - 1.0 / tmp) / 2.0;
+    return sinH;
+}
 
 // Inicio del shader
 void main() {
@@ -51,8 +75,9 @@ void main() {
 		u = w_r;
 		v = w_i;
 
-		w_r = exp(u*u*u - 3.0*u*v*v)*cos(3.0*u*u*v - v*v*v) + j_re;
-		w_i = exp(u*u*u - 3.0*u*v*v)*sin(3.0*u*u*v - v*v*v) + j_im;
+        // https://www.wolframalpha.com/input/?i=re(+(u%2Bi*v)*sin(u%2Bi*v)%2Fexp(u%2Bi*v))
+		w_r = -exp(u)*v*cos(u)*cos(v)*sinh(v) + exp(-u)*v*sin(u)*sin(v)*cosh(v) + exp(-u)*u*cos(u)*sin(v)*sinh(v) + exp(-u)*u*sin(u)*cos(v)*cosh(v)+ j_re;
+		w_i = exp(-u)*u*cos(u)*cos(v)*sinh(v) - exp(-u)*u*sin(u)*sin(v)*cosh(v) + exp(-u)*v*cos(u)*sin(v)*sinh(v) + exp(-u)*v*sin(u)*cos(v)*cosh(v)+ j_im;
 
 		if (w_r*w_r + w_i*w_i > 4.0) { // |z| > 2
 
