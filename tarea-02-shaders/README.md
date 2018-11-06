@@ -1,4 +1,5 @@
-# T2-CC7515
+# Julia Shaders
+### T2-CC7515
 
 Visualizador shaders de conjunto fractal de Julia con Three.js, tarea N°2 curso Computación en GPU CC7515, uchile.
 
