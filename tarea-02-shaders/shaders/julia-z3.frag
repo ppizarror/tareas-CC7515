@@ -1,5 +1,5 @@
 /*
-JULIA-Z-3
+JULIA-Z3
 FRAGMENT SHADER
 
 Julia polinomial orden 3. Cumple ecuación z_n = z_n-1^3 + C.

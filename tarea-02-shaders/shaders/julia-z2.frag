@@ -1,5 +1,5 @@
 /*
-JULIA-Z-2
+JULIA-Z2
 FRAGMENT SHADER
 
 Julia polinomial orden 2. Cumple ecuación z_n = z_n-1^2 + C.

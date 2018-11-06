@@ -20,8 +20,8 @@ let shader_lib = {
             "vert": "shaders/julia.vert",
         },
         "julia": {
-            "re": 0.279,
-            "im": 0.000
+            "re": -0.450,
+            "im": 0.600
         },
         "name": "Julia f(z) = z^2 + C",
     },
@@ -80,16 +80,16 @@ let shader_lib = {
         },
         "name": "Julia f(z) = z*exp(z) + C",
     },
-    "julia-z2-z-lnz": {
+    "julia-z2-exp-z": {
         "files": {
-            "frag": "shaders/julia-z2-z-ln-z.frag",
+            "frag": "shaders/julia-z2-exp-z.frag",
             "vert": "shaders/julia.vert",
         },
         "julia": {
-            "re": 0.268,
-            "im": 0.060
+            "re": -0.800,
+            "im": 0.030
         },
-        "name": "Julia f(z) = (z^2+z)/ln(z) + C",
+        "name": "Julia f(z) = z^2/exp(z) + C",
     },
     "mandelbrot": {
         "files": {

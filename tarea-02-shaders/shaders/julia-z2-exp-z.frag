@@ -1,12 +1,12 @@
 /*
-JULIA-EXP
+JULIA-Z2-EXP-Z
 FRAGMENT SHADER
 
-Julia exponencial. Cumple ecuación z_n = exp(z_n-1) + C.
+Julia avanzado. Cumple ecuación z_n = z^2/exp(z) + C.
 
 @author Pablo Pizarro R. @ppizarror.com
 @license MIT
-@since 0.3.0
+@since 0.3.2
 */
 
 // Esto para hacer valer mandelbrot
@@ -52,8 +52,8 @@ void main() {
 		v = w_i;
 
         // Calcula el incremento
-		w_r = exp(u)*cos(v) + j_re;
-		w_i = exp(u)*sin(v) + j_im;
+		w_r = exp(-u)*u*u*cos(v) - exp(-u)*v*v*cos(v) + 2.0*exp(-u)*u*v*sin(v) + j_re;
+		w_i = -exp(-u)*u*u*sin(v) + exp(-u)*v*v*sin(v) + 2.0*u*v*cos(v) + j_im;
 
 		if (w_r*w_r + w_i*w_i > 4.0) { // |z| > 2
 

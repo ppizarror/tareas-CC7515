@@ -1,5 +1,5 @@
 /*
-JULIA-Z-4
+JULIA-Z4
 FRAGMENT SHADER
 
 Julia polinomial orden 4. Cumple ecuación z_n = z_n-1^4 + C.
