@@ -193,6 +193,27 @@ function BuildUI() {
         });
 
         /**
+         * Crea input valor complejo
+         */
+        c = this._drawMenuInput();
+        let $julia_re = generateID();
+        let $julia_im = generateID();
+
+        // Obtiene la constante de julia actual
+        let $julia_c = this._shaderViewer.getJuliaConstant();
+
+        c.title.text(lang.julia_constant);
+        c.content.append('Re <input type="number" class="form-control" id="{0}" value="{1}" />'.format($julia_re, $julia_c[0]));
+        $('#' + $julia_re).on('change', function () {
+            self._shaderViewer.updateJuliaConstant('re', $('#' + $julia_re).val());
+        });
+
+        c.content.append('Im <input type="number" class="form-control" id="{0}" value="{1}" />'.format($julia_im, $julia_c[1]));
+        $('#' + $julia_im).on('change', function () {
+            self._shaderViewer.updateJuliaConstant('im', $('#' + $julia_im).val());
+        });
+
+        /**
          * Crea acerca de
          */
         c = this._drawMenuInput();

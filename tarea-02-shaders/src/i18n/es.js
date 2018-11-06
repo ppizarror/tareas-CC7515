@@ -21,6 +21,7 @@ lang_db.es = {
     "dialog_error_button_function_null": "Se intenta asociar un evento inválido a un botón ({0}) del diálogo, se ha definido una función nula por defecto",
     "dialog_form_cancel": "Cancelar",
     "dialog_form_send": "Enviar",
+    "julia_constant": "Constante julia",
     "dialog_form_submit_null": "La función submit no puede ser nula",
     "dialog_last_closed_equal_opened": "Se ha cerrado el último diálogo ya que se ha abierto uno idéntico",
     "dialog_popup_created": "Abriendo diálogo <{0}>",

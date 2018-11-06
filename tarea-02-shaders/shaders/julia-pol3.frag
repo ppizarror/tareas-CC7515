@@ -1,11 +1,12 @@
 /*
-MANDELBROT
+JULIA-POL3
 FRAGMENT SHADER
 
-Ejecuta mandelbrot, C = c_r + i*c_i se pasa por cada (x,y) del plano complejo.
-@since 0.1.0
+Julia polinomial orden 3. Cumple ecuación z_n = z_n-1^3 + C.
+@since 0.3.0
 */
 
+// Esto para hacer valer mandelbrot
 varying float c_r;
 varying float c_i;
 
@@ -20,6 +21,10 @@ uniform float g_max;
 uniform float b_min;
 uniform float b_max;
 
+// Constante c = j_re + i*j_im
+uniform float j_re;
+uniform float j_im;
+
 // Inicio del shader
 void main() {
 	float r;
@@ -31,8 +36,8 @@ void main() {
 	float u;
 	float v;
 
-	w_r = 0.0;
-	w_i = 0.0;
+	w_r = c_r;
+	w_i = c_i;
 
 	// Si converge es negro
 	r = 0.0;
@@ -44,8 +49,8 @@ void main() {
 		v = w_i;
 
         // Calcula el incremento
-		w_r = u*u - v*v + c_r;
-		w_i = 2.0*u*v + c_i;
+		w_r = u*u*u - 3.0*u*v*v + j_re;
+		w_i = 3.0*u*u*v - v*v*v + j_im;
 
 		if (w_r*w_r + w_i*w_i > 4.0) { // |z| > 2
 

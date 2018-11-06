@@ -63,17 +63,26 @@ function ShaderViewer() {
     };
 
     /**
+     * Contiene los input de los valores de julia (constantes)
+     * @private
+     */
+    this._juliaInputs = {
+        re: null,
+        im: null,
+    };
+
+    /**
      * Datos del visualizador
      * @private
      */
     this._shaderObject = {
         color: {                // Colores
-            b_max: 1.00,
+            b_max: 0.00,
             b_min: 0.00,
-            g_max: 0.00,
+            g_max: 1.00,
             g_min: 0.00,
             r_max: 1.00,
-            r_min: 0.35,
+            r_min: 0.10,
         },
         datashader: {           // Contiene los datos cargados del shader
             f: '',
@@ -86,6 +95,10 @@ function ShaderViewer() {
             range: 2,
         },
         iters: 100,             // Número de iteraciones del shader
+        julia: {                // Valores iniciales C julia
+            im: 0.0,
+            re: 0.0,
+        },
         material: null,         // Material del shader
         mesh: null,             // Contiene la geometría + material
         plotz: 0.0,             // Altura del objeto
@@ -301,12 +314,12 @@ function ShaderViewer() {
             maxpolarangle: 1.000,               // Máximo ángulo que puede alcanzar la cámara (Por pi/2)
             near: 0.001,                        // Plano cercano de la cámara
             nopan: true,                        // Activa/desactiva el PAN del mouse
-            posx: 0.000,                        // Posición inicial en x (% dimensión del mundo)
-            posy: -1.600,                       // Posición inicial en y (% dimensión del mundo)
+            posx: 0.400,                        // Posición inicial en x (% dimensión del mundo)
+            posy: -0.600,                       // Posición inicial en y (% dimensión del mundo)
             posz: 1.500,                        // Posición inicial en z
-            rotationx: -1.600,                  // Rotación inicial con respecto al eje x (Por pi/2)
-            rotationy: -1.600,                  // Rotación inicial con respecto al eje y (Por pi/2)
-            rotationz: -0.600,                  // Rotación inicial con respecto al eje z (Por pi/2)
+            rotationx: -1.000,                  // Rotación inicial con respecto al eje x (Por pi/2)
+            rotationy: -1.300,                  // Rotación inicial con respecto al eje y (Por pi/2)
+            rotationz: -0.500,                  // Rotación inicial con respecto al eje z (Por pi/2)
             target: {                           // Target de la cámara, posición inicial con respecto a la dimensión
                 x: 0.000,
                 y: 0.000,
@@ -1983,6 +1996,9 @@ function ShaderViewer() {
         if (notNullUndf(self._shaderObject.mesh)) {
             this._scene.remove(self._shaderObject.mesh);
         }
+        if (notNullUndf(self._bound.mesh)) {
+            this._scene.remove(self._bound.mesh);
+        }
 
         /**
          * Crea la geometría
@@ -2059,7 +2075,15 @@ function ShaderViewer() {
                     'max_iterations': {
                         'type': 'i',
                         'value': self._shaderObject.iters,
-                    }
+                    },
+                    'j_im': {
+                        'type': 'f',
+                        'value': self._shaderObject.julia.im,
+                    },
+                    'j_re': {
+                        'type': 'f',
+                        'value': self._shaderObject.julia.re,
+                    },
                 },
                 'vertexShader': self._shaderObject.datashader.v,
             });
@@ -2481,7 +2505,7 @@ function ShaderViewer() {
         // noinspection JSCheckFunctionSignatures
         value = parseInt(value);
         value = Math.max(0, Math.min(value, 65536));
-        this._shaderObject.material.max_iterations.value = value;
+        this._shaderObject.material.uniforms.max_iterations.value = value;
         this._shaderObject.iters = value;
         this._animateFrame();
     };
@@ -2494,6 +2518,61 @@ function ShaderViewer() {
      */
     this.getMaxIterations = function () {
         return this._shaderObject.iters;
+    };
+
+    /**
+     * Retorna la constante compleja de julia
+     *
+     * @function
+     * @return {number[]}
+     */
+    this.getJuliaConstant = function () {
+        return [self._shaderObject.julia.re, self._shaderObject.julia.im];
+    };
+
+    /**
+     * Define el valor de la constante de julia.
+     *
+     * @function
+     * @param {string} m - Indica si es real o imaginario
+     * @param {number} val - Valor
+     */
+    this.updateJuliaConstant = function (m, val) {
+
+        // noinspection JSCheckFunctionSignatures
+        /**
+         * Convierte a flotante
+         */
+        val = parseFloat(val);
+
+        /**
+         * Modifica el valor en el shader
+         */
+        if (m === 're') {
+            this._shaderObject.material.uniforms.j_re.value = val;
+            this._shaderObject.julia.re = val;
+        } else if (m === 'im') {
+            this._shaderObject.material.uniforms.j_im.value = val;
+            this._shaderObject.julia.im = val;
+        }
+
+        /**
+         * Redibuja
+         */
+        this._animateFrame();
+
+    };
+
+    /**
+     * Define los input de los valores de julia.
+     *
+     * @function
+     * @param {JQuery<HTMLElement>} re - Input real
+     * @param {JQuery<HTMLElement>} im - Input real
+     * @since 0.3.0
+     */
+    this.setJuliaInputs = function(){
+
     };
 
 }
