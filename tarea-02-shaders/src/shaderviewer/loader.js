@@ -91,6 +91,17 @@ let shader_lib = {
         },
         "name": "Julia f(z) = z^2/exp(z) + C",
     },
+    "julia-cos": {
+        "files": {
+            "frag": "shaders/julia-cos.frag",
+            "vert": "shaders/julia.vert",
+        },
+        "julia": {
+            "re": -0.106,
+            "im": 1.200
+        },
+        "name": "Julia f(z) = cos(z) + C",
+    },
     "mandelbrot": {
         "files": {
             "frag": "shaders/mandelbrot.frag",
