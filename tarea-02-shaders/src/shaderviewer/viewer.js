@@ -67,6 +67,14 @@ function ShaderViewer() {
      * @private
      */
     this._shaderObject = {
+        color: {                // Colores
+            b_max: 1.00,
+            b_min: 0.00,
+            g_max: 0.00,
+            g_min: 0.00,
+            r_max: 1.00,
+            r_min: 0.35,
+        },
         datashader: {           // Contiene los datos cargados del shader
             f: '',
             v: '',
@@ -2024,6 +2032,30 @@ function ShaderViewer() {
                 'fragmentShader': self._shaderObject.datashader.f,
                 'side': THREE.DoubleSide,
                 'uniforms': {
+                    'r_min': {
+                        'type': 'f',
+                        'value': self._shaderObject.color.r_min,
+                    },
+                    'r_max': {
+                        'type': 'f',
+                        'value': self._shaderObject.color.r_max,
+                    },
+                    'g_min': {
+                        'type': 'f',
+                        'value': self._shaderObject.color.g_min,
+                    },
+                    'g_max': {
+                        'type': 'f',
+                        'value': self._shaderObject.color.g_max,
+                    },
+                    'b_min': {
+                        'type': 'f',
+                        'value': self._shaderObject.color.b_min,
+                    },
+                    'b_max': {
+                        'type': 'f',
+                        'value': self._shaderObject.color.b_max,
+                    },
                     'max_iterations': {
                         'type': 'i',
                         'value': self._shaderObject.iters,
@@ -2412,5 +2444,31 @@ function ShaderViewer() {
         this._infoID.zoomlevel = $('#' + $zoomlevel);
 
     };
+
+    /**
+     * Actualiza un color.
+     *
+     * @function
+     * @param {string} color - Nombre del color
+     * @param {number} value - Valor del color
+     * @since 0.2.5
+     */
+    this.updateShaderColor = function (color, value) {
+        this._shaderObject.color[color] = value;
+        this._shaderObject.material.uniforms[color].value = value;
+        this._animateFrame();
+    };
+
+    /**
+     * Retorna el color inicial del shader.
+     *
+     * @function
+     * @param {string} color - Nombre del color
+     * @returns {number}
+     * @since 0.2.5
+     */
+    this.getShaderColor = function (color) {
+        return this._shaderObject.color[color];
+    }
 
 }

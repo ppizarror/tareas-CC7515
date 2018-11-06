@@ -120,6 +120,67 @@ function BuildUI() {
         c.content.append('<div class="viewer-menu-complex-info" id="{0}"></div>'.format($complexinfo));
         self._shaderViewer.setComplexInfoWindow($('#' + $complexinfo));
 
+        /**
+         * Crea varyings
+         */
+        c = this._drawMenuInput();
+        c.title.text(lang.shader_data_color);
+        let $slider;
+
+        let $r_min = generateID();
+        c.content.append('<p><b>R min</b> <input type="text" value="" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="{1}" id="{0}"/></p>'.format($r_min, self._shaderViewer.getShaderColor('r_min')));
+        $slider = $('#' + $r_min);
+        $slider.slider({});
+        $slider.on('change', function () {
+            // noinspection JSCheckFunctionSignatures
+            self._shaderViewer.updateShaderColor('r_min', parseFloat($('#' + $r_min).val()));
+        });
+
+        let $r_max = generateID();
+        c.content.append('<p><b>R max</b> <input type="text" value="" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="{1}" id="{0}"/></p>'.format($r_max, self._shaderViewer.getShaderColor('r_max')));
+        $slider = $('#' + $r_max);
+        $slider.slider({});
+        $slider.on('change', function () {
+            // noinspection JSCheckFunctionSignatures
+            self._shaderViewer.updateShaderColor('r_max', parseFloat($('#' + $r_max).val()));
+        });
+
+        let $g_min = generateID();
+        c.content.append('<p><b>G min</b> <input type="text" value="" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="{1}" id="{0}"/></p>'.format($g_min, self._shaderViewer.getShaderColor('g_min')));
+        $slider = $('#' + $g_min);
+        $slider.slider({});
+        $slider.on('change', function () {
+            // noinspection JSCheckFunctionSignatures
+            self._shaderViewer.updateShaderColor('g_min', parseFloat($('#' + $g_min).val()));
+        });
+
+        let $g_max = generateID();
+        c.content.append('<p><b>G max</b> <input type="text" value="" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="{1}" id="{0}"/></p>'.format($g_max, self._shaderViewer.getShaderColor('g_max')));
+        $slider = $('#' + $g_max);
+        $slider.slider({});
+        $slider.on('change', function () {
+            // noinspection JSCheckFunctionSignatures
+            self._shaderViewer.updateShaderColor('g_max', parseFloat($('#' + $g_max).val()));
+        });
+
+        let $b_min = generateID();
+        c.content.append('<p><b>B min</b> <input type="text" value="" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="{1}" id="{0}"/></p>'.format($b_min, self._shaderViewer.getShaderColor('b_min')));
+        $slider = $('#' + $b_min);
+        $slider.slider({});
+        $slider.on('change', function () {
+            // noinspection JSCheckFunctionSignatures
+            self._shaderViewer.updateShaderColor('b_min', parseFloat($('#' + $b_min).val()));
+        });
+
+        let $b_max = generateID();
+        c.content.append('<p><b>B max</b> <input type="text" value="" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="{1}" id="{0}"/></p>'.format($b_max, self._shaderViewer.getShaderColor('b_max')));
+        $slider = $('#' + $b_max);
+        $slider.slider({});
+        $slider.on('change', function () {
+            // noinspection JSCheckFunctionSignatures
+            self._shaderViewer.updateShaderColor('b_max', parseFloat($('#' + $b_max).val()));
+        });
+
     };
 
     /**

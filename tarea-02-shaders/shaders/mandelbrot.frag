@@ -1,17 +1,16 @@
 varying float c_r;
 varying float c_i;
 
+// Interaciones máximas
 uniform int max_iterations;
 
-// Define el rango de colores
-#define r_min 0.0
-#define r_max 1.0
-
-#define g_min 0.0
-#define g_max 1.0
-
-#define b_min 0.0
-#define b_max 1.0
+// Rango de colores
+uniform float r_min;
+uniform float r_max;
+uniform float g_min;
+uniform float g_max;
+uniform float b_min;
+uniform float b_max;
 
 // Inicio del shader
 void main() {

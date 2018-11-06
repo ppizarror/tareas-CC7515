@@ -12,6 +12,7 @@ El proyecto se puede ejecutar de manera online: [https://ppizarror.com/tareas-CC
 | :-- | :--: | :-- |
 | animate.css | 3.7.0 | <a href="https://github.com/daneden/animate.css">github.com/daneden/animate.css</a> |
 | bootstrap | 4.1.3 | <a href="https://github.com/twbs/bootstrap">github.com/twbs/bootstrap</a> |
+| bootstrap-slider | 10.2.3 | <a href="https://github.com/seiyria/bootstrap-slider">github.com/seiyria/bootstrap-slider</a> |
 | dat.gui | 0.7.2 | <a href="https://github.com/dataarts/dat.gui/releases">github.com/dataarts/dat.gui/releases</a> |
 | fontawesome | 5.2.0 | <a href="https://fontawesome.com">fontawesome.com</a> |
 | hover | 2.3.1 | <a href="https://github.com/IanLunn/Hover">github.com/IanLunn/Hover</a> |

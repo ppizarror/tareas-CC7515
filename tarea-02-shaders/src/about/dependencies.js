@@ -12,6 +12,7 @@
 aboutinfo.dependencies = {
     "animate.css": "3.7.0",                 // https://github.com/daneden/animate.css
     "bootstrap": "4.1.3",                   // https://github.com/twbs/bootstrap
+    "bootstrap-slider": "10.2.3",           // https://github.com/seiyria/bootstrap-slider
     "dat.gui": "0.7.2",                     // https://github.com/dataarts/dat.gui/releases
     "fontawesome": "5.2.0",                 // https://fontawesome.com
     "hover": "2.3.1",                       // https://github.com/IanLunn/Hover
