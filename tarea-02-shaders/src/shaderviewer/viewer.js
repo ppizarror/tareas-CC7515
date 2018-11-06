@@ -2366,6 +2366,7 @@ function ShaderViewer() {
         if (self._bound.hide) return;
         self._bound.hide = true;
         self._hasMouseIntersectPlane = false;
+        if (isNullUndf(self._bound.mesh)) return;
         self._bound.mesh.material.opacity = 0.0;
         this._animateFrame();
         app_console.info(lang.viewer_hide_zoom);
@@ -2381,6 +2382,7 @@ function ShaderViewer() {
     this._showZoomPlane = function () {
         if (!self._bound.hide) return;
         self._bound.hide = false;
+        if (isNullUndf(self._bound.mesh)) return;
         self._bound.mesh.material.opacity = 1.0;
         this._animateFrame();
         app_console.info(lang.viewer_show_zoom);

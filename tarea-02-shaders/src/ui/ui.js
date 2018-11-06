@@ -203,14 +203,14 @@ function BuildUI() {
         let $julia_c = this._shaderViewer.getJuliaConstant();
 
         c.title.text(lang.julia_constant);
-        c.content.append('Re <input type="number" class="form-control" id="{0}" value="{1}" step="0.001" />'.format($julia_re, $julia_c[0]));
+        c.content.append('Re <input type="number" class="form-control" id="{0}" value="{1}" step="0.005" />'.format($julia_re, $julia_c[0]));
         let $juliare = $('#' + $julia_re);
         $juliare.on('change', function () {
             // noinspection JSCheckFunctionSignatures
             self._shaderViewer.updateJuliaConstant('re', $juliare.val());
         });
 
-        c.content.append('Im <input type="number" class="form-control" id="{0}" value="{1}" step="0.001" />'.format($julia_im, $julia_c[1]));
+        c.content.append('Im <input type="number" class="form-control" id="{0}" value="{1}" step="0.005" />'.format($julia_im, $julia_c[1]));
         let $juliaim = $('#' + $julia_im);
         $juliaim.on('change', function () {
             // noinspection JSCheckFunctionSignatures
