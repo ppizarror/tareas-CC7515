@@ -50,6 +50,13 @@ function ShaderViewer() {
     this._shaderSelector = null;
 
     /**
+     * Puntero al menú
+     * @type {JQuery | jQuery | HTMLElement | null}
+     * @protected
+     */
+    this._menuContainer = null;
+
+    /**
      * Contiene los identificadores de los valores del campo complejo
      * @private
      */
@@ -121,6 +128,7 @@ function ShaderViewer() {
      * @private
      */
     this._bound = {
+        hide: false,            // Indica que el borde está oculto
         linecolor: 0xFFFFFF,    // Color del borde
         linez: 0.005,           // Altura de la línea
         max_zi: 0,              // Máximo valor absoluto de zi (imaginario)
@@ -170,6 +178,14 @@ function ShaderViewer() {
      * @private
      */
     this._mouseMoveDrag = false;
+
+    // noinspection JSUnusedGlobalSymbols
+    /**
+     * Si el mouse no intersecta el plano no se muestra la región del zoom
+     * @type {boolean}
+     * @private
+     */
+    this._hasMouseIntersectPlane = false;
 
     /**
      * ID del evento de mousemove en la ventana
@@ -512,7 +528,7 @@ function ShaderViewer() {
         this._renderer = new THREE.WebGLRenderer({
 
             // Activa las transparencias
-            alpha: false,
+            alpha: true,
 
             // Antialias
             antialias: true,
@@ -1163,8 +1179,19 @@ function ShaderViewer() {
      * @private
      * @since 0.1.0
      */
-    this._forceFocus = function () {
+    this.focus = function () {
         self._canvasParent.trigger('focus'); // Atrapa focus
+        self._menuContainer.css('opacity', 0.75); // Saca opacidad al menú
+    };
+
+    /**
+     * Guarda la referencia al menú.
+     *
+     * @function
+     * @param {JQuery<HTMLElement>} menu - Menú de la aplicación
+     */
+    this.setMenuPanel = function (menu) {
+        self._menuContainer = menu;
     };
 
     /**
@@ -1195,10 +1222,17 @@ function ShaderViewer() {
          */
         this._canvasParent.on(self._eventID.mousedown, function (e) {
             e.preventDefault();
-            self._forceFocus();
+            self.focus();
             self._animateFrame();
             self._hasMouseOver = true;
             self._hasMousePressed = true;
+        });
+
+        /**
+         * Ganar-perder foco
+         */
+        this._canvasParent.on('blur', function () {
+            self._menuContainer.css('opacity', 1.00);
         });
 
         /**
@@ -1353,7 +1387,7 @@ function ShaderViewer() {
     this._toggleHelper = function () {
         self._drawHelpers();
         self._animateFrame();
-        self._forceFocus();
+        self.focus();
     };
 
     // noinspection JSUnusedGlobalSymbols
@@ -2134,7 +2168,7 @@ function ShaderViewer() {
         /**
          * Genera el mesh del recuadro de zoom
          */
-        let material = new THREE.LineBasicMaterial({color: self._bound.linecolor});
+        let material = new THREE.LineBasicMaterial({color: self._bound.linecolor, transparent: true});
         let geometry; // Geometrías de las líneas
 
         geometry = new THREE.Geometry();
@@ -2240,9 +2274,17 @@ function ShaderViewer() {
     this._drawZoomRegion = function (e) {
 
         /**
+         * Se define como no intersectado
+         */
+        self._hasMouseIntersectPlane = false;
+
+        /**
          * Si el mouse no está encima entonces retorna
          */
-        if (!self._hasMouseOver || self._hasMousePressed) return;
+        if (!self._hasMouseOver || self._hasMousePressed) {
+            self._hideZoomPlane();
+            return;
+        }
 
         /**
          * Obtiene dimensiones generales
@@ -2289,6 +2331,7 @@ function ShaderViewer() {
              * Si no se encontró
              */
             if (shaderIntersect === -1) {
+                self._hideZoomPlane();
                 return;
             }
 
@@ -2298,14 +2341,49 @@ function ShaderViewer() {
             let zr, zi;
             zr = intersects[shaderIntersect].point.z;
             zi = intersects[shaderIntersect].point.x;
+            self._hasMouseIntersectPlane = true;
 
             /**
              * Ajusta el recuadro del zoom
              */
             this._updateBoundZoom(zr, zi);
+            self._showZoomPlane();
 
+        } else {
+            self._hideZoomPlane();
         }
 
+    };
+
+    /**
+     * Oculta el plano de zoom
+     *
+     * @function
+     * @private
+     * @since 0.4.1
+     */
+    this._hideZoomPlane = function () {
+        if (self._bound.hide) return;
+        self._bound.hide = true;
+        self._hasMouseIntersectPlane = false;
+        self._bound.mesh.material.opacity = 0.0;
+        this._animateFrame();
+        app_console.info(lang.viewer_hide_zoom);
+    };
+
+    /**
+     * Muestra el plano de zoom
+     *
+     * @function
+     * @private
+     * @since 0.4.1
+     */
+    this._showZoomPlane = function () {
+        if (!self._bound.hide) return;
+        self._bound.hide = false;
+        self._bound.mesh.material.opacity = 1.0;
+        this._animateFrame();
+        app_console.info(lang.viewer_show_zoom);
     };
 
     /**
@@ -2361,7 +2439,7 @@ function ShaderViewer() {
         /**
          * Si se tiene el mouse presionado retorna
          */
-        if (self._mouseMoveDrag) return;
+        if (self._mouseMoveDrag || !self._hasMouseOver) return;
 
         /**
          * Calcula el nuevo punto medio
@@ -2393,7 +2471,7 @@ function ShaderViewer() {
         /**
          * Si se tiene el mouse presionado retorna
          */
-        if (self._mouseMoveDrag) return;
+        if (self._mouseMoveDrag || !self._hasMouseOver) return;
 
         /**
          * Aumenta el zoom del rango

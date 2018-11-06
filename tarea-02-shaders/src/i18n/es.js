@@ -42,4 +42,6 @@ lang_db.es = {
     "viewer_3d_error_draw_null": "ShaderViewer: Se ha intentado dibujar un objeto nulo",
     "viewer_3d_error_zobj": "ShaderViewer: Ocurrió un error al obtener el parámetro z del objeto {0}",
     "viewer_3d_gui_camera": "Cámara",
+    "viewer_hide_zoom": "Ocultando plano de zoom",
+    "viewer_show_zoom": "Mostrando plano de zoom",
 };
