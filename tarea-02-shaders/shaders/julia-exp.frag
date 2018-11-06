@@ -1,8 +1,8 @@
 /*
-JULIA-POL3
+JULIA-EXP
 FRAGMENT SHADER
 
-Julia polinomial orden 4. Cumple ecuación z_n = z_n-1^4 + C.
+Julia exponencial. Cumple ecuación z_n = exp(z_n-1) + C.
 
 @author Pablo Pizarro R. @ppizarror.com
 @license MIT
@@ -52,8 +52,8 @@ void main() {
 		v = w_i;
 
         // Calcula el incremento
-		w_r = u*u*u*u - 6.0*u*u*v*v + v*v*v*v + j_re;
-		w_i = 4.0*u*u*u*v - 4.0*u*v*v*v + j_im;
+		w_r = exp(u)*cos(v) + j_re;
+		w_i = exp(u)*sin(v) + j_im;
 
 		if (w_r*w_r + w_i*w_i > 4.0) { // |z| > 2
 

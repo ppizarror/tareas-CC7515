@@ -16,36 +16,69 @@
 let shader_lib = {
     "julia-pol2": {
         "files": {
-            "frag": "shaders/julia-pol2.frag",
+            "frag": "shaders/julia-z-2.frag",
             "vert": "shaders/julia.vert",
         },
         "julia": {
             "re": 0.279,
             "im": 0.000
         },
-        "name": "Julia polinomial 2",
+        "name": "Julia f(z) = z^2 + C",
     },
     "julia-pol3": {
         "files": {
-            "frag": "shaders/julia-pol3.frag",
+            "frag": "shaders/julia-z-3.frag",
             "vert": "shaders/julia.vert",
         },
         "julia": {
             "re": 0.400,
             "im": 0.000
         },
-        "name": "Julia polinomial 3",
+        "name": "Julia f(z) = z^3 + C",
     },
     "julia-pol4": {
         "files": {
-            "frag": "shaders/julia-pol4.frag",
+            "frag": "shaders/julia-z-4.frag",
             "vert": "shaders/julia.vert",
         },
         "julia": {
             "re": 0.484,
             "im": 0.000
         },
-        "name": "Julia polinomial 4",
+        "name": "Julia f(z) = z^4 + C",
+    },
+    "julia-exp": {
+        "files": {
+            "frag": "shaders/julia-exp.frag",
+            "vert": "shaders/julia.vert",
+        },
+        "julia": {
+            "re": -0.650,
+            "im": 0.000
+        },
+        "name": "Julia f(z) = exp(z) + C",
+    },
+    "julia-expz3": {
+        "files": {
+            "frag": "shaders/julia-exp-z-3.frag",
+            "vert": "shaders/julia.vert",
+        },
+        "julia": {
+            "re": -0.59,
+            "im": 0.000
+        },
+        "name": "Julia f(z) = exp(z^3) + C",
+    },
+    "julia-z-exp": {
+        "files": {
+            "frag": "shaders/julia-z-exp.frag",
+            "vert": "shaders/julia.vert",
+        },
+        "julia": {
+            "re": 0.040,
+            "im": 0.000
+        },
+        "name": "Julia f(z) = z*exp(z) + C",
     },
     "mandelbrot": {
         "files": {
