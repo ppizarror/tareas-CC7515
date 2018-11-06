@@ -1,8 +1,8 @@
 /*
-JULIA-Z-EXP
+JULIA-EXP
 FRAGMENT SHADER
 
-Julia pseudo-exponencial. Cumple ecuación z_n = z*exp(z_n-1) + C.
+Julia exponencial. Cumple ecuación z_n = exp(z_n-1) + C.
 
 @author Pablo Pizarro R. @ppizarror.com
 @license MIT
@@ -52,8 +52,8 @@ void main() {
 		v = w_i;
 
         // Calcula el incremento
-		w_r = exp(u)*u*cos(v) - exp(u)*v*sin(v) + j_re;
-		w_i = exp(u)*u*sin(v) + exp(u)*v*cos(v) + j_im;
+		w_r = exp(u)*cos(v) + j_re;
+		w_i = exp(u)*sin(v) + j_im;
 
 		if (w_r*w_r + w_i*w_i > 4.0) { // |z| > 2
 
