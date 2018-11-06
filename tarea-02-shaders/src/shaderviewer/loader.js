@@ -36,6 +36,17 @@ let shader_lib = {
         },
         "name": "Julia polinomial 3",
     },
+    "julia-pol4": {
+        "files": {
+            "frag": "shaders/julia-pol4.frag",
+            "vert": "shaders/julia.vert",
+        },
+        "julia": {
+            "re": 0.484,
+            "im": 0.000
+        },
+        "name": "Julia polinomial 4",
+    },
     "mandelbrot": {
         "files": {
             "frag": "shaders/mandelbrot.frag",
