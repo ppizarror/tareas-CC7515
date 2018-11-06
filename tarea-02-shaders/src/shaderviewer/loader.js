@@ -21,7 +21,7 @@ let shader_lib = {
         },
         "julia": {
             "re": -0.450,
-            "im": 0.600
+            "im": 0.600,
         },
         "name": "Julia f(z) = z^2 + C",
     },
@@ -32,7 +32,7 @@ let shader_lib = {
         },
         "julia": {
             "re": 0.400,
-            "im": 0.000
+            "im": 0.000,
         },
         "name": "Julia f(z) = z^3 + C",
     },
@@ -43,7 +43,7 @@ let shader_lib = {
         },
         "julia": {
             "re": 0.484,
-            "im": 0.000
+            "im": 0.000,
         },
         "name": "Julia f(z) = z^4 + C",
     },
@@ -54,7 +54,7 @@ let shader_lib = {
         },
         "julia": {
             "re": -0.650,
-            "im": 0.000
+            "im": 0.000,
         },
         "name": "Julia f(z) = exp(z) + C",
     },
@@ -65,7 +65,7 @@ let shader_lib = {
         },
         "julia": {
             "re": -0.59,
-            "im": 0.000
+            "im": 0.000,
         },
         "name": "Julia f(z) = exp(z^3) + C",
     },
@@ -76,7 +76,7 @@ let shader_lib = {
         },
         "julia": {
             "re": 0.040,
-            "im": 0.000
+            "im": 0.000,
         },
         "name": "Julia f(z) = z*exp(z) + C",
     },
@@ -87,7 +87,7 @@ let shader_lib = {
         },
         "julia": {
             "re": -0.800,
-            "im": 0.030
+            "im": 0.030,
         },
         "name": "Julia f(z) = z^2/exp(z) + C",
     },
@@ -98,9 +98,20 @@ let shader_lib = {
         },
         "julia": {
             "re": -0.106,
-            "im": 1.200
+            "im": 1.200,
         },
         "name": "Julia f(z) = cos(z) + C",
+    },
+    "julia-sin": {
+        "files": {
+            "frag": "shaders/julia-sin.frag",
+            "vert": "shaders/julia.vert",
+        },
+        "julia": {
+            "re": 0,
+            "im": 0.700,
+        },
+        "name": "Julia f(z) = sin(z) + C",
     },
     "mandelbrot": {
         "files": {
