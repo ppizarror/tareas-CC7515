@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.106
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "T3-CC7515-CUDA", "T3-CC7515-CUDA.vcxproj", "{0F85041F-C2D6-4219-BCBE-DE3A6F8A1106}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F85041F-C2D6-4219-BCBE-DE3A6F8A1106}.Debug|x64.ActiveCfg = Debug|x64
+		{0F85041F-C2D6-4219-BCBE-DE3A6F8A1106}.Debug|x64.Build.0 = Debug|x64
+		{0F85041F-C2D6-4219-BCBE-DE3A6F8A1106}.Release|x64.ActiveCfg = Release|x64
+		{0F85041F-C2D6-4219-BCBE-DE3A6F8A1106}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9A6E4734-CD54-4B25-A01E-147F9A50782F}
+	EndGlobalSection
+EndGlobal
