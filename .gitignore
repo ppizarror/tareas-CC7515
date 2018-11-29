@@ -49,3 +49,6 @@ entregas/*
 
 # VScode
 .vs/
+
+# Carpatas compilación
+**/x64
