@@ -44,6 +44,7 @@ void imprimir(int *matriz);
 
 /* Método principal */
 int main(int argc, char *argv[]) {
+
     int i, j;
     int *h_grid; // Matriz en CPU
     int *d_grid; // Matriz en GPU
@@ -89,7 +90,7 @@ int main(int argc, char *argv[]) {
     dim3 cpyGridRowsGridSize((int) ceil(dimFilas / (float) cpyBlockSize.x), 1, 1);
     dim3 cpyGridColsGridSize((int) ceil((dimColumnas + 2) / (float) cpyBlockSize.x), 1, 1);
 
-    //Imprimimos de ser el caso
+    // Imprimimos de ser el caso
     if (IMPRIMIR) { imprimir(h_grid); }
 
     // Ciclo principal de ejecucion
@@ -131,7 +132,9 @@ int main(int argc, char *argv[]) {
     cudaFree(d_newGrid);
     free(h_grid);
 
+    // Retorna main()
     return 0;
+
 }
 
 __global__
