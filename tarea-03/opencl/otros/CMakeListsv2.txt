@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.10)
+set(CMAKE_CXX_STANDARD 14)
+project(T3-CC7515-OPENCL)
+
+set(CUDA_SELF_PATH
+        "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0")
+set(OPENCL_ROOT
+        ${CUDA_SELF_PATH})
+set(FIND_LIBRARY_USE_LIB64_PATHS
+        ${CUDA_SELF_PATH}/lib)
+set(CUDA_SELF_LIBS
+        ${CUDA_SELF_PATH}/lib/x64/OpenCL.lib
+        #${CMAKE_CURRENT_SOURCE_DIR}/common/x64/OpenCL.lib
+        )
+
+set(OCL_PATH
+        "C:/Program Files (x86)/OCL_SDK_Light/include")
+
+set(OCL_LIB
+        "C:/Program Files (x86)/OCL_SDK_Light/lib/x86_64/OpenCL.lib")
+
+message("CUDA ${OCL_PATH} ${CUDA_SELF_LIBS}")
+include(FindOpenCL.cmake)
+
+include_directories(${OCL_PATH})
+add_executable(MAIN main.cpp)
+target_link_libraries(MAIN ${OCL_LIB})

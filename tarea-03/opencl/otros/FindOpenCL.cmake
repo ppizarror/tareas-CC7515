@@ -48,22 +48,13 @@
 include(CheckSymbolExists)
 include(CMakePushCheckState)
 
+MESSAGE("-- Cuda path: ${CUDA_PATH}")
 if (DEFINED OPENCL_ROOT OR DEFINED ENV{OPENCL_ROOT})
     message(STATUS "Defined OPENCL_ROOT: ${OPENCL_ROOT}, ENV{OPENCL_ROOT}: $ENV{OPENCL_ROOT}")
 endif ()
 
-find_path(OPENCL_INCLUDE_DIRS
-        NAMES OpenCL/cl.h CL/cl.h
-        HINTS
-        ${OPENCL_ROOT}/include
-        $ENV{OPENCL_ROOT}/include
-        $ENV{AMDAPPSDKROOT}/include
-        $ENV{CUDA_PATH}/include
-        PATHS
-        /usr/include
-        /usr/local/include
-        /usr/local/cuda/include
-        DOC "OpenCL header file path"
+set(OPENCL_INCLUDE_DIRS
+        ${CUDA_PATH}/include/CL/cl.h
         )
 mark_as_advanced(OPENCL_INCLUDE_DIRS)
 message(STATUS "OPENCL_INCLUDE_DIRS: ${OPENCL_INCLUDE_DIRS}")
@@ -84,9 +75,9 @@ endif ()
 check_symbol_exists(CL_VERSION_2_0 ${CL_HEADER_FILE} HAVE_CL_2_0)
 check_symbol_exists(CL_VERSION_1_2 ${CL_HEADER_FILE} HAVE_CL_1_2)
 check_symbol_exists(CL_VERSION_1_1 ${CL_HEADER_FILE} HAVE_CL_1_1)
-# message( STATUS "HAVE_CL_2_0: ${HAVE_CL_2_0}" )
-# message( STATUS "HAVE_CL_1_2: ${HAVE_CL_1_2}" )
-# message( STATUS "HAVE_CL_1_1: ${HAVE_CL_1_1}" )
+message(STATUS "HAVE_CL_2_0: ${HAVE_CL_2_0}")
+message(STATUS "HAVE_CL_1_2: ${HAVE_CL_1_2}")
+message(STATUS "HAVE_CL_1_1: ${HAVE_CL_1_1}")
 
 # set OpenCL_VERSION to the highest detected version
 if (HAVE_CL_2_0)
@@ -114,7 +105,7 @@ if (LIB64)
             ${OPENCL_ROOT}/lib
             $ENV{OPENCL_ROOT}/lib
             $ENV{AMDAPPSDKROOT}/lib
-            $ENV{CUDA_PATH}/lib
+            ${CUDA_PATH}/lib
             DOC "OpenCL dynamic library path"
             PATH_SUFFIXES x86_64 x64 x86_64/sdk
             PATHS
@@ -128,7 +119,7 @@ else ()
             ${OPENCL_ROOT}/lib
             $ENV{OPENCL_ROOT}/lib
             $ENV{AMDAPPSDKROOT}/lib
-            $ENV{CUDA_PATH}/lib
+            ${CUDA_PATH}/lib
             DOC "OpenCL dynamic library path"
             PATH_SUFFIXES x86 Win32
             PATHS
@@ -136,6 +127,9 @@ else ()
             /usr/local/cuda/lib
             )
 endif ()
+set(OPENCL_LIBRARIES
+        ${CUDA_PATH}/lib/x64
+        )
 mark_as_advanced(OPENCL_LIBRARIES)
 
 # message( STATUS "OpenCL_FIND_VERSION: ${OpenCL_FIND_VERSION}" )

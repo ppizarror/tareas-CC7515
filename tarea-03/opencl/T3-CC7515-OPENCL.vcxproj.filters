@@ -15,13 +15,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <None Include="GOL-kernels.cl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="vector_add_kernel.cl">
+    <ClCompile Include="GOL.cpp">
       <Filter>Source Files</Filter>
-    </None>
+    </ClCompile>
   </ItemGroup>
 </Project>
