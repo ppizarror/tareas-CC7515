@@ -4,33 +4,47 @@
 #include <CL/cl.h>
 #include <time.h>
 #include <sys/stat.h>
+#include <iostream>
+#include <fstream>
 
 #define SRAND_VALUE 1985
-#define LOCAL_SIZE 16
-#define GOL_IF 1    //Ejecutar el juego preguntando con IF (0:Falso 1:Verdadero)
-#define N 1000
-#define M 1000
-#define IMPRIMIR 0  //Imprimir o no las matrices de entrada y de salida
+#define LOCAL_SIZE 32
+#define GOL_IF 0	// Ejecutar el juego preguntando con IF (0:Falso 1:Verdadero)
+#define IMPRIMIR 0  // Imprimir o no las matrices de entrada y de salida
+#define T_LIMIT 1	// Tiempo límite de cálculo
 
-
-void imprimir(int *matriz);
+void imprimir(int *matriz, int n, int m);
 
 int main(int argc, char *argv[]) {
+
+	// Carga NxM desde un archivo
+	std::ifstream infile;
+	infile.open("NxM.txt");
+	int x;
+	int N = 0;
+	int M = 0;
+	int jfile = 0;
+	while (infile >> x) {
+		if (jfile == 0) { N = x; }
+		else { M = x; }
+		jfile = 1;
+	}
+	infile.close();
+	printf("Cargando matriz %dx%d\n", N, M);
+
 	int i, j;
 	int *h_grid;
 	cl_mem d_grid;
 	cl_mem d_newGrid;
 	cl_mem d_tmpGrid;
 
-	signed t0, t1;    //variables para medir tiempo
-	double time = 0;      //variables para medir tiempo
+	signed t0, t1;				// Variables para medir tiempo
+	double time = 0;			// Variables para medir tiempo
+	double Noperaciones = 0;	// Variable para medir cantidad de operaciones ejecutadas
+	int dimFilas = N;			// Dimensiones del juego de la vida (Filas), sin contar las filas fantasmas
+	int dimColumnas = M;		// Dimensiones del juego de la vida (Columnas), sin contar las columnas fantasmas
 
-	double Noperaciones = 0; //variable para medir cantidad de operaciones ejecutadas
-
-	int dimFilas = N;     //Dimensiones del juego de la vida (Filas), sin contar las filas fantasmas
-	int dimColumnas = M;   //Dimensiones del juego de la vida (Columnas), sin contar las columnas fantasmas
-
-	// Size, in bytes, of each vector
+	// Tamaño, en bytes, de cada vector
 	size_t bytes = sizeof(int) * (dimFilas + 2) * (dimColumnas + 2);
 
 	// Allocate host Grid used for initial setup and read back from device
@@ -41,8 +55,7 @@ int main(int argc, char *argv[]) {
 	cl_context context;               // context
 	cl_command_queue queue;           // command queue
 	cl_program program;               // program
-	//Kernels
-	cl_kernel k_gol, k_ghostRows, k_ghostCols, k_gol_if;
+	cl_kernel k_gol, k_ghostRows, k_ghostCols, k_gol_if; // Kernels
 
 	// Assign initial population randomly
 	srand(SRAND_VALUE);
@@ -165,7 +178,7 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	// Set the arguments to GOL  kernel
+	// Set the arguments to GOL kernel
 	err = clSetKernelArg(k_gol, 0, sizeof(int), &dimFilas);
 	err |= clSetKernelArg(k_gol, 1, sizeof(cl_mem), &d_grid);
 	err |= clSetKernelArg(k_gol, 2, sizeof(cl_mem), &d_newGrid);
@@ -206,6 +219,7 @@ int main(int argc, char *argv[]) {
 	// Set kernel local and global sizes
 	size_t cpyRowsGlobalSize, cpyColsGlobalSize, cpyLocalSize;
 	cpyLocalSize = LOCAL_SIZE;
+
 	// Number of total work items - localSize must be devisor
 	cpyRowsGlobalSize = (size_t)ceil(dimFilas / (float)cpyLocalSize) * cpyLocalSize;
 	cpyColsGlobalSize = (size_t)ceil((dimColumnas + 2) / (int)cpyLocalSize) * cpyLocalSize;
@@ -214,13 +228,13 @@ int main(int argc, char *argv[]) {
 	size_t linGlobal = (size_t)ceil(dimFilas / (float)LOCAL_SIZE) * LOCAL_SIZE;
 	size_t GolGlobalSize[2] = { linGlobal, linGlobal };
 
-	//Imprimimos de ser el caso
-	if (IMPRIMIR) { imprimir(h_grid); }
+	// Imprimimos de ser el caso
+	if (IMPRIMIR) { imprimir(h_grid, N, M); }
 
 	// Main game loop
 	t0 = clock();
 	int iter = 0;
-	while (time < 1.0) {
+	while (time < T_LIMIT) {
 		err = clEnqueueNDRangeKernel(queue, k_ghostRows, 1, NULL, &cpyRowsGlobalSize, &cpyLocalSize,
 			0, NULL, NULL);
 		err |= clEnqueueNDRangeKernel(queue, k_ghostCols, 1, NULL, &cpyColsGlobalSize, &cpyLocalSize,
@@ -280,15 +294,15 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	//Imprimimos de ser el caso
+	// Imprimimos de ser el caso
 	if (IMPRIMIR) {
 		printf("\n");
-		imprimir(h_grid);
+		imprimir(h_grid, N, M);
 	}
 
-	//Imprimimos datos pedidos
+	// Imprimimos datos pedidos
 	printf("Tiempo total: %f\n", time);
-	printf("Numero de operaciones efectuadas %.0f\n", Noperaciones);
+	printf("Numero de operaciones efectuadas: %.0f\n", Noperaciones);
 
 	// Release memory
 	free(h_grid);
@@ -296,10 +310,10 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
-void imprimir(int *matriz) {
-	for (int i = 1; i < N - 1; i++) {
-		for (int j = 1; j < M - 1; j++) {
-			printf("%d ", matriz[i * M + j]);
+void imprimir(int *matriz, int n, int m) {
+	for (int i = 1; i < n - 1; i++) {
+		for (int j = 1; j < m - 1; j++) {
+			printf("%d ", matriz[i * m + j]);
 		}
 		printf("\n");
 	}

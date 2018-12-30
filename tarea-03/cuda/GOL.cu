@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
 	size_t bytes = sizeof(int) * (dimFilas + 2) *
 		(dimColumnas + 2);// Se annade mas espacio para dejar filas y columnas fantasmas
 
-// Solicitamos memoria para la matriz en la CPU
+	// Solicitamos memoria para la matriz en la CPU
 	h_grid = (int *)malloc(bytes);
 
 	// Solicitamos memoria para las matrices en la GPU
