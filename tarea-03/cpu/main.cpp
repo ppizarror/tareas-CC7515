@@ -3,8 +3,8 @@
 #include "GOL.h"
 #include <fstream>
 
-/* Declaracion de constantes */
-const bool imprimir = false;
+#define T_LIMIT 1               // Tiempo límite de cálculo
+const bool imprimir = false;    // Imprime la matriz
 
 /* Rutina Principal */
 int main() {
@@ -41,7 +41,7 @@ int main() {
     game->inicializarBordesMatriz();
 
     t0 = static_cast<int>(clock());
-    while (time < 1.0) {
+    while (time < T_LIMIT) {
         if (imprimir) { // Imprimimos de ser necesario
             game->printGrid();
             std::cout << std::endl;
