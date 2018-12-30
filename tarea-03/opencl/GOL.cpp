@@ -7,11 +7,9 @@
 #include <iostream>
 #include <fstream>
 
-#define SRAND_VALUE 1985
-#define LOCAL_SIZE 32
-#define GOL_IF 0	// Ejecutar el juego preguntando con IF (0:Falso 1:Verdadero)
-#define IMPRIMIR 0  // Imprimir o no las matrices de entrada y de salida
-#define T_LIMIT 1	// Tiempo límite de cálculo
+#define SRAND_VALUE 1985	// Semilla para generar numeros random
+#define IMPRIMIR 0  		// Imprimir o no las matrices de entrada y de salida
+#define T_LIMIT 1			// Tiempo límite de cálculo
 
 void imprimir(int *matriz, int n, int m);
 
@@ -30,7 +28,31 @@ int main(int argc, char *argv[]) {
 		jfile = 1;
 	}
 	infile.close();
+
+	// Carga IF, ejecutar el juego preguntando con IF (0:Falso 1:Verdadero)
+	infile.open("IF.txt");
+	int GOL_IF = 0;
+	while (infile >> x) {
+		GOL_IF = x;
+	}
+	infile.close();
+
+	// Carga el tamaño de bloque
+	infile.open("LOCAL_SIZE.txt");
+	int LOCAL_SIZE = 0;
+	while (infile >> x) {
+		LOCAL_SIZE = x;
+	}
+	infile.close();
+
 	printf("Cargando matriz %dx%d\n", N, M);
+	printf("LOCAL SIZE: %d\n", LOCAL_SIZE);
+	if (GOL_IF) {
+		printf("IF activado\n\n");
+	}
+	else {
+		printf("IF desactivado\n\n");
+	}
 
 	int i, j;
 	int *h_grid;

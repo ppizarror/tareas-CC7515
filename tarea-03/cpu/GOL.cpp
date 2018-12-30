@@ -116,8 +116,8 @@ void GOL::inicializarBordesMatriz() {
     for (int i = 0; i < M; i++) {
         matriz[i] = true;
         matrizAux[i] = true;
-        matriz[N * (M - 1) + i] = true;
-        matrizAux[N * (M - 1) + i] = true;
+        matriz[(N - 1) * M + i] = true;
+        matrizAux[(N - 1) * M + i] = true;
     }
 }
 

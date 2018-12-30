@@ -21,15 +21,12 @@
 #include <stdio.h>
 #include <iostream>
 #include <ctime>
+#include <fstream>
 
  /* Declaración de constantes */
-#define N 20 // Filas
-#define M 20 // Columnas
-
-#define BLOCK_SIZE 128   // Tamaño de bloque
-#define SRAND_VALUE 1998 // Semilla para generar numeros random
-#define GOLIF 0          // Ejecutar el juego preguntando con IF (0:Falso 1:Verdadero)
-#define IMPRIMIR 0       // Imprimir o no las matrices de entrada y de salida
+#define SRAND_VALUE 1998	// Semilla para generar numeros random
+#define IMPRIMIR 0			// Imprimir o no las matrices de entrada y de salida
+#define T_LIMIT 1			// Tiempo límite de cálculo
 
 /* Declaración de funciones */
 __global__ void GOL(int dimFilas, int dimColumnas, int *grid, int *newGrid);
@@ -40,10 +37,49 @@ __global__ void ghostCols(int dimFilas, int dimColumnas, int *grid);
 
 __global__ void GOL_IF(int dimFilas, int dimColumnas, int *grid, int *newGrid);
 
-void imprimir(int *matriz);
+void imprimir(int *matriz, int n, int m);
 
 /* Método principal */
 int main(int argc, char *argv[]) {
+
+	// Carga NxM desde un archivo
+	std::ifstream infile;
+	infile.open("NxM.txt");
+	int x;
+	int N = 0;
+	int M = 0;
+	int jfile = 0;
+	while (infile >> x) {
+		if (jfile == 0) { N = x; }
+		else { M = x; }
+		jfile = 1;
+	}
+	infile.close();
+
+	// Carga IF, ejecutar el juego preguntando con IF (0:Falso 1:Verdadero)
+	infile.open("IF.txt");
+	int GOLIF = 0;
+	while (infile >> x) {
+		GOLIF = x;
+	}
+	infile.close();
+
+	// Carga el tamaño de bloque
+	infile.open("BLOCK_SIZE.txt");
+	int BLOCK_SIZE = 0;
+	while (infile >> x) {
+		BLOCK_SIZE = x;
+	}
+	infile.close();
+
+	printf("Cargando matriz %dx%d\n", N, M);
+	printf("BLOCK SIZE: %d\n", BLOCK_SIZE);
+	if (GOLIF) {
+		printf("IF activado\n\n");
+	}
+	else {
+		printf("IF desactivado\n\n");
+	}
 
 	int i, j;
 	int *h_grid; // Matriz en CPU
@@ -53,7 +89,6 @@ int main(int argc, char *argv[]) {
 
 	signed t0, t1; // Variables para medir tiempo
 	double time = 0; //variables para medir tiempo
-
 	double Noperaciones = 0; // Variable para medir cantidad de operaciones ejecutadas
 
 	int dimFilas = N; // Dimensiones del juego de la vida (Filas), sin contar las filas fantasmas
@@ -91,11 +126,13 @@ int main(int argc, char *argv[]) {
 	dim3 cpyGridColsGridSize((int)ceil((dimColumnas + 2) / (float)cpyBlockSize.x), 1, 1);
 
 	// Imprimimos de ser el caso
-	if (IMPRIMIR) { imprimir(h_grid); }
+	if (IMPRIMIR) {
+		imprimir(h_grid, N, M);
+	}
 
-	// Ciclo principal de ejecucion
+	// Ciclo principal de ejecución
 	t0 = static_cast<int>(clock());
-	while (time < 1.0) {
+	while (time < T_LIMIT) {
 		ghostRows <<< cpyGridRowsGridSize, cpyBlockSize >>> (dimFilas, dimColumnas, d_grid);
 		ghostCols <<< cpyGridColsGridSize, cpyBlockSize >>> (dimFilas, dimColumnas, d_grid);
 		if (GOLIF) {
@@ -104,6 +141,7 @@ int main(int argc, char *argv[]) {
 		else {
 			GOL <<< gridSize, blockSize >>> (dimFilas, dimColumnas, d_grid, d_newGrid);
 		}
+
 		// Intercambiamos punteros
 		d_tmpGrid = d_grid;
 		d_grid = d_newGrid;
@@ -113,7 +151,7 @@ int main(int argc, char *argv[]) {
 
 		t1 = static_cast<int>(clock());
 		time = (double(t1 - t0) / CLOCKS_PER_SEC);
-	}// Fin del ciclo principal de ejecucion
+	} // Fin del ciclo principal de ejecución
 
 	// Pedimos los resultados de vuelta
 	cudaMemcpy(h_grid, d_grid, bytes, cudaMemcpyDeviceToHost);
@@ -121,12 +159,12 @@ int main(int argc, char *argv[]) {
 	// Imprimimos de ser el caso
 	if (IMPRIMIR) {
 		printf("\n");
-		imprimir(h_grid);
+		imprimir(h_grid, N, M);
 	}
 
 	// Imprimimos datos pedidos
 	printf("Tiempo total: %f\n", time);
-	printf("Numero de operaciones efectuadas %.0f\n", Noperaciones);
+	printf("Numero de operaciones efectuadas: %.0f\n", Noperaciones);
 
 	// Se borra memoria
 	cudaFree(d_grid);
@@ -150,9 +188,9 @@ void GOL(int dimFilas, int dimColumnas, int *grid, int *newGrid) {
 	if (iy <= dimFilas && ix <= dimColumnas) {
 
 		// Obtenemos la cantidad de vecinos vivos
-		numNeighbors = grid[id + (dimColumnas + 2)] + grid[id - (dimColumnas + 2)] //upper lower
-			+ grid[id + 1] + grid[id - 1]             //right left
-			+ grid[id + (dimColumnas + 3)] + grid[id - (dimColumnas + 3)] //diagonals
+		numNeighbors = grid[id + (dimColumnas + 2)] + grid[id - (dimColumnas + 2)] // upper lower
+			+ grid[id + 1] + grid[id - 1] // right left
+			+ grid[id + (dimColumnas + 3)] + grid[id - (dimColumnas + 3)] // diagonals
 			+ grid[id - (dimColumnas + 1)] + grid[id + (dimColumnas + 1)];
 
 		int cell = grid[id];
@@ -239,10 +277,10 @@ __global__ void ghostCols(int dimFilas, int dimColumnas, int *grid) {
 
 }
 
-void imprimir(int *matriz) {
-	for (int i = 1; i < N - 1; i++) {
-		for (int j = 1; j < M - 1; j++) {
-			printf("%d ", matriz[i * M + j]);
+void imprimir(int *matriz, int n, int m) {
+	for (int i = 1; i < n - 1; i++) {
+		for (int j = 1; j < m - 1; j++) {
+			printf("%d ", matriz[i * m + j]);
 		}
 		printf("\n");
 	}

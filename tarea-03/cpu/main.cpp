@@ -1,14 +1,28 @@
 #include <iostream>
 #include <ctime>
 #include "GOL.h"
+#include <fstream>
 
 /* Declaracion de constantes */
-const int N = 20;
-const int M = 20;
 const bool imprimir = false;
 
 /* Rutina Principal */
 int main() {
+
+    // Carga NxM desde un archivo
+    std::ifstream infile;
+    infile.open("NxM.txt");
+    int x;
+    int N = 0;
+    int M = 0;
+    int jfile = 0;
+    while (infile >> x) {
+        if (jfile == 0) { N = x; }
+        else { M = x; }
+        jfile = 1;
+    }
+    infile.close();
+    printf("Cargando matriz %dx%d\n", N, M);
 
     // Variables para medir tiempo
     signed t0, t1;
@@ -43,7 +57,7 @@ int main() {
     }
 
     std::cout << "Tiempo de ejecucion: " << time << std::endl;
-    std::cout << "Numero de evaluaciones: " << Nevaluaciones << std::endl;
+    std::cout << "Numero de operaciones efectuadas: " << Nevaluaciones << std::endl;
 
     // Elimina variables
     delete game;
