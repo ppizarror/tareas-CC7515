@@ -1,6 +1,5 @@
-__kernel void ghostRows(const int dimFilas, __global int *grid, const int dimColumnas)
-{
-	// We want id to range from 1 to dim
+__kernel void ghostRows(const int dimFilas, __global int *grid, const int dimColumnas) {
+	// Queremos id en [1,dim]
 	int id = get_global_id(0) + 1;
 
 	if (id <= dimColumnas)
@@ -12,9 +11,8 @@ __kernel void ghostRows(const int dimFilas, __global int *grid, const int dimCol
 	}
 }
 
-__kernel void ghostCols(const int dimFilas, __global int *grid, const int dimColumnas)
-{
-	// We want id to range from 0 to dim+1
+__kernel void ghostCols(const int dimFilas, __global int *grid, const int dimColumnas) {
+	// Queremos id en [0,dim+1]
 	int id = get_global_id(0);
 
 	if (id <= dimFilas + 1)
@@ -26,8 +24,7 @@ __kernel void ghostCols(const int dimFilas, __global int *grid, const int dimCol
 	}
 }
 
-__kernel void GOL(const int dimFilas, __global int *grid, __global int *newGrid, const int dimColumnas)
-{
+__kernel void GOL(const int dimFilas, __global int *grid, __global int *newGrid, const int dimColumnas) {
 	int ix = get_global_id(0) + 1;
 	int iy = get_global_id(1) + 1;
 	int id = iy * (dimColumnas + 2) + ix;
@@ -54,8 +51,7 @@ __kernel void GOL(const int dimFilas, __global int *grid, __global int *newGrid,
 	}
 }
 
-__kernel void GOL_IF(const int dimFilas, __global int *grid, __global int *newGrid, const int dimColumnas)
-{
+__kernel void GOL_IF(const int dimFilas, __global int *grid, __global int *newGrid, const int dimColumnas) {
 	int ix = get_global_id(0) + 1;
 	int iy = get_global_id(1) + 1;
 	int id = iy * (dimColumnas + 2) + ix;
@@ -85,6 +81,5 @@ __kernel void GOL_IF(const int dimFilas, __global int *grid, __global int *newGr
 		else {
 			newGrid[id] = cell;
 		}
-
 	}
 }

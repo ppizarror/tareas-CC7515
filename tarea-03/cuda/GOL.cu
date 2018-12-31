@@ -176,9 +176,7 @@ int main(int argc, char *argv[]) {
 
 }
 
-__global__
-void GOL(int dimFilas, int dimColumnas, int *grid, int *newGrid) {
-
+__global__ void GOL(int dimFilas, int dimColumnas, int *grid, int *newGrid) {
 	// Queremos id en [1,dim]
 	int iy = blockDim.y * blockIdx.y + threadIdx.y + 1;
 	int ix = blockDim.x * blockIdx.x + threadIdx.x + 1;
@@ -205,14 +203,11 @@ void GOL(int dimFilas, int dimColumnas, int *grid, int *newGrid) {
 		else {
 			newGrid[id] = cell;
 		}
-
 	}
 }
 
-__global__
-void GOL_IF(int dimFilas, int dimColumnas, int *grid, int *newGrid) {
-
-	// Queremos id ∈ [1,dim]
+__global__ void GOL_IF(int dimFilas, int dimColumnas, int *grid, int *newGrid) {
+	// Queremos id en [1, dim]
 	int iy = blockDim.y * blockIdx.y + threadIdx.y + 1;
 	int ix = blockDim.x * blockIdx.x + threadIdx.x + 1;
 	int id = iy * (dimColumnas + 2) + ix;
@@ -244,37 +239,28 @@ void GOL_IF(int dimFilas, int dimColumnas, int *grid, int *newGrid) {
 			newGrid[id] = cell;
 		}
 	}
-
 }
 
 __global__ void ghostRows(int dimFilas, int dimColumnas, int *grid) {
-
-	// Queremos id ∈ [1,dim]
+	// Queremos id en [1, dim]
 	int id = blockDim.x * blockIdx.x + threadIdx.x + 1;
-
 	if (id <= dimColumnas) {
 		// Copiamos la primera fila real a la última fila
 		grid[(dimColumnas + 2) * (dimFilas + 1) + id] = grid[(dimColumnas + 2) + id];
-
 		// Copiamos la última fila real a la primera fila
 		grid[id] = grid[(dimColumnas + 2) * dimFilas + id];
 	}
-
 }
 
 __global__ void ghostCols(int dimFilas, int dimColumnas, int *grid) {
-
-	// Queremos id ∈ [0,dim+1]
+	// Queremos id en [0, dim+1]
 	int id = blockDim.x * blockIdx.x + threadIdx.x;
-
 	if (id <= dimFilas + 1) {
 		// Copia la primera columna real a la ultima
 		grid[id * (dimColumnas + 2) + dimFilas + 1] = grid[id * (dimColumnas + 2) + 1];
-
 		// Copia la última columna real a la primera
 		grid[id * (dimColumnas + 2)] = grid[id * (dimColumnas + 2) + dimFilas];
 	}
-
 }
 
 void imprimir(int *matriz, int n, int m) {

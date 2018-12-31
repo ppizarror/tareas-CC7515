@@ -9,7 +9,7 @@
 
 #define SRAND_VALUE 1985	// Semilla para generar numeros random
 #define IMPRIMIR 0  		// Imprimir o no las matrices de entrada y de salida
-#define T_LIMIT 1			// Tiempo límite de cálculo
+#define T_LIMIT 1			// Tiempo limite de calculo
 
 void imprimir(int *matriz, int n, int m);
 
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
 	}
 	infile.close();
 
-	// Carga el tamaño de bloque
+	// Carga el tamaÃ±o de bloque
 	infile.open("LOCAL_SIZE.txt");
 	int LOCAL_SIZE = 0;
 	while (infile >> x) {
@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
 	int dimFilas = N;			// Dimensiones del juego de la vida (Filas), sin contar las filas fantasmas
 	int dimColumnas = M;		// Dimensiones del juego de la vida (Columnas), sin contar las columnas fantasmas
 
-	// Tamaño, en bytes, de cada vector
+	// Tamaï¿½o, en bytes, de cada vector
 	size_t bytes = sizeof(int) * (dimFilas + 2) * (dimColumnas + 2);
 
 	// Allocate host Grid used for initial setup and read back from device
@@ -253,7 +253,7 @@ int main(int argc, char *argv[]) {
 	// Imprimimos de ser el caso
 	if (IMPRIMIR) { imprimir(h_grid, N, M); }
 
-	// Main game loop
+	// Bucle principal
 	t0 = clock();
 	int iter = 0;
 	while (time < T_LIMIT) {
