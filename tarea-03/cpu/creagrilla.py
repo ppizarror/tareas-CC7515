@@ -1,6 +1,5 @@
 from subprocess import Popen, check_output, check_call, PIPE, call
 import time
-# datan = [800, 900, 1000]
 # datan = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
 datan = [5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25]
 datatime = []
@@ -11,10 +10,12 @@ for m in range(len(datan)):
         a.write('{0}\n'.format(datan[n]))
         a.write('{0}\n'.format(datan[m]))
         a.close()
-        process = Popen(['T3-CC7515-OPENCL.exe'],
-                        stdout=PIPE, stderr=PIPE, shell=True)
+        process = Popen(['MAIN.exe'], stdout=PIPE, stderr=PIPE, shell=True)
         stdout, stderr = process.communicate()
-        nops = int(str(stdout).split('\\r\\n')[5].split(': ')[1])
+        try:
+            nops = int(str(stdout).split('\\r\\n')[2].split(': ')[1])
+        except:
+            nops = -1
         print('{0}x{1}, ops: {2}'.format(datan[n], datan[m], nops))
         datatime.append(nops)
         time.sleep(1)
