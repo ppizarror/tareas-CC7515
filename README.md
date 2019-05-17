@@ -9,3 +9,7 @@ Repositorio de tareas curso CC7515 Computación en GPU.
 ## Autor
 
 [Pablo Pizarro R.](http://ppizarror.com) | 2018
+
+## Licencia
+
+Este proyecto está bajo la licencia MIT [https://opensource.org/licenses/MIT]
