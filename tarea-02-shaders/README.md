@@ -36,4 +36,4 @@ El proyecto se puede ejecutar de manera online: [https://ppizarror.com/tareas-CC
 
 ## Autor
 
-[Pablo Pizarro R.](http://ppizarror.com) | 2018
+[Pablo Pizarro R.](https://ppizarror.com) | 2018

@@ -287,4 +287,4 @@ Notar que la aplicación es capaz de reconocer de forma correcta todas las relac
 
 ## Autor
 
-[Pablo Pizarro R.](http://ppizarror.com) | 2018
+[Pablo Pizarro R.](https://ppizarror.com) | 2018

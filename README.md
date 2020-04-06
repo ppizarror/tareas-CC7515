@@ -8,7 +8,7 @@ Repositorio de tareas curso CC7515 Computación en GPU.
 
 ## Autor
 
-[Pablo Pizarro R.](http://ppizarror.com) | 2018
+[Pablo Pizarro R.](https://ppizarror.com) | 2018
 
 ## Licencia
 
